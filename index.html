@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!-- saved from url=(0078)http://www.zhangxinxu.com/sp/demo/live2d/sdk/sample/SampleApp1/SampleApp1.html -->
+<html><script>(function main() {
+    // Create enabled event
+    function fireEnabledEvent() {
+        // If gli exists, then we are already present and shouldn't do anything
+        if (!window.gli) {
+            setTimeout(function () {
+                var enabledEvent = document.createEvent("Event");
+                enabledEvent.initEvent("WebGLEnabledEvent", true, true);
+                document.dispatchEvent(enabledEvent);
+            }, 0);
+        } else {
+            //console.log("WebGL Inspector already embedded on the page - disabling extension");
+        }
+    };
+
+    // Grab the path root from the extension
+    document.addEventListener("WebGLInspectorReadyEvent", function (e) {
+        var pathElement = document.getElementById("__webglpathroot");
+        if (window["gliloader"]) {
+            gliloader.pathRoot = pathElement.innerText;
+        } else {
+            // TODO: more?
+            window.gliCssUrl = pathElement.innerText + "gli.all.css";
+        }
+    }, false);
+
+    // Rewrite getContext to snoop for webgl
+    var originalGetContext = HTMLCanvasElement.prototype.getContext;
+    if (!HTMLCanvasElement.prototype.getContextRaw) {
+        HTMLCanvasElement.prototype.getContextRaw = originalGetContext;
+    }
+    HTMLCanvasElement.prototype.getContext = function () {
+        var ignoreCanvas = this.internalInspectorSurface;
+        if (ignoreCanvas) {
+            return originalGetContext.apply(this, arguments);
+        }
+
+        var result = originalGetContext.apply(this, arguments);
+        if (result == null) {
+            return null;
+        }
+
+        var contextNames = ["moz-webgl", "webkit-3d", "experimental-webgl", "webgl", "3d"];
+        var requestingWebGL = contextNames.indexOf(arguments[0]) != -1;
+        if (requestingWebGL) {
+            // Page is requesting a WebGL context!
+            fireEnabledEvent(this);
+
+            // If we are injected, inspect this context
+            if (window.gli) {
+                if (gli.host.inspectContext) {
+                    // TODO: pull options from extension
+                    result = gli.host.inspectContext(this, result);
+                    // NOTE: execute in a timeout so that if the dom is not yet
+                    // loaded this won't error out.
+                    window.setTimeout(function() {
+                        var hostUI = new gli.host.HostUI(result);
+                        result.hostUI = hostUI; // just so we can access it later for debugging
+                    }, 0);
+                }
+            }
+        }
+
+        return result;
+    };
+})();</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+            <title>Live2D SampleApp1</title>
+        
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=1.0, maximum-scale=4.0">
+        
+
+        <style>
+            html, body {
+                oveflow: hidden;
+                height: 100%;
+            }
+            
+            body{
+                margin:0px ;
+                padding:0px ;
+            }
+            
+            #glcanvas {
+                /*
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                */
+                background-size: 150%;
+                background-position: 50% 50%;
+                background-image: url(assets/image/back_class_normal.png);
+            }
+            
+            button {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 14px;
+                color: #ffffff;
+                padding: 10px 20px;
+                -moz-border-radius: 30px;
+                -webkit-border-radius: 30px;
+                border-radius: 30px;
+                -moz-box-shadow:
+                    0px 1px 3px rgba(0,0,0,0.5),
+                    inset 0px 0px 1px rgba(255,255,255,0.7);
+                -webkit-box-shadow:
+                    0px 1px 3px rgba(0,0,0,0.5),
+                    inset 0px 0px 1px rgba(255,255,255,0.7);
+                box-shadow:
+                    0px 1px 3px rgba(0,0,0,0.5),
+                    inset 0px 0px 1px rgba(255,255,255,0.7);
+                text-shadow:
+                    0px -1px 0px rgba(0,0,0,0.4),
+                    0px 1px 0px rgba(255,255,255,0.3);
+            }
+
+            button.active {
+                background: linear-gradient(
+                    to bottom, 
+                    #3498db, 
+                    #2980b9);
+                background: -moz-linear-gradient(
+                    top,
+                    #3498db 0%,
+                    #2980b9);
+                background: -webkit-gradient(
+                    linear, left top, left bottom,
+                    from(#3498db),
+                    to(#2980b9));
+                border: 1px solid #2980b9;
+            }
+            
+            button.inactive {
+                background: linear-gradient(
+                    to bottom, 
+                    #e74c3c, 
+                    #c0392b);
+                background: -moz-linear-gradient(
+                    top,
+                    #e74c3c 0%,
+                    #c0392b);
+                background: -webkit-gradient(
+                    linear, left top, left bottom,
+                    from(#e74c3c),
+                    to(#c0392b));
+                border: 1px solid #c0392b;
+            }
+        </style>
+
+    </head>
+
+    <body onload="sampleApp1()">
+        
+        <p>
+            <button id="btnChange" class="active">Change Model</button>
+        </p>
+        
+        <div>
+            <canvas id="glcanvas" width="680" height="940" style="border:dashed 1px #CCC">
+            </canvas>
+        </div>
+        
+        <div id="myconsole" style="color:#000">---- Log ----</div>
+
+        <!-- Live2D Library -->
+        <script src="res/live2d.min.js"></script>
+        
+        <!-- Live2D Framework -->
+        <script src="res/Live2DFramework.js"></script>
+        
+        <!-- User's Script -->
+        <script src="res/MatrixStack.js"></script>
+        <script src="res/ModelSettingJson.js"></script>
+        <script src="res/PlatformManager.js"></script>
+        <script src="res/LAppDefine.js"></script>
+        <script src="res/LAppModel.js"></script>
+        <script src="res/LAppLive2DManager.js"></script>
+        <script src="res/SampleApp1.js"></script>
+
+    
+
+</body></html>
