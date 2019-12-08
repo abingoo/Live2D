@@ -7,8 +7,8 @@
         }
         this._$Xg = null;
         this._$Mk = null;
-        this._$sH = null;
-        this._$yd = null;
+        this.drawDataID = null;
+        this.targetBaseDataID = null;
         this._$Tk = null;
         this._$Kg = null;
     }
@@ -16,17 +16,17 @@
     Z._$hg = 500;
     Z._$Lk = 2;
     Z._$Fg = 3;
-    Z._$Yj = Z._$hg;
-    Z._$Cj = Z._$hg;
+    Z.minInterval_$Yj = Z._$hg;
+    Z.maxInterval_$Cj = Z._$hg;
     Z._$Rd = function() {
-        return Z._$Yj;
+        return Z.minInterval_$Yj;
     };
     Z._$Hd = function() {
-        return Z._$Cj;
+        return Z.maxInterval_$Cj;
     };
     Z.prototype._$O2 = function(aC) {
-        this._$sH = aC._$oH();
-        this._$yd = aC._$oH();
+        this.drawDataID = aC._$oH();
+        this.targetBaseDataID = aC._$oH();
         this._$Xg = aC._$oH();
         this._$Mk = aC._$BT();
         this._$Tk = aC._$Ug();
@@ -42,17 +42,17 @@
                 return;
             }
         }
-        aD._$am = aB._$kd(aC, this._$Xg, aD._$4g, this._$Kg);
+        aD.opacity = aB._$kd(aC, this._$Xg, aD._$4g, this._$Kg);
     };
     Z.prototype._$jk = function(aC, aD) {};
     Z.prototype.getDrawDataID = function() {
-        return this._$sH;
+        return this.drawDataID;
     };
-    Z.prototype._$Jj = function(aC) {
-        this._$sH = aC;
+    Z.prototype.setDrawDataID = function(aC) {
+        this.drawDataID = aC;
     };
     Z.prototype.getOpacity = function(aC, aD) {
-        return aD._$am;
+        return aD.opacity;
     };
     Z.prototype._$pg = function(aC, aD) {
         return aD._$1m;
@@ -60,23 +60,23 @@
     Z.prototype._$8g = function(aE) {
         for (var aD = aE.length - 1; aD >= 0; --aD) {
             var aC = aE[aD];
-            if (aC < Z._$Yj) {
-                Z._$Yj = aC;
+            if (aC < Z.minInterval_$Yj) {
+                Z.minInterval_$Yj = aC;
             } else {
-                if (aC > Z._$Cj) {
-                    Z._$Cj = aC;
+                if (aC > Z.maxInterval_$Cj) {
+                    Z.maxInterval_$Cj = aC;
                 }
             }
         }
     };
     Z.prototype.getTargetBaseDataID = function() {
-        return this._$yd;
+        return this.targetBaseDataID;
     };
-    Z.prototype._$sm = function(aC) {
-        this._$yd = aC;
+    Z.prototype.setTargetBaseDataID = function(aC) {
+        this.targetBaseDataID = aC;
     };
     Z.prototype._$Sj = function() {
-        return (this._$yd != null && (this._$yd != n._$jR()));
+        return (this.targetBaseDataID != null && (this.targetBaseDataID != n._$jR()));
     };
     Z.prototype.draw = function(aE, aC, aD) {};
     Z.prototype.getType = function() {};
@@ -487,8 +487,8 @@
             return;
         }
         Z.prototype.constructor.call(this);
-        this._$sH = null;
-        this._$yd = null;
+        this.drawDataID = null;
+        this.targetBaseDataID = null;
         this._$Xg = null;
         this._$Mk = null;
         this._$Tk = null;
@@ -500,29 +500,29 @@
     a._$Lk = 2;
     a._$Fg = 3;
     a._$Rm = 4;
-    a._$Yj = a._$hg;
-    a._$Cj = a._$hg;
+    a.minInterval_$Yj = a._$hg;
+    a.maxInterval_$Cj = a._$hg;
     a._$gk = function(aE) {
         for (var aD = aE.length - 1; aD >= 0; --aD) {
             var aC = aE[aD];
-            if (aC < a._$Yj) {
-                a._$Yj = aC;
+            if (aC < a.minInterval_$Yj) {
+                a.minInterval_$Yj = aC;
             } else {
-                if (aC > a._$Cj) {
-                    a._$Cj = aC;
+                if (aC > a.maxInterval_$Cj) {
+                    a.maxInterval_$Cj = aC;
                 }
             }
         }
     };
     a._$Rd = function() {
-        return a._$Yj;
+        return a.minInterval_$Yj;
     };
     a._$Hd = function() {
-        return a._$Cj;
+        return a.maxInterval_$Cj;
     };
     a.prototype._$O2 = function(aC) {
-        this._$sH = aC._$oH();
-        this._$yd = aC._$oH();
+        this.drawDataID = aC._$oH();
+        this.targetBaseDataID = aC._$oH();
         this._$Xg = aC._$oH();
         this._$Mk = aC._$BT();
         this._$Tk = aC._$Ug();
@@ -537,29 +537,29 @@
                 return;
             }
         }
-        aC._$am = aB._$kd(aD, this._$Xg, aC._$4g, this._$Kg);
+        aC.opacity = aB._$kd(aD, this._$Xg, aC._$4g, this._$Kg);
     };
     a.prototype._$jk = function(aC) {};
     a.prototype.getDrawDataID = function() {
-        return this._$sH;
+        return this.drawDataID;
     };
-    a.prototype._$Jj = function(aC) {
-        this._$sH = aC;
+    a.prototype.setDrawDataID = function(aC) {
+        this.drawDataID = aC;
     };
     a.prototype.getOpacity = function(aC, aD) {
-        return aD._$am;
+        return aD.opacity;
     };
     a.prototype._$pg = function(aC, aD) {
         return aD._$1m;
     };
     a.prototype.getTargetBaseDataID = function() {
-        return this._$yd;
+        return this.targetBaseDataID;
     };
-    a.prototype._$sm = function(aC) {
-        this._$yd = aC;
+    a.prototype.setTargetBaseDataID = function(aC) {
+        this.targetBaseDataID = aC;
     };
     a.prototype._$Sj = function() {
-        return (this._$yd != null && (this._$yd != n._$jR()));
+        return (this.targetBaseDataID != null && (this.targetBaseDataID != n._$jR()));
     };
     a.prototype.getType = function() {};
 
@@ -568,7 +568,7 @@
             return;
         }
         this._$IH = null;
-        this._$yd = null;
+        this.targetBaseDataID = null;
         this._$VP = true;
         this._$Kg = null;
     }
@@ -577,7 +577,7 @@
     c._$_k = 2;
     c.prototype._$O2 = function(aC) {
         this._$IH = aC._$oH();
-        this._$yd = aC._$oH();
+        this.targetBaseDataID = aC._$oH();
     };
     c.prototype.readV2_opacity = function(aC) {
         if (aC.getFormatVersion() >= at.LIVE2D_FORMAT_VERSION_V2_10_SDK2) {
@@ -596,20 +596,20 @@
     c.prototype._$jk = function(aD, aC) {};
     c.prototype._$ok = function(aG, aF, aH, aC, aD, aE, aI) {};
     c.prototype.getType = function() {};
-    c.prototype._$sm = function(aC) {
-        this._$yd = aC;
+    c.prototype.setTargetBaseDataID = function(aC) {
+        this.targetBaseDataID = aC;
     };
     c.prototype._$Qj = function(aC) {
         this._$IH = aC;
     };
     c.prototype.getTargetBaseDataID = function() {
-        return this._$yd;
+        return this.targetBaseDataID;
     };
     c.prototype.getBaseDataID = function() {
         return this._$IH;
     };
     c.prototype._$Sj = function() {
-        return (this._$yd != null && (this._$yd != n._$jR()));
+        return (this.targetBaseDataID != null && (this.targetBaseDataID != n._$jR()));
     };
 
     function O() {}
@@ -2664,7 +2664,7 @@
         this._$Vf = true;
         this._$u2 = aC;
         this.totalScale = 1;
-        this._$am = 1;
+        this.opacity = 1;
         this.totalOpacity = 1;
     }
     A.prototype._$7R = function() {
@@ -2695,10 +2695,10 @@
         this.totalScale = aC;
     };
     A.prototype.getInterpolatedOpacity = function() {
-        return this._$am;
+        return this.opacity;
     };
     A.prototype.setInterpolatedOpacity = function(aC) {
-        this._$am = aC;
+        this.opacity = aC;
     };
     A.prototype.getTotalOpacity = function(aC) {
         return this.totalOpacity;
@@ -3783,7 +3783,7 @@
         this._$u2 = null;
         this._$4H = null;
         this._$1m = null;
-        this._$am = null;
+        this.opacity = null;
         this._$4g = [false];
         this._$Ng = null;
         this._$Vf = true;
