@@ -210,28 +210,28 @@
     //     }
     // };
 
-    function W() {
+    function ALive2DModel() {
         if (live2d_initializing) {
             return;
         }
         this._model = null;
-        this._$Yg = null;
+        this._modelContext = null;
         this._$tH = 0;
-        W._instance_count++;
-        this._$Yg = new l2d_control_params(this);
+        ALive2DModel._instance_count++;
+        this._modelContext = new l2d_control_params(this);
     }
-    W._$2m = 1;
-    W._$im = 2;
-    W._instance_count = 0;
-    W._$Bj = function(aL, aP) {
+    ALive2DModel._$2m = 1;
+    ALive2DModel._$im = 2;
+    ALive2DModel._instance_count = 0;
+    ALive2DModel.loadModel_exe = function(aLive2DModel, inputStream) {
         try {
-            if (aP instanceof ArrayBuffer) {
-                aP = new DataView(aP);
+            if (inputStream instanceof ArrayBuffer) {
+                inputStream = new DataView(inputStream);
             }
-            if (!(aP instanceof DataView)) {
+            if (!(inputStream instanceof DataView)) {
                 throw new I("_$gg#loadModel(b) / b _$3 be DataView or ArrayBuffer");
             }
-            var buffReader = new l2d_bufferReader(aP);
+            var buffReader = new l2d_bufferReader(inputStream);
             var aH = buffReader._getNextInt8();
             var aF = buffReader._getNextInt8();
             var aE = buffReader._getNextInt8();
@@ -239,13 +239,13 @@
             if (aH == 109 && aF == 111 && aE == 99) {
                 fmtVersion = buffReader._getNextInt8();
             } else {
-                throw new I("_$sP _$x _$bP , _$62 _$H2.");
+                throw new I("Model load error , Unknown fomart.");
             }
             buffReader._setFormatVersion(fmtVersion);
             if (fmtVersion > l2d_global_format._latest_format_version) {
-                aL._$tH |= W._$im;
+                aLive2DModel._$tH |= ALive2DModel._$im;
                 var aM = l2d_global_format._latest_format_version;
-                var aD = "_$sP _$x _$bP , _$o2 _$_ version _$bP ( SDK : " + aM + " < _$q2 : " + aI + " )@_$gg#loadModel()\n";
+                var aD = "Model load error , Illegal data version error ( SDK : " + aM + " < loaded . : " + aI + " )@ALive2DModel#loadModel()\n";
                 throw new I(aD);
             }
             var model = buffReader._getNextValue();
@@ -253,103 +253,103 @@
                 var aC = buffReader._getNextInt16();
                 var aO = buffReader._getNextInt16();
                 if (aC != -30584 || aO != -30584) {
-                    aL._$tH |= W._$2m;
-                    throw new I("_$sP _$x _$bP , _$2 _$B _$1P.");
+                    aL._$tH |= ALive2DModel._$2m;
+                    throw new I("Model load error , EOF not found.");
                 }
             }
-            aL.setModelImpl(model);
-            var aK = aL.getModelContext();
-            aK.init();
+            aLive2DModel.setModelImpl(model);
+            var modelContext = aLive2DModel.getModelContext();
+            modelContext.init();
         } catch (aJ) {
             p.dumpException(aJ);
         }
     };
-    W.prototype.setModelImpl = function(aC) {
+    ALive2DModel.prototype.setModelImpl = function(aC) {
         this._model = aC;
     };
-    W.prototype.getModelImpl = function() {
+    ALive2DModel.prototype.getModelImpl = function() {
         if (this._model == null) {
             this._model = new l2d_model();
             this._model._initialize();
         }
         return this._model;
     };
-    W.prototype.getCanvasWidth = function() {
+    ALive2DModel.prototype.getCanvasWidth = function() {
         if (this._model == null) {
             return 0;
         }
         return this._model.getCanvasWidth();
     };
-    W.prototype.getCanvasHeight = function() {
+    ALive2DModel.prototype.getCanvasHeight = function() {
         if (this._model == null) {
             return 0;
         }
         return this._model.getCanvasHeight();
     };
-    W.prototype.getParamFloat = function(aC) {
-        if (typeof aC != "number") {
-            aC = this._$Yg.getParamIndex(y.getID(aC));
+    ALive2DModel.prototype.getParamFloat = function(paramIndex) {
+        if (typeof paramIndex != "number") {
+            paramIndex = this._modelContext.getParamIndex(y.getID(paramIndex));
         }
-        return this._$Yg.getParamFloat(aC);
+        return this._modelContext.getParamFloat(paramIndex);
     };
-    W.prototype.setParamFloat = function(aC, aE, aD) {
-        if (typeof aC != "number") {
-            aC = this._$Yg.getParamIndex(y.getID(aC));
-        }
-        if (arguments.length < 3) {
-            aD = 1;
-        }
-        this._$Yg.setParamFloat(aC, this._$Yg.getParamFloat(aC) * (1 - aD) + aE * aD);
-    };
-    W.prototype.addToParamFloat = function(aC, aE, aD) {
-        if (typeof aC != "number") {
-            aC = this._$Yg.getParamIndex(y.getID(aC));
+    ALive2DModel.prototype.setParamFloat = function(paramIndex, value, weight) {
+        if (typeof paramIndex != "number") {
+            paramIndex = this._modelContext.getParamIndex(y.getID(paramIndex));
         }
         if (arguments.length < 3) {
-            aD = 1;
+            weight = 1;
         }
-        this._$Yg.setParamFloat(aC, this._$Yg.getParamFloat(aC) + aE * aD);
+        this._modelContext.setParamFloat(paramIndex, this._modelContext.getParamFloat(paramIndex) * (1 - weight) + value * weight);
     };
-    W.prototype.multParamFloat = function(aC, aE, aD) {
-        if (typeof aC != "number") {
-            aC = this._$Yg.getParamIndex(y.getID(aC));
+    ALive2DModel.prototype.addToParamFloat = function(paramIndex, value, weight) {
+        if (typeof paramIndex != "number") {
+            paramIndex = this._modelContext.getParamIndex(y.getID(paramIndex));
         }
         if (arguments.length < 3) {
-            aD = 1;
+            weight = 1;
         }
-        this._$Yg.setParamFloat(aC, this._$Yg.getParamFloat(aC) * (1 + (aE - 1) * aD));
+        this._modelContext.setParamFloat(paramIndex, this._modelContext.getParamFloat(paramIndex) + value * weight);
     };
-    W.prototype.getParamIndex = function(aC) {
-        return this._$Yg.getParamIndex(y.getID(aC));
+    ALive2DModel.prototype.multParamFloat = function(paramIndex, mult, weight) {
+        if (typeof paramIndex != "number") {
+            paramIndex = this._modelContext.getParamIndex(y.getID(paramIndex));
+        }
+        if (arguments.length < 3) {
+            weight = 1;
+        }
+        this._modelContext.setParamFloat(paramIndex, this._modelContext.getParamFloat(paramIndex) * (1 + (mult - 1) * weight));
     };
-    W.prototype.loadParam = function() {
-        this._$Yg.loadParam();
+    ALive2DModel.prototype.getParamIndex = function(paramID) {
+        return this._modelContext.getParamIndex(y.getID(paramID));
     };
-    W.prototype.saveParam = function() {
-        this._$Yg.saveParam();
+    ALive2DModel.prototype.loadParam = function() {
+        this._modelContext.loadParam();
     };
-    W.prototype.init = function() {
-        this._$Yg.init();
+    ALive2DModel.prototype.saveParam = function() {
+        this._modelContext.saveParam();
     };
-    W.prototype.update = function() {
-        this._$Yg.update();
+    ALive2DModel.prototype.init = function() {
+        this._modelContext.init();
     };
-    W.prototype._$Cm = function() {
-        p._$bP("_$B2 _$Hf _$Cm()");
+    ALive2DModel.prototype.update = function() {
+        this._modelContext.update();
+    };
+    ALive2DModel.prototype.generateModelTextureNo = function() {
+        p._$bP("please override generateModelTextureNo()");
         return -1;
     };
-    W.prototype._$wm = function(aC) {
-        p._$bP("_$B2 _$Hf _$gg#_$wm() \n");
+    ALive2DModel.prototype.releaseModelTextureNo = function(aC) {
+        p._$bP("please override ALive2DModel#releaseModelTextureNo() \n");
     };
-    W.prototype._$Dj = function() {};
-    W.prototype.draw = function() {};
-    W.prototype.getModelContext = function() {
-        return this._$Yg;
+    ALive2DModel.prototype.deleteTextures = function() {};
+    ALive2DModel.prototype.draw = function() {};
+    ALive2DModel.prototype.getModelContext = function() {
+        return this._modelContext;
     };
-    W.prototype._$mj = function() {
+    ALive2DModel.prototype.getErrorFlags = function() {
         return this._$tH;
     };
-    W.prototype._$Ha = function(aF, aM, aC, aV) {
+    ALive2DModel.prototype.setupPartsOpacityGroup_alphaImpl = function(aF, aM, aC, aV) {
         var aP = -1;
         var aT = 0;
         var aH = this;
@@ -435,46 +435,46 @@
             }
         }
     };
-    W.prototype.setPartsOpacity = function(aD, aC) {
+    ALive2DModel.prototype.setPartsOpacity = function(aD, aC) {
         if (typeof aD != "number") {
-            aD = this._$Yg.getPartsDataIndex(i.getID(aD));
+            aD = this._modelContext.getPartsDataIndex(i.getID(aD));
         }
-        this._$Yg.setPartsOpacity(aD, aC);
+        this._modelContext.setPartsOpacity(aD, aC);
     };
-    W.prototype.getPartsDataIndex = function(aC) {
+    ALive2DModel.prototype.getPartsDataIndex = function(aC) {
         if (!(aC instanceof i)) {
             aC = i.getID(aC);
         }
-        return this._$Yg.getPartsDataIndex(aC);
+        return this._modelContext.getPartsDataIndex(aC);
     };
-    W.prototype.getPartsOpacity = function(aC) {
+    ALive2DModel.prototype.getPartsOpacity = function(aC) {
         if (typeof aC != "number") {
-            aC = this._$Yg.getPartsDataIndex(i.getID(aC));
+            aC = this._modelContext.getPartsDataIndex(i.getID(aC));
         }
         if (aC < 0) {
             return 0;
         }
-        return this._$Yg.getPartsOpacity(aC);
+        return this._modelContext.getPartsOpacity(aC);
     };
-    W.prototype.getDrawParam = function() {};
-    W.prototype.getDrawDataIndex = function(aC) {
-        return this._$Yg.getDrawDataIndex(V.getID(aC));
+    ALive2DModel.prototype.getDrawParam = function() {};
+    ALive2DModel.prototype.getDrawDataIndex = function(aC) {
+        return this._modelContext.getDrawDataIndex(V.getID(aC));
     };
-    W.prototype.getDrawData = function(aC) {
-        return this._$Yg.getDrawData(aC);
+    ALive2DModel.prototype.getDrawData = function(aC) {
+        return this._modelContext.getDrawData(aC);
     };
-    W.prototype.getTransformedPoints = function(aC) {
-        var aD = this._$Yg._$xj(aC);
+    ALive2DModel.prototype.getTransformedPoints = function(aC) {
+        var aD = this._modelContext._$xj(aC);
         if (aD instanceof ab) {
             return (aD).getTransformedPoints();
         }
         return null;
     };
-    W.prototype.getIndexArray = function(aD) {
-        if (aD < 0 || aD >= this._$Yg._drawDataList.length) {
+    ALive2DModel.prototype.getIndexArray = function(aD) {
+        if (aD < 0 || aD >= this._modelContext._drawDataList.length) {
             return null;
         }
-        var aC = this._$Yg._drawDataList[aD];
+        var aC = this._modelContext._drawDataList[aD];
         if (aC != null && aC.getType() == a._$Lk) {
             if (aC instanceof b) {
                 return aC.getIndexArray();
@@ -866,18 +866,18 @@
         if (live2d_initializing) {
             return;
         }
-        W.prototype.constructor.call(this);
+        ALive2DModel.prototype.constructor.call(this);
         this._$pR = new w();
     }
-    u.prototype = new W();
+    u.prototype = new ALive2DModel();
     u.loadModel = function(aD) {
         var aC = new u();
-        W._$Bj(aC, aD);
+        ALive2DModel.loadModel_exe(aC, aD);
         return aC;
     };
     u.loadModel = function(aD) {
         var aC = new u();
-        W._$Bj(aC, aD);
+        ALive2DModel.loadModel_exe(aC, aD);
         return aC;
     };
     u._$eR = function() {
@@ -907,7 +907,7 @@
         this._$pR.setTransform(aC);
     };
     u.prototype.draw = function() {
-        this._$Yg.draw(this._$pR);
+        this._modelContext.draw(this._$pR);
     };
     u.prototype._$Dj = function() {
         this._$pR._$Dj();
@@ -1694,7 +1694,7 @@
                     if (((aC = this._getNextInt8()) & 128) == 0) {
                         return ((aF & 127) << 21) | ((aE & 127) << 14) | ((aD & 127) << 7) | (aC & 255);
                     } else {
-                        throw new I("_$T _$2H  _");
+                        throw new I("Not supported  _");
                     }
                 }
             }
@@ -1818,7 +1818,7 @@
             if (0 <= aC && aC < this._valueListOfJ.length) {
                 return this._valueListOfJ[aC];
             } else {
-                throw new I("_$mT _$iP @_$K2");
+                throw new I("illegal refNo @Breader");
             }
         } else {
             var aD = this._getNextValByType(aE);
@@ -1892,7 +1892,7 @@
         case 22:
             return new l2d_point(this._getNextInt32(), this._getNextInt32());
         case 23:
-            throw new Error("_$T _$dR ");
+            throw new Error("Not Implemented ");
         case 16:
         case 25:
             return this._getNextArr_int32();
@@ -1913,9 +1913,9 @@
         case 20:
         case 24:
         case 28:
-            throw new I("_$B _$M : _getNextValue() of 2-9 ,18,19,20,24,28 : " + aI);
+            throw new I("not impl : _getNextValue() of 2-9 ,18,19,20,24,28 : " + aI);
         default:
-            throw new I("_$B _$M : _getNextValue() NO _$P : " + aI);
+            throw new I("not impl : _getNextValue() NO DEF : " + aI);
         }
     };
     l2d_bufferReader.prototype._getNextBitFlag = function() {
@@ -5013,13 +5013,13 @@
         if (live2d_initializing) {
             return;
         }
-        W.prototype.constructor.call(this);
+        ALive2DModel.prototype.constructor.call(this);
         this.drawParamWebGL = new B();
     }
-    l.prototype = new W();
+    l.prototype = new ALive2DModel();
     l.loadModel = function(aD) {
         var aC = new l();
-        W._$Bj(aC, aD);
+        ALive2DModel.loadModel_exe(aC, aD);
         return aC;
     };
     l._$eR = function() {
@@ -5049,7 +5049,7 @@
         this.drawParamWebGL.setTransform(aC);
     };
     l.prototype.draw = function() {
-        this._$Yg.draw(this.drawParamWebGL);
+        this._modelContext.draw(this.drawParamWebGL);
     };
     l.prototype._$Dj = function() {
         this.drawParamWebGL._$Dj();
