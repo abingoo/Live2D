@@ -1,8 +1,8 @@
 (function() {
-    var j = true;
+    var live2d_initializing = true;
 
     function Z() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$Xg = null;
@@ -18,19 +18,19 @@
     Z._$Fg = 3;
     Z.minInterval_$Yj = Z._$hg;
     Z.maxInterval_$Cj = Z._$hg;
-    Z._$Rd = function() {
+    Z.getMinInterval_$Rd = function() {
         return Z.minInterval_$Yj;
     };
-    Z._$Hd = function() {
+    Z.getMaxInterval_$Hd = function() {
         return Z.maxInterval_$Cj;
     };
     Z.prototype._$O2 = function(aC) {
-        this.drawDataID = aC._$oH();
-        this.targetBaseDataID = aC._$oH();
-        this._$Xg = aC._$oH();
-        this._$Mk = aC._$BT();
-        this._$Tk = aC._$Ug();
-        this._$Kg = aC._$fk();
+        this.drawDataID = aC._getNextValue();
+        this.targetBaseDataID = aC._getNextValue();
+        this._$Xg = aC._getNextValue();
+        this._$Mk = aC._getNextInt32();
+        this._$Tk = aC._getNextArr_int32();
+        this._$Kg = aC._getNextArr_float32();
         this._$8g(this._$Tk);
     };
     Z.prototype.init = function(aC) {};
@@ -82,16 +82,16 @@
     Z.prototype.getType = function() {};
     Z.prototype._$cj = function(aD, aC, aE) {};
 
-    function I(aC) {
-        if (j) {
-            return;
-        }
-        this._$Pk = aC;
-    }
-    I._$qd = -1;
-    I.prototype.toString = function() {
-        return this._$Pk;
-    };
+    // function I(aC) {
+    //     if (live2d_initializing) {
+    //         return;
+    //     }
+    //     this._$Pk = aC;
+    // }
+    // I._$qd = -1;
+    // I.prototype.toString = function() {
+    //     return this._$Pk;
+    // };
 
     function p() {}
     p._$Fm = 0;
@@ -103,13 +103,13 @@
             aC._$d = aD;
             p._$qf[aD] = aC;
         }
-        aC._$2g = O.getSystemTimeMSec();
+        aC.startTime = O.getSystemTimeMSec();
     };
     p.dump = function(aE) {
         var aC = p._$qf[aE];
         if (aC != null) {
             var aD = O.getSystemTimeMSec();
-            var aF = aD - aC._$2g;
+            var aF = aD - aC.startTime;
             console.log(aE + " : " + aF + "ms");
             return aF;
         } else {
@@ -120,7 +120,7 @@
         var aC = p._$qf[aE];
         if (aC != null) {
             var aD = O.getSystemTimeMSec();
-            return aD - aC._$2g;
+            return aD - aC.startTime;
         } else {
             return -1;
         }
@@ -158,59 +158,60 @@
         }
         console.log("\n");
     };
-    p._$Ck = function(aC) {
+    p.dumpException = function(aC) {
         console.log("dump exception : " + aC);
         console.log("stack :: " + aC.stack);
     };
 
-    function aa() {
-        this._$d = null;
-        this._$2g = null;
-    }
-    function ak() {}
-    ak._$2f = function(aC) {
-        return ak._$2f(new _$Y(aC));
-    };
-    ak._$2f = function(aE) {
-        if (!aE.exists()) {
-            throw new _$bm(aE._$Sk());
-        }
-        var aC = aE.length();
-        var aD = new Int8Array(aC);
-        var aH = new _$rm(new _$Ik(aE), 8192);
-        var aF;
-        var aG = 0;
-        while ((aF = aH.read(aD, aG, aC - aG)) > 0) {
-            aG += aF;
-        }
-        return aD;
-    };
-    ak._$x = function(aE) {
-        var aD = null;
-        var aG = null;
-        try {
-            aD = (aE instanceof Array) ? aE : new _$rm(aE, 8192);
-            aG = new _$Jm();
-            var aH = 1000;
-            var aF;
-            var aC = new Int8Array(aH);
-            while ((aF = aD.read(aC)) > 0) {
-                aG.write(aC, 0, aF);
-            }
-            return aG._$fg();
-        } finally {
-            if (aE != null) {
-                aE.close();
-            }
-            if (aG != null) {
-                aG.flush();
-                aG.close();
-            }
-        }
-    };
+    // function aa() {
+    //     this._$d = null;
+    //     this.startTime = null;
+    // }
+
+    // function ak() {}
+    // ak._$2f = function(aC) {
+    //     return ak._$2f(new _$Y(aC));
+    // };
+    // ak._$2f = function(aE) {
+    //     if (!aE.exists()) {
+    //         throw new _$bm(aE._$Sk());
+    //     }
+    //     var aC = aE.length();
+    //     var aD = new Int8Array(aC);
+    //     var aH = new _$rm(new _$Ik(aE), 8192);
+    //     var aF;
+    //     var aG = 0;
+    //     while ((aF = aH.read(aD, aG, aC - aG)) > 0) {
+    //         aG += aF;
+    //     }
+    //     return aD;
+    // };
+    // ak._$x = function(aE) {
+    //     var aD = null;
+    //     var aG = null;
+    //     try {
+    //         aD = (aE instanceof Array) ? aE : new _$rm(aE, 8192);
+    //         aG = new _$Jm();
+    //         var aH = 1000;
+    //         var aF;
+    //         var aC = new Int8Array(aH);
+    //         while ((aF = aD.read(aC)) > 0) {
+    //             aG.write(aC, 0, aF);
+    //         }
+    //         return aG._$fg();
+    //     } finally {
+    //         if (aE != null) {
+    //             aE.close();
+    //         }
+    //         if (aG != null) {
+    //             aG.flush();
+    //             aG.close();
+    //         }
+    //     }
+    // };
 
     function W() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$8f = null;
@@ -231,26 +232,26 @@
                 throw new I("_$gg#loadModel(b) / b _$3 be DataView or ArrayBuffer");
             }
             var aN = new J(aP);
-            var aH = aN._$gf();
-            var aF = aN._$gf();
-            var aE = aN._$gf();
+            var aH = aN._getNextInt8();
+            var aF = aN._getNextInt8();
+            var aE = aN._getNextInt8();
             var aI;
             if (aH == 109 && aF == 111 && aE == 99) {
-                aI = aN._$gf();
+                aI = aN._getNextInt8();
             } else {
                 throw new I("_$sP _$x _$bP , _$62 _$H2.");
             }
-            aN._$sd(aI);
+            aN._setFormatVersion(aI);
             if (aI > at._$fa) {
                 aL._$tH |= W._$im;
                 var aM = at._$fa;
                 var aD = "_$sP _$x _$bP , _$o2 _$_ version _$bP ( SDK : " + aM + " < _$q2 : " + aI + " )@_$gg#loadModel()\n";
                 throw new I(aD);
             }
-            var aG = aN._$oH();
+            var aG = aN._getNextValue();
             if (aI >= at._$ma) {
-                var aC = aN._$Ef();
-                var aO = aN._$Ef();
+                var aC = aN._getNextInt16();
+                var aO = aN._getNextInt16();
                 if (aC != -30584 || aO != -30584) {
                     aL._$tH |= W._$2m;
                     throw new I("_$sP _$x _$bP , _$2 _$B _$1P.");
@@ -260,7 +261,7 @@
             var aK = aL.getModelContext();
             aK.init();
         } catch (aJ) {
-            p._$Ck(aJ);
+            p.dumpException(aJ);
         }
     };
     W.prototype._$Dg = function(aC) {
@@ -483,7 +484,7 @@
     };
 
     function a() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         Z.prototype.constructor.call(this);
@@ -514,19 +515,19 @@
             }
         }
     };
-    a._$Rd = function() {
+    a.getMinInterval_$Rd = function() {
         return a.minInterval_$Yj;
     };
-    a._$Hd = function() {
+    a.getMaxInterval_$Hd = function() {
         return a.maxInterval_$Cj;
     };
     a.prototype._$O2 = function(aC) {
-        this.drawDataID = aC._$oH();
-        this.targetBaseDataID = aC._$oH();
-        this._$Xg = aC._$oH();
-        this._$Mk = aC._$BT();
-        this._$Tk = aC._$Ug();
-        this._$Kg = aC._$fk();
+        this.drawDataID = aC._getNextValue();
+        this.targetBaseDataID = aC._getNextValue();
+        this._$Xg = aC._getNextValue();
+        this._$Mk = aC._getNextInt32();
+        this._$Tk = aC._getNextArr_int32();
+        this._$Kg = aC._getNextArr_float32();
         a._$gk(this._$Tk);
     };
     a.prototype._$td = function(aD, aC) {
@@ -564,7 +565,7 @@
     a.prototype.getType = function() {};
 
     function c() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$IH = null;
@@ -576,12 +577,12 @@
     c._$Uj = 1;
     c._$_k = 2;
     c.prototype._$O2 = function(aC) {
-        this._$IH = aC._$oH();
-        this.targetBaseDataID = aC._$oH();
+        this._$IH = aC._getNextValue();
+        this.targetBaseDataID = aC._getNextValue();
     };
     c.prototype.readV2_opacity = function(aC) {
         if (aC.getFormatVersion() >= at.LIVE2D_FORMAT_VERSION_V2_10_SDK2) {
-            this._$Kg = aC._$fk();
+            this._$Kg = aC._getNextArr_float32();
         }
     };
     c.prototype.init = function(aC) {};
@@ -623,7 +624,7 @@
             var aE = getTimeMSec();
             while (getTimeMSec() - aE < aD) {}
         } catch (aC) {
-            aC._$Ck();
+            aC.dumpException();
         }
     };
     O.getUserTimeMSec = function() {
@@ -649,7 +650,7 @@
     };
 
     function S() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this.motions = null;
@@ -808,7 +809,7 @@
     };
 
     function n(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         af.prototype.constructor.call(this, aC);
@@ -839,7 +840,7 @@
     };
 
     function i(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         af.prototype.constructor.call(this, aC);
@@ -862,7 +863,7 @@
     };
 
     function u() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         W.prototype.constructor.call(this);
@@ -934,7 +935,7 @@
     };
 
     function av() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$NH = 0;
@@ -947,9 +948,9 @@
     }
     av._$ym = -2;
     av.prototype._$O2 = function(aC) {
-        this._$LT = aC._$oH();
-        this._$NH = aC._$BT();
-        this._$XH = aC._$oH();
+        this._$LT = aC._getNextValue();
+        this._$NH = aC._getNextInt32();
+        this._$XH = aC._getNextValue();
     };
     av.prototype.getParamIndex = function(aC) {
         if (this._$jd != aC) {
@@ -991,7 +992,7 @@
     };
 
     function af(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this.id = aC;
@@ -1006,14 +1007,14 @@
         return this.id;
     };
 
-    function H() {
-        if (j) {
-            return;
-        }
-        this.color = null;
-    }
+    // function H() {
+    //     if (live2d_initializing) {
+    //         return;
+    //     }
+    //     this.color = null;
+    // }
     function X() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         c.prototype.constructor.call(this);
@@ -1038,8 +1039,8 @@
     };
     X.prototype._$O2 = function(aC) {
         c.prototype._$O2.call(this, aC);
-        this._$Xg = aC._$oH();
-        this._$92 = aC._$oH();
+        this._$Xg = aC._getNextValue();
+        this._$92 = aC._getNextValue();
         c.prototype.readV2_opacity.call(this, aC);
     };
     X.prototype.init = function(aC) {
@@ -1383,7 +1384,7 @@
     ag.prototype = new A();
 
     function ac() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$yH = null;
@@ -1476,7 +1477,7 @@
     ac.prototype.updateParamExe = function(aC, aD, aE, aF) {};
 
     function y(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         af.prototype.constructor.call(this, aC);
@@ -1499,7 +1500,7 @@
     };
 
     function al() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$tT = null;
@@ -1515,9 +1516,9 @@
         return this._$Qg;
     };
     al.prototype._$O2 = function(aC) {
-        this._$tT = aC._$oH();
-        this._$Qg = aC._$oH();
-        this._$Sg = aC._$oH();
+        this._$tT = aC._getNextValue();
+        this._$Qg = aC._getNextValue();
+        this._$Sg = aC._getNextValue();
     };
     al.prototype._$Id = function(aC) {
         aC._$AR(this._$Sg);
@@ -1665,32 +1666,32 @@
     };
 
     function J(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
-        this._$H = new Int8Array(8);
-        this._$C2 = new DataView(this._$H.buffer);
-        this._$SP = new Int8Array(1000);
-        this._$vT = 0;
-        this._$z2 = 0;
-        this._$gj = 0;
-        this._$DR = new Array();
-        this._$f = aC;
-        this._$O = 0;
+        // this._$H = new Int8Array(8);
+        // this._$C2 = new DataView(this._$H.buffer);
+        // this._$SP = new Int8Array(1000);
+        this._bitOffset = 0;
+        this._currentInt8 = 0;
+        this._formatVersion = 0;
+        this._valueListOfJ = new Array();
+        this._dataView = aC;
+        this._dataOffset = 0;
     }
-    J.prototype._$qH = function() {
-        var aF = this._$gf();
+    J.prototype._nextIntDynamic = function() {
+        var aF = this._getNextInt8();
         var aE, aD, aC;
         if ((aF & 128) == 0) {
             return aF & 255;
         } else {
-            if (((aE = this._$gf()) & 128) == 0) {
+            if (((aE = this._getNextInt8()) & 128) == 0) {
                 return ((aF & 127) << 7) | (aE & 127);
             } else {
-                if (((aD = this._$gf()) & 128) == 0) {
+                if (((aD = this._getNextInt8()) & 128) == 0) {
                     return ((aF & 127) << 14) | ((aE & 127) << 7) | (aD & 255);
                 } else {
-                    if (((aC = this._$gf()) & 128) == 0) {
+                    if (((aC = this._getNextInt8()) & 128) == 0) {
                         return ((aF & 127) << 21) | ((aE & 127) << 14) | ((aD & 127) << 7) | (aC & 255);
                     } else {
                         throw new I("_$T _$2H  _");
@@ -1700,58 +1701,58 @@
         }
     };
     J.prototype.getFormatVersion = function() {
-        return this._$gj;
+        return this._formatVersion;
     };
-    J.prototype._$sd = function(aC) {
-        this._$gj = aC;
+    J.prototype._setFormatVersion = function(aC) {
+        this._formatVersion = aC;
     };
-    J.prototype._$ST = function() {
-        return this._$qH();
+    J.prototype._getNextIntDynamic = function() {
+        return this._nextIntDynamic();
     };
-    J.prototype._$KH = function() {
-        this._$pf();
-        this._$O += 8;
-        return this._$f.getFloat64(this._$O - 8);
+    J.prototype._getNextFloat64 = function() {
+        this._resetBitOffset();
+        this._dataOffset += 8;
+        return this._dataView.getFloat64(this._dataOffset - 8);
     };
-    J.prototype._$_f = function() {
-        this._$pf();
-        this._$O += 4;
-        return this._$f.getFloat32(this._$O - 4);
+    J.prototype._getNextFloat32 = function() {
+        this._resetBitOffset();
+        this._dataOffset += 4;
+        return this._dataView.getFloat32(this._dataOffset - 4);
     };
-    J.prototype._$BT = function() {
-        this._$pf();
-        this._$O += 4;
-        return this._$f.getInt32(this._$O - 4);
+    J.prototype._getNextInt32 = function() {
+        this._resetBitOffset();
+        this._dataOffset += 4;
+        return this._dataView.getInt32(this._dataOffset - 4);
     };
-    J.prototype._$gf = function() {
-        this._$pf();
-        return this._$f.getInt8(this._$O++);
+    J.prototype._getNextInt8 = function() {
+        this._resetBitOffset();
+        return this._dataView.getInt8(this._dataOffset++);
     };
-    J.prototype._$Ef = function() {
-        this._$pf();
-        this._$O += 2;
-        return this._$f.getInt16(this._$O - 2);
+    J.prototype._getNextInt16 = function() {
+        this._resetBitOffset();
+        this._dataOffset += 2;
+        return this._dataView.getInt16(this._dataOffset - 2);
     };
-    J.prototype._$jf = function() {
-        this._$pf();
-        this._$O += 8;
-        throw new I("_$T _$M read long");
-    };
-    J.prototype._$WR = function() {
-        this._$pf();
-        return this._$f.getInt8(this._$O++) != 0;
+    // J.prototype._$jf = function() {
+    //     this._resetBitOffset();
+    //     this._dataOffset += 8;
+    //     throw new I("_$T _$M read long");
+    // };
+    J.prototype._getNextBool8 = function() {
+        this._resetBitOffset();
+        return this._dataView.getInt8(this._dataOffset++) != 0;
     };
     var N = true;
-    J.prototype._$kf = function() {
-        this._$pf();
-        var aC = this._$ST();
+    J.prototype._getNextStr_utf8 = function() {
+        this._resetBitOffset();
+        var aC = this._getNextIntDynamic();
         var aF = null;
         if (N) {
             try {
                 var aH = new ArrayBuffer(aC * 2);
                 aF = new Uint16Array(aH);
                 for (var aE = 0; aE < aC; ++aE) {
-                    aF[aE] = this._$f.getUint8(this._$O++);
+                    aF[aE] = this._dataView.getUint8(this._dataOffset++);
                 }
                 return String.fromCharCode.apply(null, aF);
             } catch (aG) {
@@ -1762,7 +1763,7 @@
             var aD = new Array();
             if (aF == null) {
                 for (var aE = 0; aE < aC; ++aE) {
-                    aD[aE] = this._$f.getUint8(this._$O++);
+                    aD[aE] = this._dataView.getUint8(this._dataOffset++);
                 }
             } else {
                 for (var aE = 0; aE < aC; ++aE) {
@@ -1774,78 +1775,78 @@
             console.log("read utf8 / _$df _$T2 !! : " + aG);
         }
     };
-    J.prototype._$Ug = function() {
-        this._$pf();
-        var aD = this._$ST();
+    J.prototype._getNextArr_int32 = function() {
+        this._resetBitOffset();
+        var aD = this._getNextIntDynamic();
         var aC = new Int32Array(aD);
         for (var aE = 0; aE < aD; aE++) {
-            aC[aE] = this._$f.getInt32(this._$O);
-            this._$O += 4;
+            aC[aE] = this._dataView.getInt32(this._dataOffset);
+            this._dataOffset += 4;
         }
         return aC;
     };
-    J.prototype._$fk = function() {
-        this._$pf();
-        var aD = this._$ST();
+    J.prototype._getNextArr_float32 = function() {
+        this._resetBitOffset();
+        var aD = this._getNextIntDynamic();
         var aC = new Float32Array(aD);
         for (var aE = 0; aE < aD; aE++) {
-            aC[aE] = this._$f.getFloat32(this._$O);
-            this._$O += 4;
+            aC[aE] = this._dataView.getFloat32(this._dataOffset);
+            this._dataOffset += 4;
         }
         return aC;
     };
-    J.prototype._$Yk = function() {
-        this._$pf();
-        var aD = this._$ST();
+    J.prototype._getNextArr_float64 = function() {
+        this._resetBitOffset();
+        var aD = this._getNextIntDynamic();
         var aC = new Float64Array(aD);
         for (var aE = 0; aE < aD; aE++) {
-            aC[aE] = this._$f.getFloat64(this._$O);
-            this._$O += 8;
+            aC[aE] = this._dataView.getFloat64(this._dataOffset);
+            this._dataOffset += 8;
         }
         return aC;
     };
-    J.prototype._$oH = function() {
-        return this._$Gk(-1);
+    J.prototype._getNextValue = function() {
+        return this._getValueByType(-1);
     };
-    J.prototype._$Gk = function(aE) {
-        this._$pf();
+    J.prototype._getValueByType = function(aE) {
+        this._resetBitOffset();
         if (aE < 0) {
-            aE = this._$ST();
+            aE = this._getNextIntDynamic();
         }
         if (aE == at._$aH) {
-            var aC = this._$BT();
-            if (0 <= aC && aC < this._$DR.length) {
-                return this._$DR[aC];
+            var aC = this._getNextInt32();
+            if (0 <= aC && aC < this._valueListOfJ.length) {
+                return this._valueListOfJ[aC];
             } else {
                 throw new I("_$mT _$iP @_$K2");
             }
         } else {
-            var aD = this._$ik(aE);
-            this._$DR.push(aD);
+            var aD = this._getNextValByType(aE);
+            this._valueListOfJ.push(aD);
             return aD;
         }
     };
-    J.prototype._$ik = function(aI) {
+    J.prototype._getNextValByType = function(aI) {
         if (aI == 0) {
             return null;
         }
         if (aI == 50) {
-            var aF = this._$kf();
+            var aF = this._getNextStr_utf8();
             var aD = V.getID(aF);
             return aD;
         } else {
             if (aI == 51) {
-                var aF = this._$kf();
+                var aF = this._getNextStr_utf8();
                 var aD = n.getID(aF);
                 return aD;
             } else {
                 if (aI == 134) {
-                    var aF = this._$kf();
+                    var aF = this._getNextStr_utf8();
                     var aD = i.getID(aF);
                     return aD;
                 } else {
                     if (aI == 60) {
-                        var aF = this._$kf();
+                        var aF = this._getNextStr_utf8();
                         var aD = y.getID(aF);
                         return aD;
                     }
@@ -1863,41 +1864,42 @@
         }
         switch (aI) {
         case 1:
-            return this._$kf();
+            return this._getNextStr_utf8();
         case 10:
-            var aH = this._$BT();
-            return new H(aH, true);
+            var aH = this._getNextInt32();
+            // return new H(aH, true);
+            throw new I("_$B _$M : _getNextValue() of 10 : " + aI);
         case 11:
-            return new ap(this._$KH(), this._$KH(), this._$KH(), this._$KH());
+            return new l2d_rect(this._getNextFloat64(), this._getNextFloat64(), this._getNextFloat64(), this._getNextFloat64());
         case 12:
-            return new ap(this._$_f(), this._$_f(), this._$_f(), this._$_f());
+            return new l2d_rect(this._getNextFloat32(), this._getNextFloat32(), this._getNextFloat32(), this._getNextFloat32());
         case 13:
-            return new e(this._$KH(), this._$KH());
+            return new l2d_point(this._getNextFloat64(), this._getNextFloat64());
         case 14:
-            return new e(this._$_f(), this._$_f());
+            return new l2d_point(this._getNextFloat32(), this._getNextFloat32());
         case 15:
-            var aC = this._$ST();
+            var aC = this._getNextIntDynamic();
             var aD = new Array(aC);
             for (var aE = 0; aE < aC; aE++) {
-                aD[aE] = this._$oH();
+                aD[aE] = this._getNextValue();
             }
             return aD;
         case 17:
-            var aD = new ay(this._$KH(), this._$KH(), this._$KH(), this._$KH(), this._$KH(), this._$KH());
+            var aD = new ay(this._getNextFloat64(), this._getNextFloat64(), this._getNextFloat64(), this._getNextFloat64(), this._getNextFloat64(), this._getNextFloat64());
             return aD;
         case 21:
-            return new E(this._$BT(), this._$BT(), this._$BT(), this._$BT());
+            return new l2d_rect(this._getNextInt32(), this._getNextInt32(), this._getNextInt32(), this._getNextInt32());
         case 22:
-            return new k(this._$BT(), this._$BT());
+            return new l2d_point(this._getNextInt32(), this._getNextInt32());
         case 23:
             throw new Error("_$T _$dR ");
         case 16:
         case 25:
-            return this._$Ug();
+            return this._getNextArr_int32();
         case 26:
-            return this._$Yk();
+            return this._getNextArr_float64();
         case 27:
-            return this._$fk();
+            return this._getNextArr_float32();
         case 2:
         case 3:
         case 4:
@@ -1911,30 +1913,30 @@
         case 20:
         case 24:
         case 28:
-            throw new I("_$B _$M : _$oH() of 2-9 ,18,19,20,24,28 : " + aI);
+            throw new I("_$B _$M : _getNextValue() of 2-9 ,18,19,20,24,28 : " + aI);
         default:
-            throw new I("_$B _$M : _$oH() NO _$P : " + aI);
+            throw new I("_$B _$M : _getNextValue() NO _$P : " + aI);
         }
     };
-    J.prototype._$FT = function() {
-        if (this._$vT == 0) {
-            this._$z2 = this._$gf();
+    J.prototype._getNextBitFlag = function() {
+        if (this._bitOffset == 0) {
+            this._currentInt8 = this._getNextInt8();
         } else {
-            if (this._$vT == 8) {
-                this._$z2 = this._$gf();
-                this._$vT = 0;
+            if (this._bitOffset == 8) {
+                this._currentInt8 = this._getNextInt8();
+                this._bitOffset = 0;
             }
         }
-        return ((this._$z2 >> (7 - this._$vT++)) & 1) == 1;
+        return ((this._currentInt8 >> (7 - this._bitOffset++)) & 1) == 1;
     };
-    J.prototype._$pf = function() {
-        if (this._$vT != 0) {
-            this._$vT = 0;
+    J.prototype._resetBitOffset = function() {
+        if (this._bitOffset != 0) {
+            this._bitOffset = 0;
         }
     };
 
     function ar() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$hk = ar._$Wm;
@@ -1996,7 +1998,7 @@
     };
 
     function f() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$ff = null;
@@ -2005,10 +2007,10 @@
         this._$LT = null;
     }
     f.prototype._$O2 = function(aC) {
-        this._$ff = aC._$_f();
-        this._$Tf = aC._$_f();
-        this._$Og = aC._$_f();
-        this._$LT = aC._$oH();
+        this._$ff = aC._getNextFloat32();
+        this._$Tf = aC._getNextFloat32();
+        this._$Og = aC._getNextFloat32();
+        this._$LT = aC._getNextValue();
     };
     f.prototype.getMinValue = function() {
         return this._$ff;
@@ -2066,7 +2068,7 @@
     C.prototype._$O2 = function(aC) {};
 
     function V(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         af.prototype.constructor.call(this, aC);
@@ -2088,24 +2090,24 @@
         return new V();
     };
 
-    function e() {
-        if (j) {
+    function l2d_point() {
+        if (live2d_initializing) {
             return;
         }
         this.x = null;
         this.y = null;
     }
-    e.prototype._$0f = function(aC, aD) {
+    l2d_point.prototype._setPoint = function(aC, aD) {
         this.x = aC;
         this.y = aD;
     };
-    e.prototype._$0f = function(aC) {
+    l2d_point.prototype._setPoint = function(aC) {
         this.x = aC.x;
         this.y = aC.y;
     };
 
-    function E() {
-        if (j) {
+    function l2d_rect() {
+        if (live2d_initializing) {
             return;
         }
         this.x = null;
@@ -2113,33 +2115,36 @@
         this.width = null;
         this.height = null;
     }
-    E.prototype._$FH = function() {
-        return 0.5 * (this.x + this.x + this.width);
+    l2d_rect.prototype._getCenterX = function() {
+        return this.x + 0.5 * this.width;
     };
-    E.prototype._$BH = function() {
-        return 0.5 * (this.y + this.y + this.height);
+    l2d_rect.prototype._getCenterY = function() {
+        return this.y + 0.5 * this.height;
     };
-    E.prototype._$hT = function() {
+    l2d_rect.prototype._getRightX = function() {
         return this.x + this.width;
     };
-    E.prototype._$Yf = function() {
+    l2d_rect.prototype._getBottomY = function() {
         return this.y + this.height;
     };
-    E.prototype._$JT = function(aD, aF, aE, aC) {
+    l2d_rect.prototype._setRect = function(aD, aF, aE, aC) {
         this.x = aD;
         this.y = aF;
         this.width = aE;
         this.height = aC;
     };
-    E.prototype._$JT = function(aC) {
+    l2d_rect.prototype._setRect = function(aC) {
         this.x = aC.x;
         this.y = aC.y;
         this.width = aC.width;
         this.height = aC.height;
     };
+    l2d_rect.prototype.contains = function(aC, aD) {
+        return this.x <= this.x && this.y <= this.y && (this.x <= this.x + this.width) && (this.y <= this.y + this.height);
+    };
 
     function v() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$zR = null;
@@ -2164,10 +2169,10 @@
         return this._$Zg;
     };
     v.prototype._$O2 = function(aC) {
-        this._$zR = aC._$oH();
-        this._$Oj = aC._$oH();
-        this._$QR = aC._$BT();
-        this._$Zg = aC._$BT();
+        this._$zR = aC._getNextValue();
+        this._$Oj = aC._getNextValue();
+        this._$QR = aC._getNextInt32();
+        this._$Zg = aC._getNextInt32();
     };
     v.prototype._$Bg = function(aC) {
         this._$Oj.push(aC);
@@ -2180,7 +2185,7 @@
     };
 
     function w() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         ar.prototype.constructor.call(this);
@@ -2655,7 +2660,7 @@
     };
 
     function A(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$u2 = null;
@@ -2707,24 +2712,8 @@
         this.totalOpacity = aC;
     };
 
-    function k() {
-        if (j) {
-            return;
-        }
-        this.x = null;
-        this.y = null;
-    }
-    k.prototype._$0f = function(aC) {
-        this.x = aC.x;
-        this.y = aC.y;
-    };
-    k.prototype._$0f = function(aC, aD) {
-        this.x = aC;
-        this.y = aD;
-    };
-
     function am() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$Zj = null;
@@ -2818,7 +2807,7 @@
     au.STATE_OPENING = "STATE_OPENING";
 
     function r() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this.visible = true;
@@ -2834,11 +2823,11 @@
         this._$Qg = new Array();
     };
     r.prototype._$O2 = function(aC) {
-        this._$s2 = aC._$FT();
-        this.visible = aC._$FT();
-        this._$tT = aC._$oH();
-        this._$Sg = aC._$oH();
-        this._$Qg = aC._$oH();
+        this._$s2 = aC._getNextBitFlag();
+        this.visible = aC._getNextBitFlag();
+        this._$tT = aC._getNextValue();
+        this._$Sg = aC._getNextValue();
+        this._$Qg = aC._getNextValue();
     };
     r.prototype.init = function(aD) {
         var aC = new ae(this);
@@ -2977,7 +2966,7 @@
 
     function Q() {}
     function U() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         ac.prototype.constructor.call(this);
@@ -3235,7 +3224,7 @@
     s._$9m = 105;
 
     function aj() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         ac.prototype.constructor.call(this);
@@ -3685,7 +3674,7 @@
                 bz.restore();
             }
         } catch (bw) {
-            p._$Ck(bw);
+            p.dumpException(bw);
         }
     };
     ao.clip = function(aF, aE, aQ, aD, aH, aG, aP, aO, aL, aK, aJ, aI, aC, aR, aN, aM) {
@@ -3777,7 +3766,7 @@
     };
 
     function ax(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$u2 = null;
@@ -3801,7 +3790,7 @@
     };
 
     function ay() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$a = 1;
@@ -3998,45 +3987,8 @@
         aC[5] = this._$L;
     };
 
-    function ap() {
-        if (j) {
-            return;
-        }
-        this.x = null;
-        this.y = null;
-        this.width = null;
-        this.height = null;
-    }
-    ap.prototype._$FH = function() {
-        return this.x + 0.5 * this.width;
-    };
-    ap.prototype._$BH = function() {
-        return this.y + 0.5 * this.height;
-    };
-    ap.prototype._$hT = function() {
-        return this.x + this.width;
-    };
-    ap.prototype._$Yf = function() {
-        return this.y + this.height;
-    };
-    ap.prototype._$JT = function(aD, aF, aE, aC) {
-        this.x = aD;
-        this.y = aF;
-        this.width = aE;
-        this.height = aC;
-    };
-    ap.prototype._$JT = function(aC) {
-        this.x = aC.x;
-        this.y = aC.y;
-        this.width = aC.width;
-        this.height = aC.height;
-    };
-    ap.prototype.contains = function(aC, aD) {
-        return this.x <= this.x && this.y <= this.y && (this.x <= this.x + this.width) && (this.y <= this.y + this.height);
-    };
-
     function b() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         a.prototype.constructor.call(this);
@@ -4100,21 +4052,21 @@
     };
     b.prototype._$O2 = function(aF) {
         a.prototype._$O2.call(this, aF);
-        this._$TH = aF._$BT();
-        this._$y2 = aF._$BT();
-        this._$9R = aF._$BT();
-        var aC = aF._$oH();
+        this._$TH = aF._getNextInt32();
+        this._$y2 = aF._getNextInt32();
+        this._$9R = aF._getNextInt32();
+        var aC = aF._getNextValue();
         this._$cH = new Int16Array(this._$9R * 3);
         for (var aE = this._$9R * 3 - 1; aE >= 0; --aE) {
             this._$cH[aE] = aC[aE];
         }
-        this._$hR = aF._$oH();
-        this._$6P = aF._$oH();
+        this._$hR = aF._getNextValue();
+        this._$6P = aF._getNextValue();
         if (aF.getFormatVersion() >= at._$ma) {
-            this._$GH = aF._$BT();
+            this._$GH = aF._getNextInt32();
             if (this._$GH != 0) {
                 if ((this._$GH & 1) != 0) {
-                    var aD = aF._$BT();
+                    var aD = aF._getNextInt32();
                     if (this._$YH == null) {
                         this._$YH = new Object();
                     }
@@ -4284,7 +4236,7 @@
     };
 
     function g() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$nk = null;
@@ -4293,7 +4245,7 @@
         this._$nk = new Array();
     };
     g.prototype._$O2 = function(aC) {
-        this._$nk = aC._$oH();
+        this._$nk = aC._getNextValue();
     };
     g.prototype._$1d = function(aF) {
         if (aF._$lg()) {
@@ -4450,7 +4402,7 @@
     };
 
     function T() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$qT = 0;
@@ -4471,20 +4423,20 @@
         this.reflectY = aC.reflectY;
     };
     T.prototype._$O2 = function(aC) {
-        this._$qT = aC._$_f();
-        this._$sT = aC._$_f();
-        this._$c2 = aC._$_f();
-        this._$p2 = aC._$_f();
-        this._$Mf = aC._$_f();
+        this._$qT = aC._getNextFloat32();
+        this._$sT = aC._getNextFloat32();
+        this._$c2 = aC._getNextFloat32();
+        this._$p2 = aC._getNextFloat32();
+        this._$Mf = aC._getNextFloat32();
         if (aC.getFormatVersion() >= at.LIVE2D_FORMAT_VERSION_V2_10_SDK2) {
-            this.reflectX = aC._$WR();
-            this.reflectY = aC._$WR();
+            this.reflectX = aC._getNextBool8();
+            this.reflectY = aC._getNextBool8();
         }
     };
     T.prototype._$u = function() {};
 
     function x(aC) {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$6f = true;
@@ -4649,8 +4601,8 @@
         var aS = false;
         var aL = this._$Sg.length;
         var aI = this._$Qg.length;
-        var aN = a._$Rd();
-        var aU = a._$Hd();
+        var aN = a.getMinInterval_$Rd();
+        var aU = a.getMaxInterval_$Hd();
         var aP = aU - aN + 1;
         if (this._$lm == null || this._$lm.length < aP) {
             this._$lm = new Int16Array(aP);
@@ -4687,7 +4639,7 @@
         }
         if (aG != null) {
             if (x._$_2) {
-                p._$Ck(aG);
+                p.dumpException(aG);
             }
         }
         if (x._$u) {
@@ -4730,7 +4682,7 @@
         }
         if (aM != null) {
             if (x._$_2) {
-                p._$Ck(aM);
+                p.dumpException(aM);
             }
         }
         if (x._$u) {
@@ -5058,18 +5010,13 @@
     };
 
     function l() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         W.prototype.constructor.call(this);
         this.drawParamWebGL = new B();
     }
     l.prototype = new W();
-    l.loadModel = function(aD) {
-        var aC = new l();
-        W._$Bj(aC, aD);
-        return aC;
-    };
     l.loadModel = function(aD) {
         var aC = new l();
         W._$Bj(aC, aD);
@@ -5269,7 +5216,7 @@
     };
 
     function ai() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this._$ig = null;
@@ -5281,14 +5228,14 @@
         this._$ig = new Array();
     };
     ai.prototype._$O2 = function(aC) {
-        this._$ig = aC._$oH();
+        this._$ig = aC._getNextValue();
     };
     ai.prototype._$Dm = function(aC) {
         this._$ig.push(aC);
     };
 
     function B() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         ar.prototype.constructor.call(this);
@@ -5710,7 +5657,7 @@
     };
 
     function D() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         c.prototype.constructor.call(this);
@@ -5727,10 +5674,10 @@
     };
     D.prototype._$O2 = function(aC) {
         c.prototype._$O2.call(this, aC);
-        this._$V = aC._$BT();
-        this._$R = aC._$BT();
-        this._$Xg = aC._$oH();
-        this._$hR = aC._$oH();
+        this._$V = aC._getNextInt32();
+        this._$R = aC._getNextInt32();
+        this._$Xg = aC._getNextValue();
+        this._$hR = aC._getNextValue();
         c.prototype.readV2_opacity.call(this, aC);
     };
     D.prototype.init = function(aC) {
@@ -6115,7 +6062,7 @@
     G.prototype = new A();
 
     function t() {
-        if (j) {
+        if (live2d_initializing) {
             return;
         }
         this.p1 = new M();
@@ -6342,5 +6289,5 @@
     window.BaseDataID = n;
     window.ParamID = y;
     P.init();
-    var j = false;
+    var live2d_initializing = false;
 })();
