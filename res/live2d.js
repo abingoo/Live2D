@@ -37,7 +37,7 @@
     Z.prototype._$td = function(aC, aD) {
         aD._$4g[0] = false;
         aD._$1m = aB._$Aj(aC, this._$Xg, aD._$4g, this._$Tk);
-        if (l2d_Live2D._$Am) {} else {
+        if (l2d_Live2D.L2D_OUTSIDE_PARAM_AVAILABLE) {} else {
             if (aD._$4g[0]) {
                 return;
             }
@@ -76,7 +76,7 @@
         this.targetBaseDataID = aC;
     };
     Z.prototype._$Sj = function() {
-        return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID._$jR()));
+        return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID.DST_BASE_ID()));
     };
     Z.prototype.draw = function(aE, aC, aD) {};
     Z.prototype.getType = function() {};
@@ -125,8 +125,8 @@
             return -1;
         }
     };
-    l2d_UtDebug._$bP = function(aD, aC) {
-        console.log("_$bP : " + aD + "\n", aC);
+    l2d_UtDebug.error = function(aD, aC) {
+        console.log("error : " + aD + "\n", aC);
     };
     l2d_UtDebug._$GP = function(aD, aC) {
         console.log(aD, aC);
@@ -335,11 +335,11 @@
         this._modelContext.update();
     };
     l2d_Live2DModelBase.prototype.generateModelTextureNo = function() {
-        l2d_UtDebug._$bP("please override generateModelTextureNo()");
+        l2d_UtDebug.error("please override generateModelTextureNo()");
         return -1;
     };
     l2d_Live2DModelBase.prototype.releaseModelTextureNo = function(aC) {
-        l2d_UtDebug._$bP("please override l2d_Live2DModelBase#releaseModelTextureNo() \n");
+        l2d_UtDebug.error("please override l2d_Live2DModelBase#releaseModelTextureNo() \n");
     };
     l2d_Live2DModelBase.prototype.deleteTextures = function() {};
     l2d_Live2DModelBase.prototype.draw = function() {};
@@ -349,28 +349,28 @@
     l2d_Live2DModelBase.prototype.getErrorFlags = function() {
         return this._$tH;
     };
-    l2d_Live2DModelBase.prototype.setupPartsOpacityGroup_alphaImpl = function(aF, aM, aC, aV) {
+    l2d_Live2DModelBase.prototype.setupPartsOpacityGroup_alphaImpl = function(paramGroup, partsIDGroup, deltaTimeSec, CLEAR_TIME_SEC) {
         var aP = -1;
         var aT = 0;
-        var aH = this;
+        var aLive2DModel = this;
         var aE = 0.5;
         var aD = 0.15;
         var aS = true;
-        if (aC == 0) {
-            for (var aQ = 0; aQ < aF.length; aQ++) {
-                var aK = aF[aQ];
-                var aJ = aM[aQ];
-                var aN = (aH.getParamFloat(aK) != 0);
-                aH.setPartsOpacity(aJ, (aN ? 1 : 0));
+        if (deltaTimeSec == 0) {
+            for (var i = 0; i < paramGroup.length; i++) {
+                var aK = paramGroup[i];
+                var aJ = partsIDGroup[i];
+                var aN = (aLive2DModel.getParamFloat(aK) != 0);
+                aLive2DModel.setPartsOpacity(aJ, (aN ? 1 : 0));
             }
             return;
         } else {
-            if (aF.length == 1) {
-                var aK = aF[0];
-                var aO = (aH.getParamFloat(aK) != 0);
-                var aJ = aM[0];
-                var aL = aH.getPartsOpacity(aJ);
-                var aR = aC / aV;
+            if (paramGroup.length == 1) {
+                var aK = paramGroup[0];
+                var aO = (aLive2DModel.getParamFloat(aK) != 0);
+                var aJ = partsIDGroup[0];
+                var aL = aLive2DModel.getPartsOpacity(aJ);
+                var aR = deltaTimeSec / CLEAR_TIME_SEC;
                 if (aO) {
                     aL += aR;
                     if (aL > 1) {
@@ -382,38 +382,38 @@
                         aL = 0;
                     }
                 }
-                aH.setPartsOpacity(aJ, aL);
+                aLive2DModel.setPartsOpacity(aJ, aL);
             } else {
-                for (var aQ = 0; aQ < aF.length; aQ++) {
-                    var aK = aF[aQ];
-                    var aN = (aH.getParamFloat(aK) != 0);
+                for (var i = 0; i < paramGroup.length; i++) {
+                    var aK = paramGroup[i];
+                    var aN = (aLive2DModel.getParamFloat(aK) != 0);
                     if (aN) {
                         if (aP >= 0) {
                             break;
                         }
-                        aP = aQ;
-                        var aJ = aM[aQ];
-                        aT = aH.getPartsOpacity(aJ);
-                        aT += aC / aV;
+                        aP = i;
+                        var aJ = partsIDGroup[i];
+                        aT = aLive2DModel.getPartsOpacity(aJ);
+                        aT += deltaTimeSec / CLEAR_TIME_SEC;
                         if (aT > 1) {
                             aT = 1;
                         }
                     }
                 }
                 if (aP < 0) {
-                    console.log("No _$LP _$M2/ _$1 default[%s]", aF[0]);
+                    console.log("No Parts Visible/ use default[%s]", paramGroup[0]);
                     aP = 0;
                     aT = 1;
-                    aH.loadParam();
-                    aH.setParamFloat(aF[aP], aT);
-                    aH.saveParam();
+                    aLive2DModel.loadParam();
+                    aLive2DModel.setParamFloat(paramGroup[aP], aT);
+                    aLive2DModel.saveParam();
                 }
-                for (var aQ = 0; aQ < aF.length; aQ++) {
-                    var aJ = aM[aQ];
+                for (var i = 0; i < paramGroup.length; i++) {
+                    var aJ = partsIDGroup[i];
                     if (aP == aQ) {
-                        aH.setPartsOpacity(aJ, aT);
+                        aLive2DModel.setPartsOpacity(aJ, aT);
                     } else {
-                        var aG = aH.getPartsOpacity(aJ);
+                        var aG = aLive2DModel.getPartsOpacity(aJ);
                         var aU;
                         if (aT < aE) {
                             aU = aT * (aE - 1) / aE + 1;
@@ -429,52 +429,52 @@
                         if (aG > aU) {
                             aG = aU;
                         }
-                        aH.setPartsOpacity(aJ, aG);
+                        aLive2DModel.setPartsOpacity(aJ, aG);
                     }
                 }
             }
         }
     };
-    l2d_Live2DModelBase.prototype.setPartsOpacity = function(aD, aC) {
-        if (typeof aD != "number") {
-            aD = this._modelContext.getPartsDataIndex(i.getID(aD));
+    l2d_Live2DModelBase.prototype.setPartsOpacity = function(partsID, opacity) {
+        if (typeof partsID != "number") {
+            partsID = this._modelContext.getPartsDataIndex(l2d_PartsDataID.getID(partsID));
         }
-        this._modelContext.setPartsOpacity(aD, aC);
+        this._modelContext.setPartsOpacity(partsID, opacity);
     };
-    l2d_Live2DModelBase.prototype.getPartsDataIndex = function(aC) {
-        if (!(aC instanceof l2d_PartsDataID)) {
-            aC = l2d_PartsDataID.getID(aC);
+    l2d_Live2DModelBase.prototype.getPartsDataIndex = function(partsID) {
+        if (!(partsID instanceof l2d_PartsDataID)) {
+            partsID = l2d_PartsDataID.getID(partsID);
         }
-        return this._modelContext.getPartsDataIndex(aC);
+        return this._modelContext.getPartsDataIndex(partsID);
     };
-    l2d_Live2DModelBase.prototype.getPartsOpacity = function(aC) {
-        if (typeof aC != "number") {
-            aC = this._modelContext.getPartsDataIndex(i.getID(aC));
+    l2d_Live2DModelBase.prototype.getPartsOpacity = function(partsID) {
+        if (typeof partsID != "number") {
+            partsID = this._modelContext.getPartsDataIndex(l2d_PartsDataID.getID(partsID));
         }
-        if (aC < 0) {
+        if (partsID < 0) {
             return 0;
         }
-        return this._modelContext.getPartsOpacity(aC);
+        return this._modelContext.getPartsOpacity(partsID);
     };
     l2d_Live2DModelBase.prototype.getDrawParam = function() {};
-    l2d_Live2DModelBase.prototype.getDrawDataIndex = function(aC) {
-        return this._modelContext.getDrawDataIndex(l2d_DrawDataID.getID(aC));
+    l2d_Live2DModelBase.prototype.getDrawDataIndex = function(drawDataID) {
+        return this._modelContext.getDrawDataIndex(l2d_DrawDataID.getID(drawDataID));
     };
-    l2d_Live2DModelBase.prototype.getDrawData = function(aC) {
-        return this._modelContext.getDrawData(aC);
+    l2d_Live2DModelBase.prototype.getDrawData = function(drawIndex) {
+        return this._modelContext.getDrawData(drawIndex);
     };
-    l2d_Live2DModelBase.prototype.getTransformedPoints = function(aC) {
-        var aD = this._modelContext._$xj(aC);
+    l2d_Live2DModelBase.prototype.getTransformedPoints = function(drawIndex) {
+        var aD = this._modelContext.getDrawContext(drawIndex);
         if (aD instanceof ab) {
             return (aD).getTransformedPoints();
         }
         return null;
     };
-    l2d_Live2DModelBase.prototype.getIndexArray = function(aD) {
-        if (aD < 0 || aD >= this._modelContext._drawDataList.length) {
+    l2d_Live2DModelBase.prototype.getIndexArray = function(drawIndex) {
+        if (drawIndex < 0 || drawIndex >= this._modelContext._drawDataList.length) {
             return null;
         }
-        var aC = this._modelContext._drawDataList[aD];
+        var aC = this._modelContext._drawDataList[drawIndex];
         if (aC != null && aC.getType() == a._$Lk) {
             if (aC instanceof b) {
                 return aC.getIndexArray();
@@ -533,7 +533,7 @@
     a.prototype._$td = function(aD, aC) {
         aC._$4g[0] = false;
         aC._$1m = aB._$Aj(aD, this._$Xg, aC._$4g, this._$Tk);
-        if (l2d_Live2D._$Am) {} else {
+        if (l2d_Live2D.L2D_OUTSIDE_PARAM_AVAILABLE) {} else {
             if (aC._$4g[0]) {
                 return;
             }
@@ -560,7 +560,7 @@
         this.targetBaseDataID = aC;
     };
     a.prototype._$Sj = function() {
-        return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID._$jR()));
+        return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID.DST_BASE_ID()));
     };
     a.prototype.getType = function() {};
 
@@ -610,7 +610,7 @@
         return this._baseDataID;
     };
     c.prototype._$Sj = function() {
-        return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID._$jR()));
+        return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID.DST_BASE_ID()));
     };
 
     function l2d_UtSystem() {}
@@ -714,7 +714,7 @@
             }
             return aD;
         } catch (aH) {
-            l2d_UtDebug._$bP(aH);
+            l2d_UtDebug.error(aH);
             return true;
         }
     };
@@ -815,17 +815,17 @@
         l2d_BaseID.prototype.constructor.call(this, aC);
     }
     l2d_BaseDataID.prototype = new l2d_BaseID();
-    l2d_BaseDataID._$uf = null;
+    l2d_BaseDataID._baseDataID = null;
     l2d_BaseDataID._keyValMap = new Object();
-    l2d_BaseDataID._$jR = function() {
-        if (l2d_BaseDataID._$uf == null) {
-            l2d_BaseDataID._$uf = l2d_BaseDataID.getID("DST_BASE");
+    l2d_BaseDataID.DST_BASE_ID = function() {
+        if (l2d_BaseDataID._baseDataID == null) {
+            l2d_BaseDataID._baseDataID = l2d_BaseDataID.getID("DST_BASE");
         }
-        return l2d_BaseDataID._$uf;
+        return l2d_BaseDataID._baseDataID;
     };
     l2d_BaseDataID._clear = function() {
         l2d_BaseDataID._keyValMap.clear();
-        l2d_BaseDataID._$uf = null;
+        l2d_BaseDataID._baseDataID = null;
     };
     l2d_BaseDataID.getID = function(aC) {
         var aD = l2d_BaseDataID._keyValMap[aC];
@@ -909,21 +909,21 @@
     };
     l2d_Live2DModelJS.prototype.setTexture = function(aD, aC) {
         if (this._$pR == null) {
-            l2d_UtDebug._$bP("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
+            l2d_UtDebug.error("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
         }
         this._$pR.setTexture(aD, aC);
     };
     l2d_Live2DModelJS.prototype.setTexture = function(aD, aC) {
         if (this._$pR == null) {
-            l2d_UtDebug._$bP("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
+            l2d_UtDebug.error("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
         }
         this._$pR.setTexture(aD, aC);
     };
-    l2d_Live2DModelJS.prototype._$Cm = function() {
-        return this._$pR._$Cm();
+    l2d_Live2DModelJS.prototype.generateModelTextureNo = function() {
+        return this._$pR.generateModelTextureNo();
     };
-    l2d_Live2DModelJS.prototype._$wm = function(aC) {
-        this._$pR._$wm(aC);
+    l2d_Live2DModelJS.prototype.releaseModelTextureNo = function(aC) {
+        this._$pR.releaseModelTextureNo(aC);
     };
     l2d_Live2DModelJS.prototype.getDrawParam = function() {
         return this._$pR;
@@ -1059,8 +1059,8 @@
         var aX = this._$Xg._$6j(ba, br);
         bs._$4k(br[0]);
         this.interpolateOpacity(ba, this._$Xg, bs, br);
-        var aY = ba._$zm();
-        var a5 = ba._$fd();
+        var aY = ba.getTmpPivotTableIndicesRef();
+        var a5 = ba.getTmpT_ArrayRef();
         this._$Xg._$pd(aY, a5, aX);
         if (aX <= 0) {
             var bi = this._$92[aY[0]];
@@ -1260,14 +1260,14 @@
                 aM._$Fd = aH.getBaseDataIndex(aO);
             }
             if (aM._$Fd < 0) {
-                if (l2d_Live2D._$mR) {
-                    l2d_UtDebug._$bP("_$T _$2H _$X :: %s", aO);
+                if (l2d_Live2D.L2D_VERBOSE) {
+                    l2d_UtDebug.error("_$T _$2H _$X :: %s", aO);
                 }
                 aM._$vg(false);
             } else {
                 var aD = aH.getBaseData(aM._$Fd);
                 if (aD != null) {
-                    var aG = aH._$Mj(aM._$Fd);
+                    var aG = aH.getBaseContext(aM._$Fd);
                     var aN = X._$rR;
                     aN[0] = aM._$9d._$qT;
                     aN[1] = aM._$9d._$sT;
@@ -1365,7 +1365,7 @@
             }
             aE *= 0.1;
         }
-        if (l2d_Live2D._$mR) {
+        if (l2d_Live2D.L2D_VERBOSE) {
             console.log("_$T2 to transform _$gH\n");
         }
     };
@@ -1499,13 +1499,13 @@
             return;
         }
         this._$tT = null;
-        this._$Sg = null;
+        this._baseDataList = null;
         this._drawDataList = null;
         al._instance_count++;
     }
     al._instance_count = 0;
     al.prototype._$Zk = function() {
-        return this._$Sg;
+        return this._baseDataList;
     };
     al.prototype.getDrawDataList = function() {
         return this._drawDataList;
@@ -1513,12 +1513,12 @@
     al.prototype._initWithBufferReader = function(aC) {
         this._$tT = aC._getNextValue();
         this._drawDataList = aC._getNextValue();
-        this._$Sg = aC._getNextValue();
+        this._baseDataList = aC._getNextValue();
     };
     al.prototype._$Id = function(aC) {
-        aC._$AR(this._$Sg);
+        aC._$AR(this._baseDataList);
         aC.setDrawData(this._drawDataList);
-        this._$Sg = null;
+        this._baseDataList = null;
         this._drawDataList = null;
     };
 
@@ -1575,7 +1575,7 @@
                 }
                 var aK = parseInt(aI[aH]);
                 if (aK < 0 || aK > 999) {
-                    l2d_UtDebug._$bP("err : " + aK + " @UtHtml5.setup()");
+                    l2d_UtDebug.error("err : " + aK + " @UtHtml5.setup()");
                     aL = 0;
                     break;
                 }
@@ -1596,7 +1596,7 @@
             if ((aG = aF.indexOf("iPad")) >= 0) {
                 aG = aF.indexOf("CPU OS");
                 if (aG < 0) {
-                    l2d_UtDebug._$bP(" err : " + aF + " @UtHtml5.setup()");
+                    l2d_UtDebug.error(" err : " + aF + " @UtHtml5.setup()");
                     return;
                 }
                 aE.os = "iPad";
@@ -1930,63 +1930,63 @@
         }
     };
 
-    function ar() {
+    function l2d_DrawParam() {
         if (live2d_initializing) {
             return;
         }
-        this._$hk = ar._$Wm;
-        this._$bf = 1;
-        this._$x2 = 1;
-        this._$ef = 1;
-        this._$lT = 1;
+        this._$hk = l2d_DrawParam._$Wm;
+        this.a = 1;
+        this.r = 1;
+        this.g = 1;
+        this.b = 1;
         this.culling = false;
         this.matrix4x4 = new Float32Array(16);
     }
-    ar._$Wm = 32;
-    ar.prototype._$Af = function() {};
-    ar.prototype._$1R = function(aH, aF, aE, aG, aI, aD, aC) {};
-    ar.prototype._$Cm = function() {
+    l2d_DrawParam._$Wm = 32;
+    l2d_DrawParam.prototype.setupDraw = function() {};
+    l2d_DrawParam.prototype.drawTexture = function(aH, aF, aE, aG, aI, aD, aC) {};
+    l2d_DrawParam.prototype.generateModelTextureNo = function() {
         return -1;
     };
-    ar.prototype._$wm = function(aC) {};
-    ar.prototype.setBaseColor = function(aF, aE, aD, aC) {
-        if (aF < 0) {
-            aF = 0;
+    l2d_DrawParam.prototype.releaseModelTextureNo = function(aC) {};
+    l2d_DrawParam.prototype.setBaseColor = function(alpha, red, green, blue) {
+        if (alpha < 0) {
+            alpha = 0;
         } else {
-            if (aF > 1) {
-                aF = 1;
+            if (alpha > 1) {
+                alpha = 1;
             }
         }
-        if (aE < 0) {
-            aE = 0;
+        if (red < 0) {
+            red = 0;
         } else {
-            if (aE > 1) {
-                aE = 1;
+            if (red > 1) {
+                red = 1;
             }
         }
-        if (aD < 0) {
-            aD = 0;
+        if (green < 0) {
+            green = 0;
         } else {
-            if (aD > 1) {
-                aD = 1;
+            if (green > 1) {
+                green = 1;
             }
         }
-        if (aC < 0) {
-            aC = 0;
+        if (blue < 0) {
+            blue = 0;
         } else {
-            if (aC > 1) {
-                aC = 1;
+            if (blue > 1) {
+                blue = 1;
             }
         }
-        this._$bf = aF;
-        this._$x2 = aE;
-        this._$ef = aD;
-        this._$lT = aC;
+        this.a = alpha;
+        this.r = red;
+        this.g = green;
+        this.b = blue;
     };
-    ar.prototype._$lH = function(aC) {
+    l2d_DrawParam.prototype.setCulling = function(aC) {
         this.culling = aC;
     };
-    ar.prototype.setMatrix = function(aC) {
+    l2d_DrawParam.prototype.setMatrix = function(aC) {
         for (var aD = 0; aD < 16; aD++) {
             this.matrix4x4[aD] = aC[aD];
         }
@@ -2142,19 +2142,19 @@
         if (live2d_initializing) {
             return;
         }
-        this._$zR = null;
-        this._$Oj = null;
+        this._paramDefSet = null;
+        this._partsDataList = null;
         this._model_width = 400;
         this._model_height = 400;
         l2d_model._instance_count++;
     }
     l2d_model._instance_count = 0;
     l2d_model.prototype._initialize = function() {
-        if (this._$zR == null) {
-            this._$zR = new ai();
+    if (this._paramDefSet == null) {
+            this._paramDefSet = new l2d_ParamDefSet();
         }
-        if (this._$Oj == null) {
-            this._$Oj = new Array();
+        if (this._partsDataList == null) {
+            this._partsDataList = new Array();
         }
     };
     l2d_model.prototype.getCanvasWidth = function() {
@@ -2164,26 +2164,26 @@
         return this._model_height;
     };
     l2d_model.prototype._initWithBufferReader = function(aC) {
-        this._$zR = aC._getNextValue();
-        this._$Oj = aC._getNextValue();
+        this._paramDefSet = aC._getNextValue();
+        this._partsDataList = aC._getNextValue();
         this._model_width = aC._getNextInt32();
         this._model_height = aC._getNextInt32();
     };
-    l2d_model.prototype._$Bg = function(aC) {
-        this._$Oj.push(aC);
+    l2d_model.prototype._addPartsData = function(parts) {
+        this._partsDataList.push(parts);
     };
-    l2d_model.prototype._$rd = function() {
-        return this._$Oj;
+    l2d_model.prototype._getPartsDataList = function() {
+        return this._partsDataList;
     };
-    l2d_model.prototype._$hj = function() {
-        return this._$zR;
+    l2d_model.prototype._getParamDefSet = function() {
+        return this._paramDefSet;
     };
 
     function w() {
         if (live2d_initializing) {
             return;
         }
-        ar.prototype.constructor.call(this);
+        l2d_DrawParam.prototype.constructor.call(this);
         this._$mk = new Int32Array(w._$Vm);
         this._$1j = new Array();
         this.transform = null;
@@ -2194,7 +2194,7 @@
             w._$oR = w._$zk(256);
         }
     }
-    w.prototype = new ar();
+    w.prototype = new l2d_DrawParam();
     w._$Vm = 32;
     w._$Xd = false;
     w._$tf = null;
@@ -2244,8 +2244,8 @@
     w.prototype.setTransform = function(aC) {
         this.transform = aC;
     };
-    w.prototype._$Af = function() {};
-    w.prototype._$1R = function(aJ, aC, aK, aD, aL, aH, aF, aE) {
+    w.prototype.setupDraw = function() {};
+    w.prototype.drawTexture = function(aJ, aC, aK, aD, aL, aH, aF, aE) {
         if (aH < 0.01) {
             return;
         }
@@ -2253,11 +2253,11 @@
         var aI = aH > 0.9 ? l2d_Live2D.EXPAND_W : 0;
         this.gl.drawElements(aG, aK, aD, aL, aH, aI, this.transform, aE);
     };
-    w.prototype._$Cm = function() {
-        throw new Error("_$Cm");
+    w.prototype.generateModelTextureNo = function() {
+        throw new Error("generateModelTextureNo");
     };
-    w.prototype._$wm = function(aC) {
-        throw new Error("_$wm");
+    w.prototype.releaseModelTextureNo = function(aC) {
+        throw new Error("releaseModelTextureNo");
     };
     w.prototype._$Dj = function() {
         for (var aC = 0; aC < this._$mk.length; aC++) {
@@ -2293,8 +2293,8 @@
     function aB() {}
     aB._$Aj = function(a6, bj, bk, aX) {
         var aW = bj._$6j(a6, bk);
-        var aY = a6._$zm();
-        var a5 = a6._$fd();
+        var aY = a6.getTmpPivotTableIndicesRef();
+        var a5 = a6.getTmpT_ArrayRef();
         bj._$pd(aY, a5, aW);
         if (aW <= 0) {
             return aX[aY[0]];
@@ -2401,8 +2401,8 @@
     };
     aB._$kd = function(a5, bj, bk, bb) {
         var aW = bj._$6j(a5, bk);
-        var aX = a5._$zm();
-        var a4 = a5._$fd();
+        var aX = a5.getTmpPivotTableIndicesRef();
+        var a4 = a5.getTmpT_ArrayRef();
         bj._$pd(aX, a4, aW);
         if (aW <= 0) {
             return bb[aX[0]];
@@ -2487,8 +2487,8 @@
     };
     aB._$Nd = function(bQ, bR, a0, aD, bx, aY, bS, bC) {
         var aI = bR._$6j(bQ, a0);
-        var br = bQ._$zm();
-        var aX = bQ._$fd();
+        var br = bQ.getTmpPivotTableIndicesRef();
+        var aX = bQ.getTmpT_ArrayRef();
         bR._$pd(br, aX, aI);
         var aE = aD * 2;
         var aL = bS;
@@ -2801,94 +2801,94 @@
     au.STATE_CLOSED = "STATE_CLOSED";
     au.STATE_OPENING = "STATE_OPENING";
 
-    function r() {
+    function l2d_PartsData() {
         if (live2d_initializing) {
             return;
         }
         this.visible = true;
-        this._$s2 = false;
-        this._$tT = null;
-        this._$Sg = null;
+        this._islocked = false;
+        this._partsDataID = null;
+        this._baseDataList = null;
         this._drawDataList = null;
-        r._instance_count++;
+        l2d_PartsData._instance_count++;
     }
-    r._instance_count = 0;
-    r.prototype._initialize = function() {
-        this._$Sg = new Array();
+    l2d_PartsData._instance_count = 0;
+    l2d_PartsData.prototype._initialize = function() {
+        this._baseDataList = new Array();
         this._drawDataList = new Array();
     };
-    r.prototype._initWithBufferReader = function(aC) {
-        this._$s2 = aC._getNextBitFlag();
-        this.visible = aC._getNextBitFlag();
-        this._$tT = aC._getNextValue();
-        this._$Sg = aC._getNextValue();
-        this._drawDataList = aC._getNextValue();
+    l2d_PartsData.prototype._initWithBufferReader = function(buffReader) {
+        this._islocked = buffReader._getNextBitFlag();
+        this.visible = buffReader._getNextBitFlag();
+        this._partsDataID = buffReader._getNextValue();
+        this._baseDataList = buffReader._getNextValue();
+        this._drawDataList = buffReader._getNextValue();
     };
-    r.prototype.init = function(aD) {
-        var aC = new ae(this);
+    l2d_PartsData.prototype.init = function(aD) {
+        var aC = new l2d_PartsDataContext(this);
         aC.setPartsOpacity(this.isVisible() ? 1 : 0);
         return aC;
     };
-    r.prototype._$BR = function(aC) {
-        if (this._$Sg == null) {
-            throw new Error("_$Sg _$B _$lR@_$BR");
+    l2d_PartsData.prototype.addBaseData = function(aC) {
+        if (this._baseDataList == null) {
+            throw new Error("baseDataList not initialized@addBaseData");
         }
-        this._$Sg.push(aC);
+        this._baseDataList.push(aC);
     };
-    r.prototype._$SR = function(aC) {
+    l2d_PartsData.prototype.addDrawData = function(aC) {
         if (this._drawDataList == null) {
-            throw new Error("_drawDataList _$B _$lR@_$SR");
+            throw new Error("_drawDataList not initialized@addDrawData");
         }
         this._drawDataList.push(aC);
     };
-    r.prototype._$AR = function(aC) {
-        this._$Sg = aC;
+    l2d_PartsData.prototype.setBaseData = function(aC) {
+        this._baseDataList = aC;
     };
-    r.prototype.setDrawData = function(aC) {
+    l2d_PartsData.prototype.setDrawData = function(aC) {
         this._drawDataList = aC;
     };
-    r.prototype.isVisible = function() {
+    l2d_PartsData.prototype.isVisible = function() {
         return this.visible;
     };
-    r.prototype._$5T = function() {
-        return this._$s2;
+    l2d_PartsData.prototype.isLocked = function() {
+        return this._islocked;
     };
-    r.prototype._$DH = function(aC) {
+    l2d_PartsData.prototype.setVisible = function(aC) {
         this.visible = aC;
     };
-    r.prototype._$hf = function(aC) {
-        this._$s2 = aC;
+    l2d_PartsData.prototype.setLocked = function(aC) {
+        this._islocked = aC;
     };
-    r.prototype.getBaseData = function() {
-        return this._$Sg;
+    l2d_PartsData.prototype.getBaseData = function() {
+        return this._baseDataList;
     };
-    r.prototype.getDrawData = function() {
+    l2d_PartsData.prototype.getDrawData = function() {
         return this._drawDataList;
     };
-    r.prototype._$Wj = function() {
-        return this._$tT;
+    l2d_PartsData.prototype.getPartsDataID = function() {
+        return this._partsDataID;
     };
-    r.prototype._$Rk = function(aC) {
-        this._$tT = aC;
+    l2d_PartsData.prototype.setPartsDataID = function(aC) {
+        this._partsDataID = aC;
     };
-    r.prototype.getPartsID = function() {
-        return this._$tT;
+    l2d_PartsData.prototype.getPartsID = function() {
+        return this._partsDataID;
     };
-    r.prototype._$8H = function(aC) {
-        this._$tT = aC;
+    l2d_PartsData.prototype.setPartsID = function(aC) {
+        this._partsDataID = aC;
     };
 
-    function ae(aC) {
-        this._$Ng = null;
-        this._$u2 = null;
-        this._$u2 = aC;
+    function l2d_PartsDataContext(partsData) {
+        this._partsOpacity = null;
+        this._partsData = null;
+        this._partsData = partsData;
     }
-    ae.prototype = new Q();
-    ae.prototype.getPartsOpacity = function() {
-        return this._$Ng;
+    l2d_PartsDataContext.prototype = new Q();
+    l2d_PartsDataContext.prototype.getPartsOpacity = function() {
+        return this._partsOpacity;
     };
-    ae.prototype.setPartsOpacity = function(aC) {
-        this._$Ng = aC;
+    l2d_PartsDataContext.prototype.setPartsOpacity = function(aC) {
+        this._partsOpacity = aC;
     };
 
     function l2d_global_format() {}
@@ -2942,11 +2942,11 @@
                             case 131:
                                 return new f();
                             case 133:
-                                return new r();
+                                return new l2d_PartsData();
                             case 136:
                                 return new l2d_model();
                             case 137:
-                                return new ai();
+                                return new l2d_ParamDefSet();
                             case 142:
                                 return new al();
                             }
@@ -3717,11 +3717,11 @@
     };
     l2d_LDGL.clipWithTransform = function(aC, aD, aN, aI, aL, aF, aK, aE) {
         if (arguments.length < (1 + 3 * 2)) {
-            l2d_UtDebug._$bP("err : @LDGL.clip()");
+            l2d_UtDebug.error("err : @LDGL.clip()");
             return;
         }
         if (!(arguments[1] instanceof ah)) {
-            l2d_UtDebug._$bP("err : a[0] is _$B LDTransform @LDGL.clip()");
+            l2d_UtDebug.error("err : a[0] is _$B LDTransform @LDGL.clip()");
             return;
         }
         var aH = l2d_LDGL._$c;
@@ -3748,7 +3748,7 @@
         aD.setAttribute("width", aC);
         aD.setAttribute("height", aE);
         if (!aD) {
-            l2d_UtDebug._$bP("err : " + aD);
+            l2d_UtDebug.error("err : " + aD);
         }
         return aD;
     };
@@ -3938,7 +3938,7 @@
         var aD = Math.sqrt(aE * aE + aI * aI);
         var aG = aE * aH - aC * aI;
         if (aD == 0) {
-            if (l2d_Live2D._$mR) {
+            if (l2d_Live2D.L2D_VERBOSE) {
                 console.log("affine._$Cf() / rt==0");
             }
         } else {
@@ -4156,12 +4156,12 @@
                         aH._$Fd = aF.getBaseDataIndex(aC);
                     }
                     if (aH._$Fd < 0) {
-                        if (l2d_Live2D._$mR) {
-                            l2d_UtDebug._$bP("_$T _$2H _$X :: %s", aC);
+                        if (l2d_Live2D.L2D_VERBOSE) {
+                            l2d_UtDebug.error("_$T _$2H _$X :: %s", aC);
                         }
                     } else {
                         var aJ = aF.getBaseData(aH._$Fd);
-                        var aE = aF._$Mj(aH._$Fd);
+                        var aE = aF.getBaseContext(aH._$Fd);
                         if (aJ != null && !aE._$3j()) {
                             aJ._$ok(aF, aE, aH._$xd, aH._$vd, this._$y2, aq._$Pj, aq._$tR);
                             aH._$Vf = true;
@@ -4190,8 +4190,8 @@
         }
         var aC = this.getOpacity(aF, aG) * aD._$Ng * aD.baseOpacity;
         var aH = (aG._$vd != null) ? aG._$vd : aG._$xd;
-        aI._$lH(this.culling);
-        aI._$1R(aE, 3 * this._$9R, this._$cH, aH, this._$6P, aC, this._$Bm, aG);
+        aI.setCulling(this.culling);
+        aI.drawTexture(aE, 3 * this._$9R, this._$cH, aH, this._$6P, aC, this._$Bm, aG);
     };
     b.prototype.dump = function() {
         console.log("  _$7P( %d ) , _$y2( %d ) , _$9R( %d ) \n", this._$TH, this._$y2, this._$9R);
@@ -4243,16 +4243,16 @@
         this._$nk = aC._getNextValue();
     };
     g.prototype._$1d = function(aF) {
-        if (aF._$lg()) {
+        if (aF.requireSetup()) {
             return true;
         }
-        var aC = aF._$zj();
+        var aC = aF.getInitVersion();
         for (var aE = this._$nk.length - 1; aE >= 0; --aE) {
             var aD = this._$nk[aE].getParamIndex(aC);
             if (aD == av._$ym) {
                 aD = aF.getParamIndex(this._$nk[aE].getParamID());
             }
-            if (aF._$rk(aD)) {
+            if (aF.isParamUpdated(aD)) {
                 return true;
             }
         }
@@ -4260,7 +4260,7 @@
     };
     g.prototype._$6j = function(aG, aQ) {
         var aS = this._$nk.length;
-        var aE = aG._$zj();
+        var aE = aG.getInitVersion();
         var aI = 0;
         var aD;
         var aL;
@@ -4346,7 +4346,7 @@
             var aD = this._$nk[aG];
             if (aD._$gT() == 0) {
                 var aJ = aD._$Td() * aF;
-                if (aJ < 0 && l2d_Live2D._$Sf) {
+                if (aJ < 0 && l2d_Live2D.L2D_DEBUG) {
                     throw new Exception("err 23246");
                 }
                 for (var aL = 0; aL < aM; ++aL) {
@@ -4430,7 +4430,7 @@
     };
     T.prototype._$u = function() {};
 
-    function l2d_context_params(aC) {
+    function l2d_context_params(model) {
         if (live2d_initializing) {
             return;
         }
@@ -4444,10 +4444,10 @@
         this._paramMaxMap = new Float32Array(l2d_context_params._param_count);
         this._$qm = new Float32Array(l2d_context_params._param_count);
         this._$Gm = new Array(l2d_context_params._param_count);
-        this._$Sg = new Array();
+        this._baseDataList = new Array();
         this._drawDataList = new Array();
         this._drawDataMap = null;
-        this._$Oj = new Array();
+        this._partsDataList = new Array();
         this._$yk = new Array();
         this._$Fk = new Array();
         this._parts = new Array();
@@ -4456,7 +4456,7 @@
         this._$hd = null;
         this._$hm = new Int16Array(aq._$6k);
         this._$AH = new Float32Array(aq._$Zd * 2);
-        this._$CP = aC;
+        this._l2dmodelBase = model;
         this._$k2 = l2d_context_params._instance_count++;
     }
     l2d_context_params._instance_count = 0;
@@ -4469,10 +4469,10 @@
     l2d_context_params._$bd = (1000000);
     l2d_context_params._param_count = 32;
     l2d_context_params._$u = false;
-    l2d_context_params.prototype.getDrawDataIndex = function(aD) {
-        for (var aC = this._drawDataList.length - 1; aC >= 0; --aC) {
-            if (this._drawDataList[aC] != null && this._drawDataList[aC].getDrawDataID() == aD) {
-                return aC;
+    l2d_context_params.prototype.getDrawDataIndex = function(id) {
+        for (var i = this._drawDataList.length - 1; i >= 0; --i) {
+            if (this._drawDataList[i] != null && this._drawDataList[i].getDrawDataID() == id) {
+                return i;
             }
         }
         return -1;
@@ -4501,9 +4501,9 @@
         }
     };
     l2d_context_params.prototype.release = function() {
-        this._$Sg.clear();
+        this._baseDataList.clear();
         this._drawDataList.clear();
-        this._$Oj.clear();
+        this._partsDataList.clear();
         if (this._drawDataMap != null) {
             this._drawDataMap.clear();
         }
@@ -4513,19 +4513,19 @@
     };
     l2d_context_params.prototype.init = function() {
         this._$UR++;
-        if (this._$Oj.length > 0) {
+        if (this._partsDataList.length > 0) {
             this.release();
         }
-        var aJ = this._$CP.getModelImpl();
-        var aO = aJ._$rd();
-        var aN = aO.length;
+        var l2dmodel = this._l2dmodelBase.getModelImpl();
+        var partsDataList = l2dmodel._getPartsDataList();
+        var aN = partsDataList.length;
         var aC = new Array();
         var aY = new Array();
         for (var aQ = 0; aQ < aN; ++aQ) {
-            var aZ = aO[aQ];
-            this._$Oj.push(aZ);
-            this._parts.push(aZ.init(this));
-            var aF = aZ.getBaseData();
+            var partsData = partsDataList[aQ];
+            this._partsDataList.push(partsData);
+            this._parts.push(partsData.init(this));
+            var aF = partsData.getBaseData();
             var aM = aF.length;
             for (var aP = 0; aP < aM; ++aP) {
                 aC.push(aF[aP]);
@@ -4535,7 +4535,7 @@
                 aH._$bj(aQ);
                 aY.push(aH);
             }
-            var aW = aZ.getDrawData();
+            var aW = partsData.getDrawData();
             var aK = aW.length;
             for (var aP = 0; aP < aK; ++aP) {
                 var aU = aW[aP];
@@ -4546,7 +4546,7 @@
             }
         }
         var aT = aC.length;
-        var aI = l2d_BaseDataID._$jR();
+        var aI = l2d_BaseDataID.DST_BASE_ID();
         while (true) {
             var aS = false;
             for (var aQ = 0; aQ < aT; ++aQ) {
@@ -4556,7 +4556,7 @@
                 }
                 var aX = aG.getTargetBaseDataID();
                 if (aX == null || aX == aI || this.getBaseDataIndex(aX) >= 0) {
-                    this._$Sg.push(aG);
+                    this._baseDataList.push(aG);
                     this._$yk.push(aY[aQ]);
                     aC[aQ] = null;
                     aS = true;
@@ -4566,17 +4566,17 @@
                 break;
             }
         }
-        var aD = aJ._$hj();
+        var aD = l2dmodel._getParamDefSet();
         if (aD != null) {
-            var aE = aD._$Zm();
+            var aE = aD._getParamDefFloatList();
             if (aE != null) {
                 var aR = aE.length;
                 for (var aQ = 0; aQ < aR; ++aQ) {
-                    var aL = aE[aQ];
-                    if (aL == null) {
+                    var paramDefFloat = aE[aQ];
+                    if (paramDefFloat == null) {
                         continue;
                     }
-                    this._$2j(aL.getParamID(), aL.getDefaultValue(), aL.getMinValue(), aL.getMaxValue());
+                    this.addFloatParam(paramDefFloat.getParamID(), paramDefFloat.getDefaultValue(), paramDefFloat.getMinValue(), paramDefFloat.getMaxValue());
                 }
             }
         }
@@ -4594,7 +4594,7 @@
             }
         }
         var aS = false;
-        var aL = this._$Sg.length;
+        var aL = this._baseDataList.length;
         var aI = this._drawDataList.length;
         var aN = a.getMinInterval_$Rd();
         var aU = a.getMaxInterval_$Hd();
@@ -4621,7 +4621,7 @@
         }
         var aG = null;
         for (var aQ = 0; aQ < aL; ++aQ) {
-            var aE = this._$Sg[aQ];
+            var aE = this._baseDataList[aQ];
             var aC = this._$yk[aQ];
             try {
                 aE._$td(this, aC);
@@ -4658,7 +4658,7 @@
                 try {
                     aK = this._$Nm[aO];
                 } catch (aT) {
-                    console.log("_$bP :: %s / %s                @@_$qg\n", aT.toString(), aH.getDrawDataID().toString());
+                    console.log("error :: %s / %s                @@l2d_context_params\n", aT.toString(), aH.getDrawDataID().toString());
                     aO = Math.floor(aH._$pg(this, aD) - aN);
                     continue;
                 }
@@ -4671,7 +4671,7 @@
             } catch (aT) {
                 if (aM == null) {
                     aM = aT;
-                    l2d_Live2D._$mf(l2d_Live2D._$0a);
+                    l2d_Live2D.setError(l2d_Live2D.L2D_ERROR_DDTEXTURE_SETUP_TRANSFORM_FAILED);
                 }
             }
         }
@@ -4695,13 +4695,13 @@
         }
         return aS;
     };
-    l2d_context_params.prototype.draw = function(aH) {
+    l2d_context_params.prototype.draw = function(drawParam) {
         if (this._$lm == null) {
-            l2d_UtDebug._$bP("call _$CP.update() before _$CP.draw() ");
+            l2d_UtDebug.error("call _l2dmodelBase.update() before _l2dmodelBase.draw() ");
             return;
         }
         var aK = this._$lm.length;
-        aH._$Af();
+        drawParam.setupDraw();
         for (var aF = 0; aF < aK; ++aF) {
             var aI = this._$lm[aF];
             if (aI == l2d_context_params._$Nj) {
@@ -4714,7 +4714,7 @@
                     var aE = aD._$4H;
                     var aG = this._parts[aE];
                     aD._$Ng = aG.getPartsOpacity();
-                    aC.draw(aH, this, aD);
+                    aC.draw(drawParam, this, aD);
                 }
                 var aJ = this._$hd[aI];
                 if (aJ <= aI || aJ == l2d_context_params._$l2) {
@@ -4730,14 +4730,14 @@
                 return aD;
             }
         }
-        return this._$2j(aC, 0, l2d_context_params._$ed, l2d_context_params._$bd);
+        return this.addFloatParam(aC, 0, l2d_context_params._$ed, l2d_context_params._$bd);
     };
     // l2d_context_params.prototype._$cg = function(aC) {
     //     return this.getBaseDataIndex(aC);
     // };
     l2d_context_params.prototype.getBaseDataIndex = function(aC) {
-        for (var aD = this._$Sg.length - 1; aD >= 0; --aD) {
-            if (this._$Sg[aD] != null && this._$Sg[aD].getBaseDataID() == aC) {
+        for (var aD = this._baseDataList.length - 1; aD >= 0; --aD) {
+            if (this._baseDataList[aD] != null && this._baseDataList[aD].getBaseDataID() == aC) {
                 return aD;
             }
         }
@@ -4748,7 +4748,7 @@
         l2d_UtSystem._copyArrayFromStartWithLength(aE, 0, aD, 0, aE.length);
         return aD;
     };
-    l2d_context_params.prototype._$2j = function(aI, aH, aG, aC) {
+    l2d_context_params.prototype.addFloatParam = function(aI, aH, aG, aC) {
         if (this._$MR >= this._paramKeys.length) {
             var aF = this._paramKeys.length;
             var aE = new Array(aF * 2);
@@ -4770,8 +4770,8 @@
         this._$Gm[this._$MR] = l2d_context_params._$Ag;
         return this._$MR++;
     };
-    l2d_context_params.prototype._$AR = function(aD, aC) {
-        this._$Sg[aD] = aC;
+    l2d_context_params.prototype.setBaseData = function(baseDataIndex, baseData) {
+        this._baseDataList[baseDataIndex] = baseData;
     };
     l2d_context_params.prototype.setParamFloat = function(aC, aD) {
         if (aD < this._paramMinMap[aC]) {
@@ -4796,23 +4796,23 @@
         }
         l2d_UtSystem._copyArrayFromStartWithLength(this._$_j, 0, this._$qm, 0, aC);
     };
-    l2d_context_params.prototype._$zj = function() {
+    l2d_context_params.prototype.getInitVersion = function() {
         return this._$UR;
     };
-    l2d_context_params.prototype._$lg = function() {
+    l2d_context_params.prototype.requireSetup = function() {
         return this._$6f;
     };
-    l2d_context_params.prototype._$rk = function(aC) {
+    l2d_context_params.prototype.isParamUpdated = function(aC) {
         return this._$Gm[aC] == l2d_context_params._$Ag;
     };
-    l2d_context_params.prototype._$zm = function() {
+    l2d_context_params.prototype.getTmpPivotTableIndicesRef = function() {
         return this._$hm;
     };
-    l2d_context_params.prototype._$fd = function() {
+    l2d_context_params.prototype.getTmpT_ArrayRef = function() {
         return this._$AH;
     };
     l2d_context_params.prototype.getBaseData = function(aC) {
-        return this._$Sg[aC];
+        return this._baseDataList[aC];
     };
     l2d_context_params.prototype.getParamFloat = function(aC) {
         return this._$_j[aC];
@@ -4832,25 +4832,25 @@
         return aC.getPartsOpacity();
     };
     l2d_context_params.prototype.getPartsDataIndex = function(aD) {
-        for (var aC = this._$Oj.length - 1; aC >= 0; --aC) {
-            if (this._$Oj[aC] != null && this._$Oj[aC]._$Wj() == aD) {
+        for (var aC = this._partsDataList.length - 1; aC >= 0; --aC) {
+            if (this._partsDataList[aC] != null && this._partsDataList[aC].getPartsDataID() == aD) {
                 return aC;
             }
         }
         return -1;
     };
-    l2d_context_params.prototype._$Mj = function(aC) {
-        return this._$yk[aC];
+    l2d_context_params.prototype.getBaseContext = function(baseDataIndex) {
+        return this._$yk[baseDataIndex];
     };
-    l2d_context_params.prototype._$xj = function(aC) {
+    l2d_context_params.prototype.getDrawContext = function(aC) {
         return this._$Fk[aC];
     };
-    l2d_context_params.prototype._$ck = function(aC) {
+    l2d_context_params.prototype.getPartsContext = function(aC) {
         return this._parts[aC];
     };
-    l2d_context_params.prototype._$Ym = function(aJ, aF) {
+    l2d_context_params.prototype.updateZBuffer_TestImpl = function(startZ, stepZ) {
         var aE = this._$lm.length;
-        var aI = aJ;
+        var aI = startZ;
         for (var aG = 0; aG < aE; ++aG) {
             var aD = this._$lm[aG];
             if (aD == l2d_context_params._$Nj) {
@@ -4860,7 +4860,7 @@
                 var aH = this._$Fk[aD];
                 if (aH._$7R()) {
                     aH._$Xf()._$cj(this, aH, aI);
-                    aI += aF;
+                    aI += stepZ;
                 }
                 var aC = this._$hd[aD];
                 if (aC <= aD || aC == l2d_context_params._$l2) {
@@ -5051,21 +5051,21 @@
     };
     l2d_Live2DModelWebGL.prototype.setTexture = function(aD, aC) {
         if (this.drawParamWebGL == null) {
-            l2d_UtDebug._$bP("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
+            l2d_UtDebug.error("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
         }
         this.drawParamWebGL.setTexture(aD, aC);
     };
     l2d_Live2DModelWebGL.prototype.setTexture = function(aD, aC) {
         if (this.drawParamWebGL == null) {
-            l2d_UtDebug._$bP("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
+            l2d_UtDebug.error("_$9P for QT _$IP / _$rg() is _$B _$5P!!");
         }
         this.drawParamWebGL.setTexture(aD, aC);
     };
-    l2d_Live2DModelWebGL.prototype._$Cm = function() {
-        return this.drawParamWebGL._$Cm();
+    l2d_Live2DModelWebGL.prototype.generateModelTextureNo = function() {
+        return this.drawParamWebGL.generateModelTextureNo();
     };
-    l2d_Live2DModelWebGL.prototype._$wm = function(aC) {
-        this.drawParamWebGL._$wm(aC);
+    l2d_Live2DModelWebGL.prototype.releaseModelTextureNo = function(aC) {
+        this.drawParamWebGL.releaseModelTextureNo(aC);
     };
     l2d_Live2DModelWebGL.prototype.getDrawParam = function() {
         return this.drawParamWebGL;
@@ -5210,30 +5210,30 @@
         return aN;
     };
 
-    function ai() {
+    function l2d_ParamDefSet() {
         if (live2d_initializing) {
             return;
         }
-        this._$ig = null;
+        this._paramDefSet = null;
     }
-    ai.prototype._$Zm = function() {
-        return this._$ig;
+    l2d_ParamDefSet.prototype._getParamDefFloatList = function() {
+        return this._paramDefSet;
     };
-    ai.prototype._initialize = function() {
-        this._$ig = new Array();
+    l2d_ParamDefSet.prototype._initialize = function() {
+        this._paramDefSet = new Array();
     };
-    ai.prototype._initWithBufferReader = function(aC) {
-        this._$ig = aC._getNextValue();
+    l2d_ParamDefSet.prototype._initWithBufferReader = function(bufferReader) {
+        this._paramDefSet = bufferReader._getNextValue();
     };
-    ai.prototype._$Dm = function(aC) {
-        this._$ig.push(aC);
+    l2d_ParamDefSet.prototype._addParamDefFloat_TestImpl = function(paramDefFloat) {
+        this._paramDefSet.push(paramDefFloat);
     };
 
     function B() {
         if (live2d_initializing) {
             return;
         }
-        ar.prototype.constructor.call(this);
+        l2d_DrawParam.prototype.constructor.call(this);
         this.textures = new Array();
         this.transform = null;
         this.gl = null;
@@ -5246,7 +5246,7 @@
         this._$zg = null;
         this._$oR = null;
     }
-    B.prototype = new ar();
+    B.prototype = new l2d_DrawParam();
     B._$Ed = function(aC) {
         var aD = new Float32Array(aC);
         return aD;
@@ -5291,7 +5291,7 @@
     B.prototype.setTransform = function(aC) {
         this.transform = aC;
     };
-    B.prototype._$Af = function() {
+    B.prototype.setupDraw = function() {
         var aC = this.gl;
         if (this.firstDraw) {
             this.initShader();
@@ -5315,7 +5315,7 @@
         aC.activeTexture(aC.TEXTURE0);
         aC.uniform1i(this.s_texture0_Loc, 0);
     };
-    B.prototype._$1R = function(aN, aO, aG, aP, aR, aI, aH, aJ) {
+    B.prototype.drawTexture = function(aN, aO, aG, aP, aR, aI, aH, aJ) {
         if (aI < 0.01) {
             return;
         }
@@ -5372,29 +5372,29 @@
         aV.vertexAttribPointer(this.a_position_Loc, 2, aV.FLOAT, false, 0, 0);
         var aC = false;
         if (aC) {
-            checkError("_$1R x1");
+            checkError("drawTexture x1");
         }
         this._$tf = R(aV, this._$tf, aR);
         aV.enableVertexAttribArray(this.a_texCoord_Loc);
         aV.vertexAttribPointer(this.a_texCoord_Loc, 2, aV.FLOAT, false, 0, 0);
         if (aC) {
-            checkError("_$1R x2");
+            checkError("drawTexture x2");
         }
         aV.bindTexture(aV.TEXTURE_2D, this.textures[aN]);
         if (this.anisotropyExt) {
             aV.texParameteri(aV.TEXTURE_2D, this.anisotropyExt.TEXTURE_MAX_ANISOTROPY_EXT, this.maxAnisotropy);
         }
         if (aC) {
-            checkError("_$1R x3");
+            checkError("drawTexture x3");
         }
         var aL = 1;
         var aK = 1;
         var aX = 1;
         var aU = 1;
-        var aQ = this._$x2 * aK;
-        var aW = this._$ef * aX;
-        var aY = this._$lT * aU;
-        var aZ = this._$bf * aI;
+        var aQ = this.r * aK;
+        var aW = this.g * aX;
+        var aY = this.b * aU;
+        var aZ = this.a * aI;
         if (aT) {
             aV.uniform4f(this.u_baseColor, aQ * aI, aW * aI, aY * aI, aZ);
         } else {
@@ -5424,11 +5424,11 @@
         aE.bufferData(aE.ELEMENT_ARRAY_BUFFER, aD, aE.DYNAMIC_DRAW);
         return aC;
     }
-    B.prototype._$Cm = function() {
-        throw new Error("_$Cm");
+    B.prototype.generateModelTextureNo = function() {
+        throw new Error("generateModelTextureNo");
     };
-    B.prototype._$wm = function(aC) {
-        throw new Error("_$wm");
+    B.prototype.releaseModelTextureNo = function(aC) {
+        throw new Error("releaseModelTextureNo");
     };
     B.prototype._$Dj = function() {
         for (var aC = 0; aC < this.textures.length; aC++) {
@@ -5489,12 +5489,12 @@
         var aH = "precision mediump float ;varying vec2 v_texCoord;uniform sampler2D s_texture0;uniform vec4 baseColor ;void main(){  vec4 f_tmp = texture2D(s_texture0 , v_texCoord) * baseColor ;  gl_FragColor = f_tmp ;}";
         aG = this.compileShader(aI.VERTEX_SHADER, aF);
         if (!aG) {
-            l2d_UtDebug._$GP("Vertex shader compile _$bP!");
+            l2d_UtDebug._$GP("Vertex shader compile error!");
             return false;
         }
         aC = this.compileShader(aI.FRAGMENT_SHADER, aH);
         if (!aC) {
-            l2d_UtDebug._$GP("Fragment shader compile _$bP!");
+            l2d_UtDebug._$GP("Fragment shader compile error!");
             return false;
         }
         aI.attachShader(this.shaderProgram, aG);
@@ -5522,29 +5522,29 @@
     };
 
     function l2d_Live2D() {}
-    l2d_Live2D._$jm = "2.0.04_1";
-    l2d_Live2D._$Dd = 199900001;
-    l2d_Live2D._$mH = true;
-    l2d_Live2D._$mR = true;
-    l2d_Live2D._$Uk = false;
-    l2d_Live2D._$Sf = true;
-    l2d_Live2D._$fm = true;
-    l2d_Live2D._$qk = true;
-    l2d_Live2D._$em = true;
+    l2d_Live2D.__L2D_VERSION_STR__ = "2.0.04_1";
+    l2d_Live2D.__L2D_VERSION_NO__ = 199900001;
+    l2d_Live2D.L2D_SAMPLE = true;
+    l2d_Live2D.L2D_VERBOSE = true;
+    l2d_Live2D.L2D_DEBUG_IMPORT = false;
+    l2d_Live2D.L2D_DEBUG = true;
+    l2d_Live2D.L2D_TEMPORARY_DEBUG = true;
+    l2d_Live2D.L2D_RANGE_CHECK = true;
+    l2d_Live2D.L2D_RANGE_CHECK_POINT = true;
     l2d_Live2D.L2D_DEFORMER_EXTEND = true;
-    l2d_Live2D._$lk = false;
-    l2d_Live2D._$7d = false;
-    l2d_Live2D._$Am = false;
+    l2d_Live2D.L2D_FORCE_UPDATE = false;
+    l2d_Live2D.L2D_INVERT_TEXTURE = false;
+    l2d_Live2D.L2D_OUTSIDE_PARAM_AVAILABLE = false;
     l2d_Live2D.L2D_NO_ERROR = 0;
-    l2d_Live2D._$Pa = 1000;
-    l2d_Live2D._$Em = 1001;
-    l2d_Live2D._$um = 1100;
-    l2d_Live2D._$da = 2000;
-    l2d_Live2D._$2a = 2001;
-    l2d_Live2D._$ka = 2002;
-    l2d_Live2D._$0a = 4000;
+    l2d_Live2D.L2D_ERROR_LIVE2D_INIT_FAILED = 1000;
+    l2d_Live2D.L2D_ERROR_FILE_LOAD_FAILED = 1001;
+    l2d_Live2D.L2D_ERROR_MEMORY_ERROR = 1100;
+    l2d_Live2D.L2D_ERROR_MODEL_DATA_VERSION_MISMATCH = 2000;
+    l2d_Live2D.L2D_ERROR_MODEL_DATA_EOF_ERROR = 2001;
+    l2d_Live2D.L2D_ERROR_MODEL_DATA_UNKNOWN_FORMAT = 2002;
+    l2d_Live2D.L2D_ERROR_DDTEXTURE_SETUP_TRANSFORM_FAILED = 4000;
     l2d_Live2D._$Bk = true;
-    l2d_Live2D._$Uf = 0;
+    l2d_Live2D.errorNumber = 0;
     l2d_Live2D.IGNORE_CLIP = false;
     l2d_Live2D.IGNORE_EXPAND = false;
     l2d_Live2D.EXPAND_W = 2;
@@ -5626,7 +5626,7 @@
     };
     l2d_Live2D.init = function() {
         if (l2d_Live2D._$Bk) {
-            console.log("Live2D %s", l2d_Live2D._$jm);
+            console.log("Live2D %s", l2d_Live2D.__L2D_VERSION_STR__);
             l2d_Live2D._$Bk = false;
             var aC = false;
             aC = true;
@@ -5637,14 +5637,14 @@
         return l2d_Live2D._$jm;
     };
     l2d_Live2D.getVersionNo = function() {
-        return l2d_Live2D._$Dd;
+        return l2d_Live2D.__L2D_VERSION_NO__;
     };
-    l2d_Live2D._$mf = function(aC) {
-        l2d_Live2D._$Uf = aC;
+    l2d_Live2D.setError = function(errorNo) {
+        l2d_Live2D.errorNumber = errorNo;
     };
     l2d_Live2D.getError = function() {
-        var aC = l2d_Live2D._$Uf;
-        l2d_Live2D._$Uf = 0;
+        var aC = l2d_Live2D.errorNumber;
+        l2d_Live2D.errorNumber = 0;
         return aC;
     };
     l2d_Live2D.prototype.dispose = function() {
@@ -5715,13 +5715,13 @@
                 aG._$Fd = aF.getBaseDataIndex(aC);
             }
             if (aG._$Fd < 0) {
-                if (l2d_Live2D._$mR) {
-                    l2d_UtDebug._$bP("_$T _$2H _$X :: %s", aC);
+                if (l2d_Live2D.L2D_VERBOSE) {
+                    l2d_UtDebug.error("_$T _$2H _$X :: %s", aC);
                 }
                 aG._$vg(false);
             } else {
                 var aI = aF.getBaseData(aG._$Fd);
-                var aD = aF._$Mj(aG._$Fd);
+                var aD = aF.getBaseContext(aG._$Fd);
                 if (aI != null && aD._$7R()) {
                     var aH = aD.getTotalScale();
                     aG.setTotalScale_notForClient(aH);
@@ -5961,7 +5961,7 @@
                                         a7[a5 + 1] = aX + (a1 - aX) * (1 - be) + (aE - aX) * (1 - bd);
                                     }
                                 } else {
-                                    System.err.printf("_$bP calc : %.4f , %.4f                  @@BDBoxGrid\n", aZ, aS);
+                                    System.err.printf("error calc : %.4f , %.4f                  @@BDBoxGrid\n", aZ, aS);
                                 }
                             }
                         }
@@ -5995,7 +5995,7 @@
         var aS, aR;
         var aO = (aC._$vd != null) ? aC._$vd : aC._$xd;
         for (var aF = aK; aF < aD; aF += aU) {
-            if (l2d_Live2D._$em) {
+            if (l2d_Live2D.L2D_RANGE_CHECK_POINT) {
                 aJ = aG[aF];
                 aI = aG[aF + 1];
                 if (aJ < 0) {
