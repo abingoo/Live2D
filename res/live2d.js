@@ -216,12 +216,12 @@
         }
         this._model = null;
         this._modelContext = null;
-        this._$tH = 0;
+        this.errorFlags = 0;
         l2d_Live2DModelBase._instance_count++;
         this._modelContext = new l2d_context_params(this);
     }
-    l2d_Live2DModelBase._$2m = 1;
-    l2d_Live2DModelBase._$im = 2;
+    l2d_Live2DModelBase._staticInt1 = 1;
+    l2d_Live2DModelBase._staticInt2 = 2;
     l2d_Live2DModelBase._instance_count = 0;
     l2d_Live2DModelBase.loadModel_exe = function(aLive2DModel, inputStream) {
         try {
@@ -243,7 +243,7 @@
             }
             buffReader._setFormatVersion(fmtVersion);
             if (fmtVersion > l2d_global_format._latest_format_version) {
-                aLive2DModel._$tH |= l2d_Live2DModelBase._$im;
+                aLive2DModel.errorFlags |= l2d_Live2DModelBase._staticInt2;
                 var aM = l2d_global_format._latest_format_version;
                 var aD = "Model load error , Illegal data version error ( SDK : " + aM + " < loaded . : " + aI + " )@l2d_Live2DModelBase#loadModel()\n";
                 throw new I(aD);
@@ -253,7 +253,7 @@
                 var aC = buffReader._getNextInt16();
                 var aO = buffReader._getNextInt16();
                 if (aC != -30584 || aO != -30584) {
-                    aL._$tH |= l2d_Live2DModelBase._$2m;
+                    aL.errorFlags |= l2d_Live2DModelBase._staticInt1;
                     throw new I("Model load error , EOF not found.");
                 }
             }
@@ -347,7 +347,7 @@
         return this._modelContext;
     };
     l2d_Live2DModelBase.prototype.getErrorFlags = function() {
-        return this._$tH;
+        return this.errorFlags;
     };
     l2d_Live2DModelBase.prototype.setupPartsOpacityGroup_alphaImpl = function(paramGroup, partsIDGroup, deltaTimeSec, CLEAR_TIME_SEC) {
         var aP = -1;
@@ -616,10 +616,10 @@
     function l2d_UtSystem() {}
     l2d_UtSystem._$lj = 0;
     l2d_UtSystem._$xg = l2d_UtSystem._$lj;
-    l2d_UtSystem._$8R = function() {
+    l2d_UtSystem.isBigEndian = function() {
         return true;
     };
-    l2d_UtSystem._$rH = function(aD) {
+    l2d_UtSystem.sleepMSec = function(aD) {
         try {
             var aE = getTimeMSec();
             while (getTimeMSec() - aE < aD) {}
@@ -1047,7 +1047,7 @@
         return aD;
     };
     X.prototype._$td = function(ba, bs) {
-        if (!((this == bs._$Xf()))) {
+        if (!((this == bs.getIDrawData()))) {
             console.log("### assert!! ### ");
         }
         var bh = bs;
@@ -1246,7 +1246,7 @@
         bh._$9d.reflectY = bi.reflectY;
     };
     X.prototype._$jk = function(aH, aC) {
-        if (!((this == aC._$Xf()))) {
+        if (!((this == aC.getIDrawData()))) {
             console.log("### assert!! ### ");
         }
         var aM = aC;
@@ -1261,7 +1261,7 @@
             }
             if (aM._$Fd < 0) {
                 if (l2d_Live2D.L2D_VERBOSE) {
-                    l2d_UtDebug.error("_$T _$2H _$X :: %s", aO);
+                    l2d_UtDebug.error("Not _$2H _$X :: %s", aO);
                 }
                 aM._$vg(false);
             } else {
@@ -1274,7 +1274,7 @@
                     var aE = X._$PR;
                     aE[0] = 0;
                     aE[1] = -0.1;
-                    var aJ = aG._$Xf().getType();
+                    var aJ = aG.getIDrawData().getType();
                     if (aJ == c._type1) {
                         aE[1] = -10;
                     } else {
@@ -1303,7 +1303,7 @@
         }
     };
     X.prototype._$ok = function(aE, aM, aG, aZ, aO, aJ, aX) {
-        if (!((this == aM._$Xf()))) {
+        if (!((this == aM.getIDrawData()))) {
             console.log("### assert!! ### ");
         }
         var aC = aM;
@@ -1329,7 +1329,7 @@
         }
     };
     X.prototype._$Gd = function(aK, aF, aD, aM, aL, aC) {
-        if (!((aF == aD._$Xf()))) {
+        if (!((aF == aD.getIDrawData()))) {
             console.log("### assert!! ### ");
         }
         var aJ = X._$TR;
@@ -2658,11 +2658,11 @@
         if (live2d_initializing) {
             return;
         }
-        this._$u2 = null;
+        this._iDrawData = null;
         this._partsIndex = null;
         this._$Gg = false;
         this._$Vf = true;
-        this._$u2 = aC;
+        this._iDrawData = aC;
         this.totalScale = 1;
         this.opacity = 1;
         this.totalOpacity = 1;
@@ -2673,8 +2673,8 @@
     A.prototype._$vg = function(aC) {
         this._$Vf = aC;
     };
-    A.prototype._$Xf = function() {
-        return this._$u2;
+    A.prototype.getIDrawData = function() {
+        return this._iDrawData;
     };
     A.prototype._setPartsIndex = function(aC) {
         this._partsIndex = aC;
@@ -3638,7 +3638,7 @@
                     aH = 0;
                 }
                 if (l2d_Live2D.USE_CACHED_POLYGON_IMAGE) {
-                    var a8 = bu._$u2;
+                    var a8 = bu._iDrawData;
                     a8.gl_cacheImage = a8.gl_cacheImage || {};
                     if (!a8.gl_cacheImage[bt]) {
                         var bi = l2d_LDGL.createCanvas(aZ - bj, bx - a6);
@@ -3760,11 +3760,11 @@
         console.log(aD);
     };
 
-    function ax(aC) {
+    function l2d_IDrawContext(iDrawData) {
         if (live2d_initializing) {
             return;
         }
-        this._$u2 = null;
+        this._iDrawData = null;
         this._partsIndex = null;
         this._$1m = null;
         this.opacity = null;
@@ -3772,16 +3772,16 @@
         this._$Ng = null;
         this._$Vf = true;
         this.baseOpacity = 1;
-        this._$u2 = aC;
+        this._iDrawData = iDrawData;
     }
-    ax.prototype._$5j = function() {
+    l2d_IDrawContext.prototype._$5j = function() {
         return this._$4g[0];
     };
-    ax.prototype._$7R = function() {
+    l2d_IDrawContext.prototype._$7R = function() {
         return this._$Vf && !this._$4g[0];
     };
-    ax.prototype._$Xf = function() {
-        return this._$u2;
+    l2d_IDrawContext.prototype.getIDrawData = function() {
+        return this._iDrawData;
     };
 
     function ay() {
@@ -4031,9 +4031,9 @@
         var aF = aq._$yR;
         switch (aF) {
         default:
-        case aq._$8m:
-            throw new Error("_$T _$dR ");
-        case aq._$6m:
+        case 1:
+            throw new Error("Not Implemented ");
+        case 2:
             for (var aE = this._numPoints - 1; aE >= 0; --aE) {
                 var aD = aE * aq._$tR;
                 aI[aD + 4] = aJ;
@@ -4124,7 +4124,7 @@
     };
     b.prototype._$td = function(aE, aC) {
         var aF = aC;
-        if (!((this == aF._$Xf()))) {
+        if (!((this == aF.getIDrawData()))) {
             console.log("### assert!! ### ");
         }
         if (!this._$Xg._$1d(aE)) {
@@ -4140,7 +4140,7 @@
     };
     b.prototype._$jk = function(aF, aD) {
         try {
-            if (!((this == aD._$Xf()))) {
+            if (!((this == aD.getIDrawData()))) {
                 console.log("### assert!! ### ");
             }
             var aG = false;
@@ -4177,7 +4177,7 @@
         }
     };
     b.prototype.draw = function(aI, aF, aD) {
-        if (!((this == aD._$Xf()))) {
+        if (!((this == aD.getIDrawData()))) {
             console.log("### assert!! ### ");
         }
         if (aD._$4g[0]) {
@@ -4220,12 +4220,12 @@
     };
 
     function ab(aC) {
-        ax.prototype.constructor.call(this, aC);
+        l2d_IDrawContext.prototype.constructor.call(this, aC);
         this._$Fd = a._$5d;
         this._$xd = null;
         this._$vd = null;
     }
-    ab.prototype = new ax();
+    ab.prototype = new l2d_IDrawContext();
     ab.prototype.getTransformedPoints = function() {
         return (this._$vd != null) ? this._$vd : this._$xd;
     };
@@ -4859,7 +4859,7 @@
             do {
                 var aH = this._$Fk[aD];
                 if (aH._$7R()) {
-                    aH._$Xf()._$cj(this, aH, aI);
+                    aH.getIDrawData()._$cj(this, aH, aI);
                     aI += stepZ;
                 }
                 var aC = this._$hd[aD];
