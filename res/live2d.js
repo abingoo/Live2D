@@ -1,7 +1,7 @@
 (function() {
     var live2d_initializing = true;
 
-    function Z() {
+    function l2d_DrawElementBase() {
         if (live2d_initializing) {
             return;
         }
@@ -12,19 +12,19 @@
         this._$Tk = null;
         this._$Kg = null;
     }
-    Z._$5d = -2;
-    Z._$hg = 500;
-    Z._$Lk = 2;
-    Z._$Fg = 3;
-    Z.minInterval_$Yj = Z._$hg;
-    Z.maxInterval_$Cj = Z._$hg;
-    Z.getMinInterval_$Rd = function() {
-        return Z.minInterval_$Yj;
+    l2d_DrawElementBase._$5d = -2;
+    l2d_DrawElementBase._$hg = 500;
+    l2d_DrawElementBase._type2 = 2;
+    l2d_DrawElementBase._$Fg = 3;
+    l2d_DrawElementBase.minInterval_$Yj = l2d_DrawElementBase._$hg;
+    l2d_DrawElementBase.maxInterval_$Cj = l2d_DrawElementBase._$hg;
+    l2d_DrawElementBase.getMinInterval_$Rd = function() {
+        return l2d_DrawElementBase.minInterval_$Yj;
     };
-    Z.getMaxInterval_$Hd = function() {
-        return Z.maxInterval_$Cj;
+    l2d_DrawElementBase.getMaxInterval_$Hd = function() {
+        return l2d_DrawElementBase.maxInterval_$Cj;
     };
-    Z.prototype._initWithBufferReader = function(aC) {
+    l2d_DrawElementBase.prototype._initWithBufferReader = function(aC) {
         this.drawDataID = aC._getNextValue();
         this.targetBaseDataID = aC._getNextValue();
         this._$Xg = aC._getNextValue();
@@ -33,8 +33,8 @@
         this._$Kg = aC._getNextArr_float32();
         this._$8g(this._$Tk);
     };
-    Z.prototype.init = function(aC) {};
-    Z.prototype._$td = function(aC, aD) {
+    l2d_DrawElementBase.prototype.init = function(aC) {};
+    l2d_DrawElementBase.prototype._$td = function(aC, aD) {
         aD._$4g[0] = false;
         aD._$1m = aB._$Aj(aC, this._$Xg, aD._$4g, this._$Tk);
         if (l2d_Live2D.L2D_OUTSIDE_PARAM_AVAILABLE) {} else {
@@ -44,43 +44,43 @@
         }
         aD.opacity = aB._$kd(aC, this._$Xg, aD._$4g, this._$Kg);
     };
-    Z.prototype._$jk = function(aC, aD) {};
-    Z.prototype.getDrawDataID = function() {
+    l2d_DrawElementBase.prototype._$jk = function(aC, aD) {};
+    l2d_DrawElementBase.prototype.getDrawDataID = function() {
         return this.drawDataID;
     };
-    Z.prototype.setDrawDataID = function(aC) {
+    l2d_DrawElementBase.prototype.setDrawDataID = function(aC) {
         this.drawDataID = aC;
     };
-    Z.prototype.getOpacity = function(aC, aD) {
+    l2d_DrawElementBase.prototype.getOpacity = function(aC, aD) {
         return aD.opacity;
     };
-    Z.prototype._$pg = function(aC, aD) {
+    l2d_DrawElementBase.prototype._$pg = function(aC, aD) {
         return aD._$1m;
     };
-    Z.prototype._$8g = function(aE) {
+    l2d_DrawElementBase.prototype._$8g = function(aE) {
         for (var aD = aE.length - 1; aD >= 0; --aD) {
             var aC = aE[aD];
-            if (aC < Z.minInterval_$Yj) {
-                Z.minInterval_$Yj = aC;
+            if (aC < l2d_DrawElementBase.minInterval_$Yj) {
+                l2d_DrawElementBase.minInterval_$Yj = aC;
             } else {
-                if (aC > Z.maxInterval_$Cj) {
-                    Z.maxInterval_$Cj = aC;
+                if (aC > l2d_DrawElementBase.maxInterval_$Cj) {
+                    l2d_DrawElementBase.maxInterval_$Cj = aC;
                 }
             }
         }
     };
-    Z.prototype.getTargetBaseDataID = function() {
+    l2d_DrawElementBase.prototype.getTargetBaseDataID = function() {
         return this.targetBaseDataID;
     };
-    Z.prototype.setTargetBaseDataID = function(aC) {
+    l2d_DrawElementBase.prototype.setTargetBaseDataID = function(aC) {
         this.targetBaseDataID = aC;
     };
-    Z.prototype._$Sj = function() {
+    l2d_DrawElementBase.prototype._$Sj = function() {
         return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID.DST_BASE_ID()));
     };
-    Z.prototype.draw = function(aE, aC, aD) {};
-    Z.prototype.getType = function() {};
-    Z.prototype._$cj = function(aD, aC, aE) {};
+    l2d_DrawElementBase.prototype.draw = function(aE, aC, aD) {};
+    l2d_DrawElementBase.prototype.getType = function() {};
+    l2d_DrawElementBase.prototype._$cj = function(aD, aC, aE) {};
 
     // function I(aC) {
     //     if (live2d_initializing) {
@@ -465,7 +465,7 @@
     };
     l2d_Live2DModelBase.prototype.getTransformedPoints = function(drawIndex) {
         var aD = this._modelContext.getDrawContext(drawIndex);
-        if (aD instanceof ab) {
+        if (aD instanceof l2d_DrawContext_ab) {
             return (aD).getTransformedPoints();
         }
         return null;
@@ -475,7 +475,7 @@
             return null;
         }
         var aC = this._modelContext._drawDataList[drawIndex];
-        if (aC != null && aC.getType() == a._$Lk) {
+        if (aC != null && aC.getType() == l2d_DrawElement_a._type2) {
             if (aC instanceof b) {
                 return aC.getIndexArray();
             }
@@ -483,11 +483,11 @@
         return null;
     };
 
-    function a() {
+    function l2d_DrawElement_a() {
         if (live2d_initializing) {
             return;
         }
-        Z.prototype.constructor.call(this);
+        l2d_DrawElementBase.prototype.constructor.call(this);
         this.drawDataID = null;
         this.targetBaseDataID = null;
         this._$Xg = null;
@@ -495,42 +495,42 @@
         this._$Tk = null;
         this._$Kg = null;
     }
-    a.prototype = new Z();
-    a._$5d = -2;
-    a._$hg = 500;
-    a._$Lk = 2;
-    a._$Fg = 3;
-    a._$Rm = 4;
-    a.minInterval_$Yj = a._$hg;
-    a.maxInterval_$Cj = a._$hg;
-    a._$gk = function(aE) {
+    l2d_DrawElement_a.prototype = new l2d_DrawElementBase();
+    l2d_DrawElement_a._$5d = -2;
+    l2d_DrawElement_a._$hg = 500;
+    l2d_DrawElement_a._type2 = 2;
+    l2d_DrawElement_a._$Fg = 3;
+    l2d_DrawElement_a._$Rm = 4;
+    l2d_DrawElement_a.minInterval_$Yj = l2d_DrawElement_a._$hg;
+    l2d_DrawElement_a.maxInterval_$Cj = l2d_DrawElement_a._$hg;
+    l2d_DrawElement_a._$gk = function(aE) {
         for (var aD = aE.length - 1; aD >= 0; --aD) {
             var aC = aE[aD];
-            if (aC < a.minInterval_$Yj) {
-                a.minInterval_$Yj = aC;
+            if (aC < l2d_DrawElement_a.minInterval_$Yj) {
+                l2d_DrawElement_a.minInterval_$Yj = aC;
             } else {
-                if (aC > a.maxInterval_$Cj) {
-                    a.maxInterval_$Cj = aC;
+                if (aC > l2d_DrawElement_a.maxInterval_$Cj) {
+                    l2d_DrawElement_a.maxInterval_$Cj = aC;
                 }
             }
         }
     };
-    a.getMinInterval_$Rd = function() {
-        return a.minInterval_$Yj;
+    l2d_DrawElement_a.getMinInterval_$Rd = function() {
+        return l2d_DrawElement_a.minInterval_$Yj;
     };
-    a.getMaxInterval_$Hd = function() {
-        return a.maxInterval_$Cj;
+    l2d_DrawElement_a.getMaxInterval_$Hd = function() {
+        return l2d_DrawElement_a.maxInterval_$Cj;
     };
-    a.prototype._initWithBufferReader = function(aC) {
+    l2d_DrawElement_a.prototype._initWithBufferReader = function(aC) {
         this.drawDataID = aC._getNextValue();
         this.targetBaseDataID = aC._getNextValue();
         this._$Xg = aC._getNextValue();
         this._$Mk = aC._getNextInt32();
         this._$Tk = aC._getNextArr_int32();
         this._$Kg = aC._getNextArr_float32();
-        a._$gk(this._$Tk);
+        l2d_DrawElement_a._$gk(this._$Tk);
     };
-    a.prototype._$td = function(aD, aC) {
+    l2d_DrawElement_a.prototype._$td = function(aD, aC) {
         aC._$4g[0] = false;
         aC._$1m = aB._$Aj(aD, this._$Xg, aC._$4g, this._$Tk);
         if (l2d_Live2D.L2D_OUTSIDE_PARAM_AVAILABLE) {} else {
@@ -540,29 +540,29 @@
         }
         aC.opacity = aB._$kd(aD, this._$Xg, aC._$4g, this._$Kg);
     };
-    a.prototype._$jk = function(aC) {};
-    a.prototype.getDrawDataID = function() {
+    l2d_DrawElement_a.prototype._$jk = function(aC) {};
+    l2d_DrawElement_a.prototype.getDrawDataID = function() {
         return this.drawDataID;
     };
-    a.prototype.setDrawDataID = function(aC) {
+    l2d_DrawElement_a.prototype.setDrawDataID = function(aC) {
         this.drawDataID = aC;
     };
-    a.prototype.getOpacity = function(aC, aD) {
+    l2d_DrawElement_a.prototype.getOpacity = function(aC, aD) {
         return aD.opacity;
     };
-    a.prototype._$pg = function(aC, aD) {
+    l2d_DrawElement_a.prototype._$pg = function(aC, aD) {
         return aD._$1m;
     };
-    a.prototype.getTargetBaseDataID = function() {
+    l2d_DrawElement_a.prototype.getTargetBaseDataID = function() {
         return this.targetBaseDataID;
     };
-    a.prototype.setTargetBaseDataID = function(aC) {
+    l2d_DrawElement_a.prototype.setTargetBaseDataID = function(aC) {
         this.targetBaseDataID = aC;
     };
-    a.prototype._$Sj = function() {
+    l2d_DrawElement_a.prototype._$Sj = function() {
         return (this.targetBaseDataID != null && (this.targetBaseDataID != l2d_BaseDataID.DST_BASE_ID()));
     };
-    a.prototype.getType = function() {};
+    l2d_DrawElement_a.prototype.getType = function() {};
 
     function l2d_IBaseData() {
         if (live2d_initializing) {
@@ -677,7 +677,7 @@
         if (motion == null) {
             return -1;
         }
-        aG = new l2d_motion_timer();
+        aG = new l2d_MotionTimer();
         aG._motion = motion;
         this.motions.push(aG);
         var aI = aG._instanceNo;
@@ -783,7 +783,7 @@
     //     }
     // };
 
-    function l2d_motion_timer() {
+    function l2d_MotionTimer() {
         this._motion = null;
         this._$Vf = true;
         this._finished = false;
@@ -791,20 +791,20 @@
         this._$km = -1;
         this._finish_time = -1;
         this._instanceNo = null;
-        this._instanceNo = l2d_motion_timer._instance_count++;
+        this._instanceNo = l2d_MotionTimer._instance_count++;
     }
-    l2d_motion_timer._instance_count = 0;
-    l2d_motion_timer.prototype.isFinished = function() {
+    l2d_MotionTimer._instance_count = 0;
+    l2d_MotionTimer.prototype.isFinished = function() {
         return this._finished;
     };
-    l2d_motion_timer.prototype._updateFinishTime = function(fadeOutMsec) {
+    l2d_MotionTimer.prototype._updateFinishTime = function(fadeOutMsec) {
         var aD = l2d_UtSystem.getUserTimeMSec();
         var aC = aD + fadeOutMsec;
         if (this._finish_time < 0 || aC < this._finish_time) {
             this._finish_time = aC;
         }
     };
-    l2d_motion_timer.prototype._getInstanceNo = function() {
+    l2d_MotionTimer.prototype._getInstanceNo = function() {
         return this._instanceNo;
     };
 
@@ -1008,7 +1008,7 @@
     //     }
     //     this.color = null;
     // }
-    function X() {
+    function l2d_drawData_type1() {
         if (live2d_initializing) {
             return;
         }
@@ -1016,45 +1016,45 @@
         this._$Xg = null;
         this._$92 = null;
     }
-    X.prototype = new l2d_IBaseData();
-    X._$rR = new Float32Array(2);
-    X._$PR = new Float32Array(2);
-    X._$2R = new Float32Array(2);
-    X._$TR = new Float32Array(2);
-    X._$fR = new Float32Array(2);
-    X._$HR = new Float32Array(2);
-    X._$sf = new Array();
-    X.prototype._initialize = function() {
+    l2d_drawData_type1.prototype = new l2d_IBaseData();
+    l2d_drawData_type1._$rR = new Float32Array(2);
+    l2d_drawData_type1._$PR = new Float32Array(2);
+    l2d_drawData_type1._$2R = new Float32Array(2);
+    l2d_drawData_type1._$TR = new Float32Array(2);
+    l2d_drawData_type1._$fR = new Float32Array(2);
+    l2d_drawData_type1._$HR = new Float32Array(2);
+    l2d_drawData_type1._$sf = new Array();
+    l2d_drawData_type1.prototype._initialize = function() {
         this._$Xg = new l2d_PivotManager();
         this._$Xg._initialize();
         this._$92 = new Array();
     };
-    X.prototype.getType = function() {
+    l2d_drawData_type1.prototype.getType = function() {
         return l2d_IBaseData._type1;
     };
-    X.prototype._initWithBufferReader = function(aC) {
+    l2d_drawData_type1.prototype._initWithBufferReader = function(aC) {
         l2d_IBaseData.prototype._initWithBufferReader.call(this, aC);
         this._$Xg = aC._getNextValue();
         this._$92 = aC._getNextValue();
         l2d_IBaseData.prototype.readV2_opacity.call(this, aC);
     };
-    X.prototype.init = function(aC) {
-        var aD = new ag(this);
-        aD._$9d = new T();
+    l2d_drawData_type1.prototype.init = function(aC) {
+        var aD = new l2d_drawContext_type1(this);
+        aD._$9d = new l2d_drawFlag();
         if (this._$Sj()) {
-            aD._$ld = new T();
+            aD._$ld = new l2d_drawFlag();
         }
         return aD;
     };
-    X.prototype._$td = function(ba, bs) {
-        if (!((this == bs.getIDrawData()))) {
+    l2d_drawData_type1.prototype._$td = function(ba, bs) {
+        if (!((this == bs.getIDrawElement()))) {
             console.log("### assert!! ### ");
         }
         var bh = bs;
         if (!this._$Xg._$1d(ba)) {
             return;
         }
-        var br = X._$sf;
+        var br = l2d_drawData_type1._$sf;
         br[0] = false;
         var aX = this._$Xg.calcPivotValue(ba, br);
         bs._$4k(br[0]);
@@ -1245,8 +1245,8 @@
         bh._$9d.reflectX = bi.reflectX;
         bh._$9d.reflectY = bi.reflectY;
     };
-    X.prototype._$jk = function(aH, aC) {
-        if (!((this == aC.getIDrawData()))) {
+    l2d_drawData_type1.prototype._$jk = function(aH, aC) {
+        if (!((this == aC.getIDrawElement()))) {
             console.log("### assert!! ### ");
         }
         var aM = aC;
@@ -1268,27 +1268,27 @@
                 var aD = aH.getBaseData(aM._$Fd);
                 if (aD != null) {
                     var aG = aH.getBaseContext(aM._$Fd);
-                    var aN = X._$rR;
+                    var aN = l2d_drawData_type1._$rR;
                     aN[0] = aM._$9d._$qT;
                     aN[1] = aM._$9d._$sT;
-                    var aE = X._$PR;
+                    var aE = l2d_drawData_type1._$PR;
                     aE[0] = 0;
                     aE[1] = -0.1;
-                    var aJ = aG.getIDrawData().getType();
+                    var aJ = aG.getIDrawElement().getType();
                     if (aJ == l2d_IBaseData._type1) {
                         aE[1] = -10;
                     } else {
                         aE[1] = -0.1;
                     }
-                    var aL = X._$2R;
+                    var aL = l2d_drawData_type1._$2R;
                     this._$Gd(aH, aD, aG, aN, aE, aL);
-                    var aK = l2d_math.getAngleNotAbs(aE, aL);
+                    var aK = l2d_math_angle.getAngleNotAbs(aE, aL);
                     aD._$ok(aH, aG, aN, aN, 1, 0, 2);
                     aM._$ld._$qT = aN[0];
                     aM._$ld._$sT = aN[1];
                     aM._$ld._$c2 = aM._$9d._$c2;
                     aM._$ld._$p2 = aM._$9d._$p2;
-                    aM._$ld._$Mf = aM._$9d._$Mf - aK * l2d_math._radian2degree_factor;
+                    aM._$ld._$Mf = aM._$9d._$Mf - aK * l2d_math_angle._radian2degree_factor;
                     var aF = aG.getTotalScale();
                     aM.setTotalScale_notForClient(aF * aM._$ld._$c2);
                     var aI = aG.getTotalOpacity();
@@ -1302,14 +1302,14 @@
             }
         }
     };
-    X.prototype._$ok = function(aE, aM, aG, aZ, aO, aJ, aX) {
-        if (!((this == aM.getIDrawData()))) {
+    l2d_drawData_type1.prototype._$ok = function(aE, aM, aG, aZ, aO, aJ, aX) {
+        if (!((this == aM.getIDrawElement()))) {
             console.log("### assert!! ### ");
         }
         var aC = aM;
         var aP = aC._$ld != null ? aC._$ld : aC._$9d;
-        var aV = Math.sin(l2d_math._degree2radian_factor * aP._$Mf);
-        var aK = Math.cos(l2d_math._degree2radian_factor * aP._$Mf);
+        var aV = Math.sin(l2d_math_angle._degree2radian_factor * aP._$Mf);
+        var aK = Math.cos(l2d_math_angle._degree2radian_factor * aP._$Mf);
         var aY = aC.getTotalScale();
         var aR = aP.reflectX ? -1 : 1;
         var aQ = aP.reflectY ? -1 : 1;
@@ -1328,16 +1328,16 @@
             aZ[aF + 1] = aW * aI + aU * aH + aS;
         }
     };
-    X.prototype._$Gd = function(aK, aF, aD, aM, aL, aC) {
-        if (!((aF == aD.getIDrawData()))) {
+    l2d_drawData_type1.prototype._$Gd = function(aK, aF, aD, aM, aL, aC) {
+        if (!((aF == aD.getIDrawElement()))) {
             console.log("### assert!! ### ");
         }
-        var aJ = X._$TR;
-        X._$TR[0] = aM[0];
-        X._$TR[1] = aM[1];
+        var aJ = l2d_drawData_type1._$TR;
+        l2d_drawData_type1._$TR[0] = aM[0];
+        l2d_drawData_type1._$TR[1] = aM[1];
         aF._$ok(aK, aD, aJ, aJ, 1, 0, 2);
-        var aG = X._$fR;
-        var aN = X._$HR;
+        var aG = l2d_drawData_type1._$fR;
+        var aN = l2d_drawData_type1._$HR;
         var aI = 10;
         var aE = 1;
         for (var aH = 0; aH < aI; aH++) {
@@ -1370,13 +1370,13 @@
         }
     };
 
-    function ag(aC) {
+    function l2d_drawContext_type1(aC) {
         l2d_IBaseContext.prototype.constructor.call(this, aC);
         this._$Fd = l2d_IBaseData._$5d;
         this._$9d = null;
         this._$ld = null;
     }
-    ag.prototype = new l2d_IBaseContext();
+    l2d_drawContext_type1.prototype = new l2d_IBaseContext();
 
     function l2d_AMotion() {
         if (live2d_initializing) {
@@ -1458,8 +1458,8 @@
             }
         }
         var aD = this._weight;
-        var aC = (this._fadeIn == 0) ? 1 : z._cos_curve(((aG - motionQueueEnt._$km) / (this._fadeIn)));
-        var aF = (this._fadeOut == 0 || motionQueueEnt._finish_time < 0) ? 1 : z._cos_curve(((motionQueueEnt._finish_time - aG) / (this._fadeOut)));
+        var aC = (this._fadeIn == 0) ? 1 : l2d_math_curve._cos_curve(((aG - motionQueueEnt._$km) / (this._fadeIn)));
+        var aF = (this._fadeOut == 0 || motionQueueEnt._finish_time < 0) ? 1 : l2d_math_curve._cos_curve(((motionQueueEnt._finish_time - aG) / (this._fadeOut)));
         aD = aD * aC * aF;
         if (!((0 <= aD && aD <= 1))) {
             console.log("### assert!! ### ");
@@ -1504,7 +1504,7 @@
         al._instance_count++;
     }
     al._instance_count = 0;
-    al.prototype._$Zk = function() {
+    al.prototype._getBaseDataList = function() {
         return this._baseDataList;
     };
     al.prototype.getDrawDataList = function() {
@@ -1522,49 +1522,49 @@
         this._drawDataList = null;
     };
 
-    function sys_env() {}
-    sys_env._$lj = 0;
-    sys_env.SYSTEM_INFO = null;
-    sys_env.USER_AGENT = navigator.userAgent;
-    sys_env.isIPhone = function() {
-        if (!sys_env.SYSTEM_INFO) {
-            sys_env.setup();
+    function l2d_UtEnv() {}
+    l2d_UtEnv._$lj = 0;
+    l2d_UtEnv.SYSTEM_INFO = null;
+    l2d_UtEnv.USER_AGENT = navigator.userAgent;
+    l2d_UtEnv.isIPhone = function() {
+        if (!l2d_UtEnv.SYSTEM_INFO) {
+            l2d_UtEnv.setup();
         }
-        return sys_env.SYSTEM_INFO._isIPhone;
+        return l2d_UtEnv.SYSTEM_INFO._isIPhone;
     };
-    sys_env.isIOS = function() {
-        if (!sys_env.SYSTEM_INFO) {
-            sys_env.setup();
+    l2d_UtEnv.isIOS = function() {
+        if (!l2d_UtEnv.SYSTEM_INFO) {
+            l2d_UtEnv.setup();
         }
-        return sys_env.SYSTEM_INFO._isIPhone || sys_env.SYSTEM_INFO._isIPad;
+        return l2d_UtEnv.SYSTEM_INFO._isIPhone || l2d_UtEnv.SYSTEM_INFO._isIPad;
     };
-    sys_env.isAndroid = function() {
-        if (!sys_env.SYSTEM_INFO) {
-            sys_env.setup();
+    l2d_UtEnv.isAndroid = function() {
+        if (!l2d_UtEnv.SYSTEM_INFO) {
+            l2d_UtEnv.setup();
         }
-        return sys_env.SYSTEM_INFO._isAndroid;
+        return l2d_UtEnv.SYSTEM_INFO._isAndroid;
     };
-    sys_env.getOSVersion = function() {
-        if (!sys_env.SYSTEM_INFO) {
-            sys_env.setup();
+    l2d_UtEnv.getOSVersion = function() {
+        if (!l2d_UtEnv.SYSTEM_INFO) {
+            l2d_UtEnv.setup();
         }
-        return sys_env.SYSTEM_INFO.version;
+        return l2d_UtEnv.SYSTEM_INFO.version;
     };
-    sys_env.getOS = function() {
-        if (!sys_env.SYSTEM_INFO) {
-            sys_env.setup();
+    l2d_UtEnv.getOS = function() {
+        if (!l2d_UtEnv.SYSTEM_INFO) {
+            l2d_UtEnv.setup();
         }
-        if (sys_env.SYSTEM_INFO._isIPhone || sys_env.SYSTEM_INFO._isIPad) {
+        if (l2d_UtEnv.SYSTEM_INFO._isIPhone || l2d_UtEnv.SYSTEM_INFO._isIPad) {
             return "iOS";
         }
-        if (sys_env.SYSTEM_INFO._isAndroid) {
+        if (l2d_UtEnv.SYSTEM_INFO._isAndroid) {
             return "Android";
         } else {
             return "_$62 OS";
         }
     };
-    sys_env.setup = function() {
-        var aF = sys_env.USER_AGENT;
+    l2d_UtEnv.setup = function() {
+        var aF = l2d_UtEnv.USER_AGENT;
 
         function aD(aJ, aM) {
             var aI = aJ.substring(aM).split(/[ _,;\.]/);
@@ -1585,7 +1585,7 @@
         }
         var aG;
         var aC;
-        var aE = sys_env.SYSTEM_INFO = {
+        var aE = l2d_UtEnv.SYSTEM_INFO = {
             userAgent: aF
         };
         if ((aG = aF.indexOf("iPhone OS ")) >= 0) {
@@ -1615,8 +1615,8 @@
         }
     };
 
-    function z() {}
-    z._cos_curve = function(aC) {
+    function l2d_math_curve() {}
+    l2d_math_curve._cos_curve = function(aC) {
         if (aC < 0) {
             return 0;
         } else {
@@ -1624,10 +1624,10 @@
                 return 1;
             }
         }
-        return (0.5 - 0.5 * Math.cos(aC * l2d_math.PI_F));
+        return (0.5 - 0.5 * Math.cos(aC * l2d_math_angle.PI_F));
     };
-    var Y = function() {};
-    Y._$oP = function(aG, aE, aM, aL, aF, aD, aC, aN, aI) {
+    var l2d_UtVector = function() {};
+    l2d_UtVector._$oP = function(aG, aE, aM, aL, aF, aD, aC, aN, aI) {
         var aH = (aC * aD - aN * aF);
         if (aH == 0) {
             return null;
@@ -2020,19 +2020,19 @@
         return this._paramID;
     };
 
-    function l2d_math() {}
-    // l2d_math._$jg = Math.PI / 180;
-    l2d_math._degree2radian_factor = (Math.PI / 180);
-    // l2d_math._$Lg = 180 / Math.PI;
-    l2d_math._radian2degree_factor = (180 / Math.PI);
-    l2d_math.PI_F = Math.PI;
-    // l2d_math._$If = [0, 0.012368, 0.024734, 0.037097, 0.049454, 0.061803, 0.074143, 0.086471, 0.098786, 0.111087, 0.12337, 0.135634, 0.147877, 0.160098, 0.172295, 0.184465, 0.196606, 0.208718, 0.220798, 0.232844, 0.244854, 0.256827, 0.268761, 0.280654, 0.292503, 0.304308, 0.316066, 0.327776, 0.339436, 0.351044, 0.362598, 0.374097, 0.385538, 0.396921, 0.408243, 0.419502, 0.430697, 0.441826, 0.452888, 0.463881, 0.474802, 0.485651, 0.496425, 0.507124, 0.517745, 0.528287, 0.538748, 0.549126, 0.559421, 0.56963, 0.579752, 0.589785, 0.599728, 0.609579, 0.619337, 0.629, 0.638567, 0.648036, 0.657406, 0.666676, 0.675843, 0.684908, 0.693867, 0.70272, 0.711466, 0.720103, 0.72863, 0.737045, 0.745348, 0.753536, 0.76161, 0.769566, 0.777405, 0.785125, 0.792725, 0.800204, 0.807561, 0.814793, 0.821901, 0.828884, 0.835739, 0.842467, 0.849066, 0.855535, 0.861873, 0.868079, 0.874153, 0.880093, 0.885898, 0.891567, 0.897101, 0.902497, 0.907754, 0.912873, 0.917853, 0.922692, 0.92739, 0.931946, 0.936359, 0.940629, 0.944755, 0.948737, 0.952574, 0.956265, 0.959809, 0.963207, 0.966457, 0.96956, 0.972514, 0.97532, 0.977976, 0.980482, 0.982839, 0.985045, 0.987101, 0.989006, 0.990759, 0.992361, 0.993811, 0.995109, 0.996254, 0.997248, 0.998088, 0.998776, 0.999312, 0.999694, 0.999924, 1];
-    l2d_math.getAngleNotAbs = function(aF, aD) {
+    function l2d_math_angle() {}
+    // l2d_math_angle._$jg = Math.PI / 180;
+    l2d_math_angle._degree2radian_factor = (Math.PI / 180);
+    // l2d_math_angle._$Lg = 180 / Math.PI;
+    l2d_math_angle._radian2degree_factor = (180 / Math.PI);
+    l2d_math_angle.PI_F = Math.PI;
+    // l2d_math_angle._$If = [0, 0.012368, 0.024734, 0.037097, 0.049454, 0.061803, 0.074143, 0.086471, 0.098786, 0.111087, 0.12337, 0.135634, 0.147877, 0.160098, 0.172295, 0.184465, 0.196606, 0.208718, 0.220798, 0.232844, 0.244854, 0.256827, 0.268761, 0.280654, 0.292503, 0.304308, 0.316066, 0.327776, 0.339436, 0.351044, 0.362598, 0.374097, 0.385538, 0.396921, 0.408243, 0.419502, 0.430697, 0.441826, 0.452888, 0.463881, 0.474802, 0.485651, 0.496425, 0.507124, 0.517745, 0.528287, 0.538748, 0.549126, 0.559421, 0.56963, 0.579752, 0.589785, 0.599728, 0.609579, 0.619337, 0.629, 0.638567, 0.648036, 0.657406, 0.666676, 0.675843, 0.684908, 0.693867, 0.70272, 0.711466, 0.720103, 0.72863, 0.737045, 0.745348, 0.753536, 0.76161, 0.769566, 0.777405, 0.785125, 0.792725, 0.800204, 0.807561, 0.814793, 0.821901, 0.828884, 0.835739, 0.842467, 0.849066, 0.855535, 0.861873, 0.868079, 0.874153, 0.880093, 0.885898, 0.891567, 0.897101, 0.902497, 0.907754, 0.912873, 0.917853, 0.922692, 0.92739, 0.931946, 0.936359, 0.940629, 0.944755, 0.948737, 0.952574, 0.956265, 0.959809, 0.963207, 0.966457, 0.96956, 0.972514, 0.97532, 0.977976, 0.980482, 0.982839, 0.985045, 0.987101, 0.989006, 0.990759, 0.992361, 0.993811, 0.995109, 0.996254, 0.997248, 0.998088, 0.998776, 0.999312, 0.999694, 0.999924, 1];
+    l2d_math_angle.getAngleNotAbs = function(aF, aD) {
         var aC = Math.atan2(aF[1], aF[0]);
         var aE = Math.atan2(aD[1], aD[0]);
-        return l2d_math.getAngleDiff(aC, aE);
+        return l2d_math_angle.getAngleDiff(aC, aE);
     };
-    l2d_math.getAngleDiff = function(aD, aC) {
+    l2d_math_angle.getAngleDiff = function(aD, aC) {
         var aE = aD - aC;
         while (aE < -Math.PI) {
             aE += 2 * Math.PI;
@@ -2042,7 +2042,7 @@
         }
         return aE;
     };
-    // l2d_math._$E = function(aC) {
+    // l2d_math_angle._$E = function(aC) {
     //     return Math.sin(aC);
     // };
 
@@ -2188,18 +2188,18 @@
         this._$1j = new Array();
         this.transform = null;
         this.gl = null;
-        if (l2d_drawParamJS._$tf == null) {
-            l2d_drawParamJS._$tf = l2d_drawParamJS._create_array_32f(256);
-            l2d_drawParamJS._$zg = l2d_drawParamJS._create_array_32f(256);
-            l2d_drawParamJS._$oR = l2d_drawParamJS._create_array_16i(256);
+        if (l2d_drawParamJS._texcoordDrawArrayBuffer == null) {
+            l2d_drawParamJS._texcoordDrawArrayBuffer = l2d_drawParamJS._create_array_32f(256);
+            l2d_drawParamJS._positionDrawArrayBuffer = l2d_drawParamJS._create_array_32f(256);
+            l2d_drawParamJS._drawElementBuffer = l2d_drawParamJS._create_array_16i(256);
         }
     }
     l2d_drawParamJS.prototype = new l2d_drawParamBase();
     l2d_drawParamJS._$Vm = 32;
-    l2d_drawParamJS._$Xd = false;
-    l2d_drawParamJS._$tf = null;
-    l2d_drawParamJS._$zg = null;
-    l2d_drawParamJS._$oR = null;
+    // l2d_drawParamJS._$Xd = false;
+    l2d_drawParamJS._texcoordDrawArrayBuffer = null;
+    l2d_drawParamJS._positionDrawArrayBuffer = null;
+    l2d_drawParamJS._drawElementBuffer = null;
     l2d_drawParamJS._create_array_32f = function(aC) {
         var aD = new Float32Array(aC);
         return aD;
@@ -2658,11 +2658,11 @@
         if (live2d_initializing) {
             return;
         }
-        this._iDrawData = null;
+        this._iDrawElement = null;
         this._partsIndex = null;
         this._$Gg = false;
         this._$Vf = true;
-        this._iDrawData = aC;
+        this._iDrawElement = aC;
         this.totalScale = 1;
         this.opacity = 1;
         this.totalOpacity = 1;
@@ -2673,8 +2673,8 @@
     l2d_IBaseContext.prototype._$vg = function(aC) {
         this._$Vf = aC;
     };
-    l2d_IBaseContext.prototype.getIDrawData = function() {
-        return this._iDrawData;
+    l2d_IBaseContext.prototype.getIDrawElement = function() {
+        return this._iDrawElement;
     };
     l2d_IBaseContext.prototype._setPartsIndex = function(aC) {
         this._partsIndex = aC;
@@ -2707,99 +2707,99 @@
         this.totalOpacity = aC;
     };
 
-    function l2d_EyeBlinkMotion() {
-        if (live2d_initializing) {
-            return;
-        }
-        this._$Zj = null;
-        this._$kk = null;
-        this._state = null;
-        this._$JR = null;
-        this._$PT = null;
-        this._$2T = null;
-        this._interval = null;
-        this._closingMotionMsec = null;
-        this._closedMotionMsec = null;
-        this._openingMotionMsec = null;
-        this._state = l2d_state_const.STATE_FIRST;
-        this._interval = 4000;
-        this._closingMotionMsec = 100;
-        this._closedMotionMsec = 50;
-        this._openingMotionMsec = 150;
-        this._$JR = true;
-        this._$PT = "PARAM_EYE_L_OPEN";
-        this._$2T = "PARAM_EYE_R_OPEN";
-    }
-    l2d_EyeBlinkMotion.prototype.calcNextBlink = function() {
-        var aD = l2d_UtSystem.getUserTimeMSec();
-        var aC = Math.random();
-        return (aD + aC * (2 * this._interval - 1));
-    };
-    l2d_EyeBlinkMotion.prototype.setInterval = function(aC) {
-        this._interval = aC;
-    };
-    l2d_EyeBlinkMotion.prototype.setEyeMotion = function(closingMotionMsec, closedMotionMsec, openingMotionMsec) {
-        this._closingMotionMsec= closingMotionMsec;
-        this._closedMotionMsec = closedMotionMsec;
-        this._openingMotionMsec = openingMotionMsec;
-    };
-    l2d_EyeBlinkMotion.prototype.setParam = function(model) {
-        var aF = l2d_UtSystem.getUserTimeMSec();
-        var aC;
-        var aE = 0;
-        switch (this._state) {
-        case STATE_CLOSING:
-            aE = (aF - this._$kk) / this._closingMotionMsec;
-            if (aE >= 1) {
-                aE = 1;
-                this._state = l2d_state_const.STATE_CLOSED;
-                this._$kk = aF;
-            }
-            aC = 1 - aE;
-            break;
-        case STATE_CLOSED:
-            aE = (aF - this._$kk) / this._closedMotionMsec;
-            if (aE >= 1) {
-                this._state = l2d_state_const.STATE_OPENING;
-                this._$kk = aF;
-            }
-            aC = 0;
-            break;
-        case STATE_OPENING:
-            aE = (aF - this._$kk) / this._openingMotionMsec;
-            if (aE >= 1) {
-                aE = 1;
-                this._state = l2d_state_const.STATE_INTERVAL;
-                this._$Zj = this.calcNextBlink();
-            }
-            aC = aE;
-            break;
-        case STATE_INTERVAL:
-            if (this._$Zj < aF) {
-                this._state = l2d_state_const.STATE_CLOSING;
-                this._$kk = aF;
-            }
-            aC = 1;
-            break;
-        case STATE_FIRST:
-        default:
-            this._state = l2d_state_const.STATE_INTERVAL;
-            this._$Zj = this.calcNextBlink();
-            aC = 1;
-            break;
-        }
-        if (!this._$JR) {
-            aC = -aC;
-        }
-        model.setParamFloat(this._$PT, aC);
-        model.setParamFloat(this._$2T, aC);
-    };
-    var l2d_state_const = function() {};
-    l2d_state_const.STATE_FIRST = "STATE_FIRST";
-    l2d_state_const.STATE_INTERVAL = "STATE_INTERVAL";
-    l2d_state_const.STATE_CLOSING = "STATE_CLOSING";
-    l2d_state_const.STATE_CLOSED = "STATE_CLOSED";
-    l2d_state_const.STATE_OPENING = "STATE_OPENING";
+    // function l2d_EyeBlinkMotion() {
+    //     if (live2d_initializing) {
+    //         return;
+    //     }
+    //     this._$Zj = null;
+    //     this._$kk = null;
+    //     this._state = null;
+    //     this._$JR = null;
+    //     this._$PT = null;
+    //     this._$2T = null;
+    //     this._interval = null;
+    //     this._closingMotionMsec = null;
+    //     this._closedMotionMsec = null;
+    //     this._openingMotionMsec = null;
+    //     this._state = l2d_state_const.STATE_FIRST;
+    //     this._interval = 4000;
+    //     this._closingMotionMsec = 100;
+    //     this._closedMotionMsec = 50;
+    //     this._openingMotionMsec = 150;
+    //     this._$JR = true;
+    //     this._$PT = "PARAM_EYE_L_OPEN";
+    //     this._$2T = "PARAM_EYE_R_OPEN";
+    // }
+    // l2d_EyeBlinkMotion.prototype.calcNextBlink = function() {
+    //     var aD = l2d_UtSystem.getUserTimeMSec();
+    //     var aC = Math.random();
+    //     return (aD + aC * (2 * this._interval - 1));
+    // };
+    // l2d_EyeBlinkMotion.prototype.setInterval = function(aC) {
+    //     this._interval = aC;
+    // };
+    // l2d_EyeBlinkMotion.prototype.setEyeMotion = function(closingMotionMsec, closedMotionMsec, openingMotionMsec) {
+    //     this._closingMotionMsec= closingMotionMsec;
+    //     this._closedMotionMsec = closedMotionMsec;
+    //     this._openingMotionMsec = openingMotionMsec;
+    // };
+    // l2d_EyeBlinkMotion.prototype.setParam = function(model) {
+    //     var aF = l2d_UtSystem.getUserTimeMSec();
+    //     var aC;
+    //     var aE = 0;
+    //     switch (this._state) {
+    //     case STATE_CLOSING:
+    //         aE = (aF - this._$kk) / this._closingMotionMsec;
+    //         if (aE >= 1) {
+    //             aE = 1;
+    //             this._state = l2d_state_const.STATE_CLOSED;
+    //             this._$kk = aF;
+    //         }
+    //         aC = 1 - aE;
+    //         break;
+    //     case STATE_CLOSED:
+    //         aE = (aF - this._$kk) / this._closedMotionMsec;
+    //         if (aE >= 1) {
+    //             this._state = l2d_state_const.STATE_OPENING;
+    //             this._$kk = aF;
+    //         }
+    //         aC = 0;
+    //         break;
+    //     case STATE_OPENING:
+    //         aE = (aF - this._$kk) / this._openingMotionMsec;
+    //         if (aE >= 1) {
+    //             aE = 1;
+    //             this._state = l2d_state_const.STATE_INTERVAL;
+    //             this._$Zj = this.calcNextBlink();
+    //         }
+    //         aC = aE;
+    //         break;
+    //     case STATE_INTERVAL:
+    //         if (this._$Zj < aF) {
+    //             this._state = l2d_state_const.STATE_CLOSING;
+    //             this._$kk = aF;
+    //         }
+    //         aC = 1;
+    //         break;
+    //     case STATE_FIRST:
+    //     default:
+    //         this._state = l2d_state_const.STATE_INTERVAL;
+    //         this._$Zj = this.calcNextBlink();
+    //         aC = 1;
+    //         break;
+    //     }
+    //     if (!this._$JR) {
+    //         aC = -aC;
+    //     }
+    //     model.setParamFloat(this._$PT, aC);
+    //     model.setParamFloat(this._$2T, aC);
+    // };
+    // var l2d_state_const = function() {};
+    // l2d_state_const.STATE_FIRST = "STATE_FIRST";
+    // l2d_state_const.STATE_INTERVAL = "STATE_INTERVAL";
+    // l2d_state_const.STATE_CLOSING = "STATE_CLOSING";
+    // l2d_state_const.STATE_CLOSED = "STATE_CLOSED";
+    // l2d_state_const.STATE_OPENING = "STATE_OPENING";
 
     function l2d_PartsData() {
         if (live2d_initializing) {
@@ -2921,17 +2921,17 @@
                     if (aC < 100) {
                         switch (aC) {
                         case 65:
-                            return new D();
+                            return new l2d_drawData_type2();
                         case 66:
                             return new l2d_PivotManager();
                         case 67:
                             return new l2d_param();
                         case 68:
-                            return new X();
+                            return new l2d_drawData_type1();
                         case 69:
-                            return new T();
+                            return new l2d_drawFlag();
                         case 70:
-                            return new b();
+                            return new l2d_DrawElement_b();
                         default:
                             l2d_global_format._printLog_at(aC);
                             return null;
@@ -2968,8 +2968,8 @@
     //     this.motions = new Array();
     //     this._$ad = null;
     //     this._$ad = U._$xR++;
-    //     this._$w2 = 30;
-    //     this._$7f = 0;
+    //     this._fps = 30;
+    //     this._frameCount = 0;
     //     this._loop = true;
     //     this.loopFadeIn = true;
     //     this._$Vg = -1;
@@ -2985,7 +2985,7 @@
     //     var aH = new U();
     //     var aD = [0];
     //     var aK = aM.length;
-    //     aH._$7f = 0;
+    //     aH._frameCount = 0;
     //     for (var aE = 0; aE < aK; ++aE) {
     //         var aL = (aM[aE] & 255);
     //         if (aL == "\n" || aL == "\r") {
@@ -3028,7 +3028,7 @@
     //                     var aG = l2d_string._string2number(aM, aK, aE, aD);
     //                     if (aD[0] > 0) {
     //                         if (aJ && 5 < aG && aG < 121) {
-    //                             aH._$w2 = aG;
+    //                             aH._fps = aG;
     //                         }
     //                     }
     //                     aE = aD[0];
@@ -3055,30 +3055,30 @@
     //                 }
     //             }
     //             if (aF >= 0) {
-    //                 var aI = new s();
+    //                 var aI = new l2d_MotionParam();
     //                 if (l2d_string.startsWith(aM, aO, U._PREFIX_VISIBLE)) {
-    //                     aI._$CH = s._$vm;
-    //                     aI._$iH = new String(aM, aO, aF - aO);
+    //                     aI._motionParamType = l2d_MotionParam.motionParamEnum_1;
+    //                     aI._motionParamName = new String(aM, aO, aF - aO);
     //                 } else {
     //                     if (l2d_string.startsWith(aM, aO, U._PREFIX_LAYOUT)) {
-    //                         aI._$iH = new String(aM, aO + 7, aF - aO - 7);
+    //                         aI._motionParamName = new String(aM, aO + 7, aF - aO - 7);
     //                         if (l2d_string.startsWith(aM, aO + 7, "ANCHOR_X")) {
-    //                             aI._$CH = s._$3m;
+    //                             aI._motionParamType = l2d_MotionParam.motionParamEnum_102;
     //                         } else {
     //                             if (l2d_string.startsWith(aM, aO + 7, "ANCHOR_Y")) {
-    //                                 aI._$CH = s._$5m;
+    //                                 aI._motionParamType = l2d_MotionParam.motionParamEnum_103;
     //                             } else {
     //                                 if (l2d_string.startsWith(aM, aO + 7, "SCALE_X")) {
-    //                                     aI._$CH = s._$Mm;
+    //                                     aI._motionParamType = l2d_MotionParam.motionParamEnum_104;
     //                                 } else {
     //                                     if (l2d_string.startsWith(aM, aO + 7, "SCALE_Y")) {
-    //                                         aI._$CH = s._$9m;
+    //                                         aI._motionParamType = l2d_MotionParam.motionParamEnum_105;
     //                                     } else {
     //                                         if (l2d_string.startsWith(aM, aO + 7, "X")) {
-    //                                             aI._$CH = s._$Lm;
+    //                                             aI._motionParamType = l2d_MotionParam.motionParamEnum_100;
     //                                         } else {
     //                                             if (l2d_string.startsWith(aM, aO + 7, "Y")) {
-    //                                                 aI._$CH = s._$tm;
+    //                                                 aI._motionParamType = l2d_MotionParam.motionParamEnum_101;
     //                                             }
     //                                         }
     //                                     }
@@ -3086,8 +3086,8 @@
     //                             }
     //                         }
     //                     } else {
-    //                         aI._$CH = s._$Od;
-    //                         aI._$iH = new String(aM, aO, aF - aO);
+    //                         aI._motionParamType = l2d_MotionParam.motionParamEnum_0;
+    //                         aI._motionParamName = new String(aM, aO, aF - aO);
     //                     }
     //                 }
     //                 aH.motions.push(aI);
@@ -3113,14 +3113,14 @@
     //                         aE = aC;
     //                     }
     //                 }
-    //                 aI._$42 = U._$wj._$cT();
-    //                 if (aN > aH._$7f) {
-    //                     aH._$7f = aN;
+    //                 aI._motionParamValues = U._$wj._$cT();
+    //                 if (aN > aH._frameCount) {
+    //                     aH._frameCount = aN;
     //                 }
     //             }
     //         }
     //     }
-    //     aH._$Vg = ((1000 * aH._$7f) / aH._$w2) | 0;
+    //     aH._$Vg = ((1000 * aH._frameCount) / aH._fps) | 0;
     //     return aH;
     // };
     // U.prototype.getDurationMSec = function() {
@@ -3129,37 +3129,37 @@
     // U.prototype.dump = function() {
     //     for (var aE = 0; aE < this.motions.length; aE++) {
     //         var aC = this.motions[aE];
-    //         console.log("_paramID[%s] [%d]. ", aC._$iH, aC._$42.length);
-    //         for (var aD = 0; aD < aC._$42.length && aD < 10; aD++) {
-    //             console.log("%5.2f ,", aC._$42[aD]);
+    //         console.log("_paramID[%s] [%d]. ", aC._motionParamName, aC._motionParamValues.length);
+    //         for (var aD = 0; aD < aC._motionParamValues.length && aD < 10; aD++) {
+    //             console.log("%5.2f ,", aC._motionParamValues[aD]);
     //         }
     //         console.log("\n");
     //     }
     // };
     // U.prototype.updateParamExe = function(aC, aG, aJ, aS) {
     //     var aH = aG - aS._$pj;
-    //     var aQ = aH * this._$w2 / 1000;
+    //     var aQ = aH * this._fps / 1000;
     //     var aE = aQ | 0;
     //     var aK = aQ - aE;
     //     for (var aP = 0; aP < this.motions.length; aP++) {
     //         var aN = this.motions[aP];
-    //         var aF = aN._$42.length;
-    //         var aL = aN._$iH;
-    //         if (aN._$CH == s._$vm) {
-    //             var aO = aN._$42[(aE >= aF ? aF - 1 : aE)];
+    //         var aF = aN._motionParamValues.length;
+    //         var aL = aN._motionParamName;
+    //         if (aN._motionParamType == l2d_MotionParam.motionParamEnum_1) {
+    //             var aO = aN._motionParamValues[(aE >= aF ? aF - 1 : aE)];
     //             aC.setParamFloat(aL, aO);
     //         } else {
-    //             if (s._$Lm <= aN._$CH && aN._$CH <= s._$9m) {} else {
+    //             if (l2d_MotionParam.motionParamEnum_100 <= aN._motionParamType && aN._motionParamType <= l2d_MotionParam.motionParamEnum_105) {} else {
     //                 var aM = aC.getParamFloat(aL);
-    //                 var aT = aN._$42[(aE >= aF ? aF - 1 : aE)];
-    //                 var aR = aN._$42[(aE + 1 >= aF ? aF - 1 : aE + 1)];
+    //                 var aT = aN._motionParamValues[(aE >= aF ? aF - 1 : aE)];
+    //                 var aR = aN._motionParamValues[(aE + 1 >= aF ? aF - 1 : aE + 1)];
     //                 var aD = aT + (aR - aT) * aK;
     //                 var aI = aM + (aD - aM) * aJ;
     //                 aC.setParamFloat(aL, aI);
     //             }
     //         }
     //     }
-    //     if (aE >= this._$7f) {
+    //     if (aE >= this._frameCount) {
     //         if (this._loop) {
     //             aS._$pj = aG;
     //             if (this.loopFadeIn) {
@@ -3204,19 +3204,19 @@
     //     return aC;
     // };
 
-    function s() {
-        this._$iH = null;
-        this._$42 = null;
-        this._$CH = null;
+    function l2d_MotionParam() {
+        this._motionParamName = null;
+        this._motionParamValues = null;
+        this._motionParamType = null;
     }
-    s._$Od = 0;
-    s._$vm = 1;
-    s._$Lm = 100;
-    s._$tm = 101;
-    s._$3m = 102;
-    s._$5m = 103;
-    s._$Mm = 104;
-    s._$9m = 105;
+    l2d_MotionParam.motionParamEnum_0 = 0;
+    l2d_MotionParam.motionParamEnum_1 = 1;
+    l2d_MotionParam.motionParamEnum_100 = 100;
+    l2d_MotionParam.motionParamEnum_101 = 101;
+    l2d_MotionParam.motionParamEnum_102 = 102;
+    l2d_MotionParam.motionParamEnum_103 = 103;
+    l2d_MotionParam.motionParamEnum_104 = 104;
+    l2d_MotionParam.motionParamEnum_105 = 105;
 
     function l2d_Live2DMotion() {
         if (live2d_initializing) {
@@ -3226,8 +3226,8 @@
         this.motions = new Array();
         this._$Rj = null;
         this._$ad = l2d_Live2DMotion._$xR++;
-        this._$w2 = 30;
-        this._$7f = 0;
+        this._fps = 30;
+        this._frameCount = 0;
         this._loop = false;
         this.loopFadeIn = true;
         this._loopDurationMSec = -1;
@@ -3256,7 +3256,7 @@
         var aI = new l2d_Live2DMotion();
         var aD = [0];
         var buffer_len = buffer_data.byteLength;
-        aI._$7f = 0;
+        aI._frameCount = 0;
         for (var aE = 0; aE < buffer_len; ++aE) {
             var buffer_str = l2d_stringFromCharCode(buffer_data, aE);
             var buffer_code = buffer_str.charCodeAt(0);
@@ -3300,7 +3300,7 @@
                         var aH = l2d_string._string2number(buffer_data, buffer_len, aE, aD);
                         if (aD[0] > 0) {
                             if (aK && 5 < aH && aH < 121) {
-                                aI._$w2 = aH;
+                                aI._fps = aH;
                             }
                         }
                         aE = aD[0];
@@ -3327,30 +3327,30 @@
                     }
                 }
                 if (aF >= 0) {
-                    var aJ = new s();
+                    var aJ = new l2d_MotionParam();
                     if (l2d_string.startsWith(buffer_data, aQ, l2d_Live2DMotion._PREFIX_VISIBLE)) {
-                        aJ._$CH = s._$vm;
-                        aJ._$iH = l2d_string.createString(buffer_data, aQ, aF - aQ);
+                        aJ._motionParamType = l2d_MotionParam.motionParamEnum_1;
+                        aJ._motionParamName = l2d_string.createString(buffer_data, aQ, aF - aQ);
                     } else {
                         if (l2d_string.startsWith(buffer_data, aQ, l2d_Live2DMotion._PREFIX_LAYOUT)) {
-                            aJ._$iH = l2d_string.createString(buffer_data, aQ + 7, aF - aQ - 7);
+                            aJ._motionParamName = l2d_string.createString(buffer_data, aQ + 7, aF - aQ - 7);
                             if (l2d_string.startsWith(buffer_data, aQ + 7, "ANCHOR_X")) {
-                                aJ._$CH = s._$3m;
+                                aJ._motionParamType = l2d_MotionParam.motionParamEnum_102;
                             } else {
                                 if (l2d_string.startsWith(buffer_data, aQ + 7, "ANCHOR_Y")) {
-                                    aJ._$CH = s._$5m;
+                                    aJ._motionParamType = l2d_MotionParam.motionParamEnum_103;
                                 } else {
                                     if (l2d_string.startsWith(buffer_data, aQ + 7, "SCALE_X")) {
-                                        aJ._$CH = s._$Mm;
+                                        aJ._motionParamType = l2d_MotionParam.motionParamEnum_104;
                                     } else {
                                         if (l2d_string.startsWith(buffer_data, aQ + 7, "SCALE_Y")) {
-                                            aJ._$CH = s._$9m;
+                                            aJ._motionParamType = l2d_MotionParam.motionParamEnum_105;
                                         } else {
                                             if (l2d_string.startsWith(buffer_data, aQ + 7, "X")) {
-                                                aJ._$CH = s._$Lm;
+                                                aJ._motionParamType = l2d_MotionParam.motionParamEnum_100;
                                             } else {
                                                 if (l2d_string.startsWith(buffer_data, aQ + 7, "Y")) {
-                                                    aJ._$CH = s._$tm;
+                                                    aJ._motionParamType = l2d_MotionParam.motionParamEnum_101;
                                                 }
                                             }
                                         }
@@ -3358,8 +3358,8 @@
                                 }
                             }
                         } else {
-                            aJ._$CH = s._$Od;
-                            aJ._$iH = l2d_string.createString(buffer_data, aQ, aF - aQ);
+                            aJ._motionParamType = l2d_MotionParam.motionParamEnum_0;
+                            aJ._motionParamName = l2d_string.createString(buffer_data, aQ, aF - aQ);
                         }
                     }
                     aI.motions.push(aJ);
@@ -3385,14 +3385,14 @@
                             aE = aC - 1;
                         }
                     }
-                    aJ._$42 = new Float32Array(aM);
-                    if (aP > aI._$7f) {
-                        aI._$7f = aP;
+                    aJ._motionParamValues = new Float32Array(aM);
+                    if (aP > aI._frameCount) {
+                        aI._frameCount = aP;
                     }
                 }
             }
         }
-        aI._loopDurationMSec = ((1000 * aI._$7f) / aI._$w2) | 0;
+        aI._loopDurationMSec = ((1000 * aI._frameCount) / aI._fps) | 0;
         return aI;
     };
     l2d_Live2DMotion.prototype.getDurationMSec = function() {
@@ -3404,27 +3404,27 @@
     l2d_Live2DMotion.prototype.dump = function() {
         for (var aE = 0; aE < this.motions.length; aE++) {
             var aC = this.motions[aE];
-            console.log("_paramID[%s] [%d]. ", aC._$iH, aC._$42.length);
-            for (var aD = 0; aD < aC._$42.length && aD < 10; aD++) {
-                console.log("%5.2f ,", aC._$42[aD]);
+            console.log("_paramID[%s] [%d]. ", aC._motionParamName, aC._motionParamValues.length);
+            for (var aD = 0; aD < aC._motionParamValues.length && aD < 10; aD++) {
+                console.log("%5.2f ,", aC._motionParamValues[aD]);
             }
             console.log("\n");
         }
     };
     l2d_Live2DMotion.prototype.updateParamExe = function(model, timeMSec, _weight, motionQueueEnt) {
         var aJ = timeMSec - motionQueueEnt._$pj;
-        var aV = aJ * this._$w2 / 1000;
+        var aV = aJ * this._fps / 1000;
         var aF = aV | 0;
         var aM = aV - aF;
         for (var aU = 0; aU < this.motions.length; aU++) {
             var aQ = this.motions[aU];
-            var aG = aQ._$42.length;
-            var aO = aQ._$iH;
-            if (aQ._$CH == s._$vm) {
-                var aS = aQ._$42[(aF >= aG ? aG - 1 : aF)];
+            var aG = aQ._motionParamValues.length;
+            var aO = aQ._motionParamName;
+            if (aQ._motionParamType == l2d_MotionParam.motionParamEnum_1) {
+                var aS = aQ._motionParamValues[(aF >= aG ? aG - 1 : aF)];
                 model.setParamFloat(aO, aS);
             } else {
-                if (s._$Lm <= aQ._$CH && aQ._$CH <= s._$9m) {} else {
+                if (l2d_MotionParam.motionParamEnum_100 <= aQ._motionParamType && aQ._motionParamType <= l2d_MotionParam.motionParamEnum_105) {} else {
                     var aC = model.getParamIndex(aO);
                     var aZ = model.getModelContext();
                     var aT = aZ.getParamMax(aC);
@@ -3432,8 +3432,8 @@
                     var aH = 0.4;
                     var aN = aH * (aT - aR);
                     var aP = aZ.getParamFloat(aC);
-                    var aX = aQ._$42[(aF >= aG ? aG - 1 : aF)];
-                    var aW = aQ._$42[(aF + 1 >= aG ? aG - 1 : aF + 1)];
+                    var aX = aQ._motionParamValues[(aF >= aG ? aG - 1 : aF)];
+                    var aW = aQ._motionParamValues[(aF + 1 >= aG ? aG - 1 : aF + 1)];
                     var aD;
                     if ((aX < aW && aW - aX > aN) || (aX > aW && aX - aW > aN)) {
                         aD = aX;
@@ -3445,7 +3445,7 @@
                 }
             }
         }
-        if (aF >= this._$7f) {
+        if (aF >= this._frameCount) {
             if (this._loop) {
                 motionQueueEnt._$pj = timeMSec;
                 if (this.loopFadeIn) {
@@ -3464,10 +3464,10 @@
         this._loop = aC;
     };
     // l2d_Live2DMotion.prototype._$g2 = function() {
-    //     return this._$w2;
+    //     return this._fps;
     // };
     // l2d_Live2DMotion.prototype._$12 = function(aC) {
-    //     this._$w2 = aC;
+    //     this._fps = aC;
     // };
     l2d_Live2DMotion.prototype.isLoopFadeIn = function() {
         return this.loopFadeIn;
@@ -3497,19 +3497,19 @@
     //     return aC;
     // };
 
-    // function s() {
-    //     this._$iH = null;
-    //     this._$42 = null;
-    //     this._$CH = null;
+    // function l2d_MotionParam() {
+    //     this._motionParamName = null;
+    //     this._motionParamValues = null;
+    //     this._motionParamType = null;
     // }
-    // s._$Od = 0;
-    // s._$vm = 1;
-    // s._$Lm = 100;
-    // s._$tm = 101;
-    // s._$3m = 102;
-    // s._$5m = 103;
-    // s._$Mm = 104;
-    // s._$9m = 105;
+    // l2d_MotionParam.motionParamEnum_0 = 0;
+    // l2d_MotionParam.motionParamEnum_1 = 1;
+    // l2d_MotionParam.motionParamEnum_100 = 100;
+    // l2d_MotionParam.motionParamEnum_101 = 101;
+    // l2d_MotionParam.motionParamEnum_102 = 102;
+    // l2d_MotionParam.motionParamEnum_103 = 103;
+    // l2d_MotionParam.motionParamEnum_104 = 104;
+    // l2d_MotionParam.motionParamEnum_105 = 105;
 
     // function ad() {}
     // ad.prototype._$LH = function(aH, aD, aF) {
@@ -3609,8 +3609,8 @@
                 var aM = br - aL;
                 var bo = Math.sqrt(aP * aP + aM * aM);
                 var bq = bd / bo;
-                Y._$oP(bf, be, aN, aL, (bs - aN), (br - aL), -(br - aL), (bs - aN), aD);
-                Y._$oP(bc, ba, aG, aF, (bm - aG), (bk - aF), -(bk - aF), (bm - aG), aC);
+                l2d_UtVector._$oP(bf, be, aN, aL, (bs - aN), (br - aL), -(br - aL), (bs - aN), aD);
+                l2d_UtVector._$oP(bc, ba, aG, aF, (bm - aG), (bk - aF), -(bk - aF), (bm - aG), aC);
                 var aT = (aC[0] - aD[0]) / aD[1];
                 var bn = Math.min(aN, bs, bf);
                 var bb = Math.max(aN, bs, bf);
@@ -3638,7 +3638,7 @@
                     aH = 0;
                 }
                 if (l2d_Live2D.USE_CACHED_POLYGON_IMAGE) {
-                    var a8 = bu._iDrawData;
+                    var a8 = bu._iDrawElement;
                     a8.gl_cacheImage = a8.gl_cacheImage || {};
                     if (!a8.gl_cacheImage[bt]) {
                         var bi = l2d_LDGL.createCanvas(aZ - bj, bx - a6);
@@ -3760,11 +3760,11 @@
         console.log(aD);
     };
 
-    function l2d_IDrawContext(iDrawData) {
+    function l2d_DrawContextBase(iDrawElement) {
         if (live2d_initializing) {
             return;
         }
-        this._iDrawData = null;
+        this._iDrawElement = null;
         this._partsIndex = null;
         this._$1m = null;
         this.opacity = null;
@@ -3772,16 +3772,16 @@
         this._$Ng = null;
         this._$Vf = true;
         this.baseOpacity = 1;
-        this._iDrawData = iDrawData;
+        this._iDrawElement = iDrawElement;
     }
-    l2d_IDrawContext.prototype._$5j = function() {
+    l2d_DrawContextBase.prototype._$5j = function() {
         return this._$4g[0];
     };
-    l2d_IDrawContext.prototype._$7R = function() {
+    l2d_DrawContextBase.prototype._$7R = function() {
         return this._$Vf && !this._$4g[0];
     };
-    l2d_IDrawContext.prototype.getIDrawData = function() {
-        return this._iDrawData;
+    l2d_DrawContextBase.prototype.getIDrawElement = function() {
+        return this._iDrawElement;
     };
 
     function ay() {
@@ -3982,55 +3982,55 @@
         aC[5] = this._$L;
     };
 
-    function b() {
+    function l2d_DrawElement_b() {
         if (live2d_initializing) {
             return;
         }
-        a.prototype.constructor.call(this);
+        l2d_DrawElement_a.prototype.constructor.call(this);
         this._textureNo = -1;
         this._numPoints = 0;
-        this._$9R = 0;
+        this._triangleCount = 0;
         this._$GH = null;
         this._$YH = null;
-        this._$cH = null;
+        this._indexArray = null;
         this._$hR = null;
-        this._$6P = null;
-        this._$Bm = null;
+        this._texcoordArray = null;
+        this._blendMode = null;
         this.culling = true;
         this.gl_cacheImage = null;
-        this.instanceNo = b._instance_count++;
+        this.instanceNo = l2d_DrawElement_b._instance_count++;
     }
-    b.prototype = new a();
-    b._instance_count = 0;
-    b._$nm = 30;
-    b._$Km = 0;
-    b._$om = 1;
-    b._$_m = 2;
-    b._$sf = new Array();
-    b.prototype._setTextureNo = function(aC) {
+    l2d_DrawElement_b.prototype = new l2d_DrawElement_a();
+    l2d_DrawElement_b._instance_count = 0;
+    l2d_DrawElement_b._$nm = 30;
+    l2d_DrawElement_b._$Km = 0;
+    l2d_DrawElement_b._$om = 1;
+    l2d_DrawElement_b._$_m = 2;
+    l2d_DrawElement_b._$sf = new Array();
+    l2d_DrawElement_b.prototype._setTextureNo = function(aC) {
         this._textureNo = aC;
     };
-    b.prototype.getTextureNo = function() {
+    l2d_DrawElement_b.prototype.getTextureNo = function() {
         return this._textureNo;
     };
-    b.prototype._$AT = function() {
-        return this._$6P;
+    l2d_DrawElement_b.prototype._getTexcoordArray = function() {
+        return this._texcoordArray;
     };
-    b.prototype._$0j = function() {
+    l2d_DrawElement_b.prototype._$0j = function() {
         return this._$GH;
     };
-    b.prototype.getNumPoints = function() {
+    l2d_DrawElement_b.prototype.getNumPoints = function() {
         return this._numPoints;
     };
-    b.prototype.getType = function() {
-        return a._$Lk;
+    l2d_DrawElement_b.prototype.getType = function() {
+        return l2d_DrawElement_a._type2;
     };
-    b.prototype._$cj = function(aG, aC, aJ) {
+    l2d_DrawElement_b.prototype._$cj = function(aG, aC, aJ) {
         var aH = aC;
         var aI = (aH._$vd != null) ? aH._$vd : aH._$xd;
         var aF = l2d_Def._$yR;
         switch (aF) {
-        default:
+            default:
         case 1:
             throw new Error("Not Implemented ");
         case 2:
@@ -4041,22 +4041,22 @@
             break;
         }
     };
-    b.prototype._initialize = function() {
+    l2d_DrawElement_b.prototype._initialize = function() {
         this._$Xg = new l2d_PivotManager();
         this._$Xg._initialize();
     };
-    b.prototype._initWithBufferReader = function(aF) {
-        a.prototype._initWithBufferReader.call(this, aF);
+    l2d_DrawElement_b.prototype._initWithBufferReader = function(aF) {
+        l2d_DrawElement_a.prototype._initWithBufferReader.call(this, aF);
         this._textureNo = aF._getNextInt32();
         this._numPoints = aF._getNextInt32();
-        this._$9R = aF._getNextInt32();
+        this._triangleCount = aF._getNextInt32();
         var aC = aF._getNextValue();
-        this._$cH = new Int16Array(this._$9R * 3);
-        for (var aE = this._$9R * 3 - 1; aE >= 0; --aE) {
-            this._$cH[aE] = aC[aE];
+        this._indexArray = new Int16Array(this._triangleCount * 3);
+        for (var aE = this._triangleCount * 3 - 1; aE >= 0; --aE) {
+            this._indexArray[aE] = aC[aE];
         }
         this._$hR = aF._getNextValue();
-        this._$6P = aF._getNextValue();
+        this._texcoordArray = aF._getNextValue();
         if (aF.getFormatVersion() >= l2d_global_format._some_old_format_version_8) {
             this._$GH = aF._getNextInt32();
             if (this._$GH != 0) {
@@ -4067,10 +4067,10 @@
                     }
                     this._$YH._$0k = parseInt(aD);
                 }
-                if ((this._$GH & b._$nm) != 0) {
-                    this._$Bm = (this._$GH & b._$nm) >> 1;
+                if ((this._$GH & l2d_DrawElement_b._$nm) != 0) {
+                    this._blendMode = (this._$GH & l2d_DrawElement_b._$nm) >> 1;
                 } else {
-                    this._$Bm = b._$Km;
+                    this._blendMode = l2d_DrawElement_b._$Km;
                 }
                 if ((this._$GH & 32) != 0) {
                     this.culling = false;
@@ -4080,8 +4080,8 @@
             this._$GH = 0;
         }
     };
-    b.prototype.init = function(aG) {
-        var aI = new ab(this);
+    l2d_DrawElement_b.prototype.init = function(aG) {
+        var aI = new l2d_DrawContext_ab(this);
         var aD = this._numPoints * l2d_Def._$tR;
         var aC = this._$Sj();
         if (aI._$xd != null) {
@@ -4099,7 +4099,7 @@
             if (l2d_Def._$Tm) {
                 for (var aE = this._numPoints - 1; aE >= 0; --aE) {
                     var aJ = aE << 1;
-                    this._$6P[aJ + 1] = 1 - this._$6P[aJ + 1];
+                    this._texcoordArray[aJ + 1] = 1 - this._texcoordArray[aJ + 1];
                 }
             }
             break;
@@ -4107,8 +4107,8 @@
             for (var aE = this._numPoints - 1; aE >= 0; --aE) {
                 var aJ = aE << 1;
                 var aF = aE * l2d_Def._$tR;
-                var aL = this._$6P[aJ];
-                var aK = this._$6P[aJ + 1];
+                var aL = this._texcoordArray[aJ];
+                var aK = this._texcoordArray[aJ + 1];
                 aI._$xd[aF] = aL;
                 aI._$xd[aF + 1] = aK;
                 aI._$xd[aF + 4] = 0;
@@ -4122,25 +4122,25 @@
         }
         return aI;
     };
-    b.prototype._$td = function(aE, aC) {
+    l2d_DrawElement_b.prototype._$td = function(aE, aC) {
         var aF = aC;
-        if (!((this == aF.getIDrawData()))) {
+        if (!((this == aF.getIDrawElement()))) {
             console.log("### assert!! ### ");
         }
         if (!this._$Xg._$1d(aE)) {
             return;
         }
-        a.prototype._$td.call(this, aE, aF);
+        l2d_DrawElement_a.prototype._$td.call(this, aE, aF);
         if (aF._$4g[0]) {
             return;
         }
-        var aD = b._$sf;
+        var aD = l2d_DrawElement_b._$sf;
         aD[0] = false;
         aB._$Nd(aE, this._$Xg, aD, this._numPoints, this._$hR, aF._$xd, l2d_Def._$Pj, l2d_Def._$tR);
     };
-    b.prototype._$jk = function(aF, aD) {
+    l2d_DrawElement_b.prototype._$jk = function(aF, aD) {
         try {
-            if (!((this == aD.getIDrawData()))) {
+            if (!((this == aD.getIDrawElement()))) {
                 console.log("### assert!! ### ");
             }
             var aG = false;
@@ -4149,10 +4149,10 @@
             }
             var aH = aD;
             if (!aG) {
-                a.prototype._$jk.call(this, aF);
+                l2d_DrawElement_a.prototype._$jk.call(this, aF);
                 if (this._$Sj()) {
                     var aC = this.getTargetBaseDataID();
-                    if (aH._$Fd == a._$5d) {
+                    if (aH._$Fd == l2d_DrawElement_a._$5d) {
                         aH._$Fd = aF.getBaseDataIndex(aC);
                     }
                     if (aH._$Fd < 0) {
@@ -4176,8 +4176,8 @@
             throw aI;
         }
     };
-    b.prototype.draw = function(aI, aF, aD) {
-        if (!((this == aD.getIDrawData()))) {
+    l2d_DrawElement_b.prototype.draw = function(aI, aF, aD) {
+        if (!((this == aD.getIDrawElement()))) {
             console.log("### assert!! ### ");
         }
         if (aD._$4g[0]) {
@@ -4188,16 +4188,16 @@
         if (aE < 0) {
             aE = 1;
         }
-        var aC = this.getOpacity(aF, aG) * aD._$Ng * aD.baseOpacity;
+        var alpha = this.getOpacity(aF, aG) * aD._$Ng * aD.baseOpacity;
         var aH = (aG._$vd != null) ? aG._$vd : aG._$xd;
         aI._setCulling(this.culling);
-        aI._drawTexture(aE, 3 * this._$9R, this._$cH, aH, this._$6P, aC, this._$Bm, aG);
+        aI._drawTexture(aE, 3 * this._triangleCount, this._indexArray, aH, this._texcoordArray, alpha, this._blendMode, aG);
     };
-    b.prototype.dump = function() {
-        console.log("  _$7P( %d ) , _numPoints( %d ) , _$9R( %d ) \n", this._textureNo, this._numPoints, this._$9R);
+    l2d_DrawElement_b.prototype.dump = function() {
+        console.log("  _$7P( %d ) , _numPoints( %d ) , _triangleCount( %d ) \n", this._textureNo, this._numPoints, this._triangleCount);
         console.log("  _$nP _$yP = { ");
-        for (var aE = 0; aE < this._$cH.length; aE++) {
-            console.log("%5d ,", this._$cH[aE]);
+        for (var aE = 0; aE < this._indexArray.length; aE++) {
+            console.log("%5d ,", this._indexArray[aE]);
         }
         console.log("\n  _$YP _$S2");
         for (var aE = 0; aE < this._$hR.length; aE++) {
@@ -4209,24 +4209,24 @@
         }
         console.log("\n");
     };
-    b.prototype._$aj = function(aC) {
-        if (this._$YH == null) {
-            return null;
-        }
-        return this._$YH[aC];
-    };
-    b.prototype.getIndexArray = function() {
-        return this._$cH;
+    // l2d_DrawElement_b.prototype._$aj = function(aC) {
+    //     if (this._$YH == null) {
+    //         return null;
+    //     }
+    //     return this._$YH[aC];
+    // };
+    l2d_DrawElement_b.prototype.getIndexArray = function() {
+        return this._indexArray;
     };
 
-    function ab(aC) {
-        l2d_IDrawContext.prototype.constructor.call(this, aC);
-        this._$Fd = a._$5d;
+    function l2d_DrawContext_ab(aC) {
+        l2d_DrawContextBase.prototype.constructor.call(this, aC);
+        this._$Fd = l2d_DrawElement_a._$5d;
         this._$xd = null;
         this._$vd = null;
     }
-    ab.prototype = new l2d_IDrawContext();
-    ab.prototype.getTransformedPoints = function() {
+    l2d_DrawContext_ab.prototype = new l2d_DrawContextBase();
+    l2d_DrawContext_ab.prototype.getTransformedPoints = function() {
         return (this._$vd != null) ? this._$vd : this._$xd;
     };
 
@@ -4376,7 +4376,7 @@
         aD._setParamValue(aC, aH);
         this._paramList.push(aD);
     };
-    // g.prototype._$Gj = function(aJ) {
+    // l2d_PivotManager.prototype._$Gj = function(aJ) {
     //     var aI = aJ;
     //     var aH = this._paramList.length;
     //     for (var aF = 0; aF < aH; ++aF) {
@@ -4396,7 +4396,7 @@
         return this._paramList;
     };
 
-    function T() {
+    function l2d_drawFlag() {
         if (live2d_initializing) {
             return;
         }
@@ -4408,7 +4408,7 @@
         this.reflectX = false;
         this.reflectY = false;
     }
-    T.prototype.init = function(aC) {
+    l2d_drawFlag.prototype.init = function(aC) {
         this._$qT = aC._$qT;
         this._$sT = aC._$sT;
         this._$c2 = aC._$c2;
@@ -4417,7 +4417,7 @@
         this.reflectX = aC.reflectX;
         this.reflectY = aC.reflectY;
     };
-    T.prototype._initWithBufferReader = function(aC) {
+    l2d_drawFlag.prototype._initWithBufferReader = function(aC) {
         this._$qT = aC._getNextFloat32();
         this._$sT = aC._getNextFloat32();
         this._$c2 = aC._getNextFloat32();
@@ -4428,7 +4428,7 @@
             this.reflectY = aC._getNextBool8();
         }
     };
-    T.prototype._$u = function() {};
+    l2d_drawFlag.prototype._$u = function() {};
 
     function l2d_context_params(model) {
         if (live2d_initializing) {
@@ -4436,14 +4436,14 @@
         }
         this._$6f = true;
         this._$UR = -1;
-        this._$MR = 0;
+        this._paramCount = 0;
         this._paramKeys = new Array(l2d_context_params._param_count);
-        this._$_j = new Float32Array(l2d_context_params._param_count);
-        this._$zd = new Float32Array(l2d_context_params._param_count);
+        this._paramValuesLoad = new Float32Array(l2d_context_params._param_count);
+        this._paramValuesUpdate = new Float32Array(l2d_context_params._param_count);
         this._paramMinMap = new Float32Array(l2d_context_params._param_count);
         this._paramMaxMap = new Float32Array(l2d_context_params._param_count);
-        this._$qm = new Float32Array(l2d_context_params._param_count);
-        this._$Gm = new Array(l2d_context_params._param_count);
+        this._paramValuesSave = new Float32Array(l2d_context_params._param_count);
+        this._paramUpdatedFlags = new Array(l2d_context_params._param_count);
         this._baseDataList = new Array();
         this._drawDataList = new Array();
         this._drawDataMap = null;
@@ -4463,10 +4463,10 @@
     l2d_context_params._$_2 = true;
     l2d_context_params._$Nj = -1;
     l2d_context_params._$l2 = -1;
-    l2d_context_params._$Jd = false;
-    l2d_context_params._$Ag = true;
-    l2d_context_params._$ed = (-1000000);
-    l2d_context_params._$bd = (1000000);
+    l2d_context_params._constFalse = false;
+    l2d_context_params._constTrue = true;
+    l2d_context_params._constMinValue = (-1000000);
+    l2d_context_params._constMaxValue = (1000000);
     l2d_context_params._param_count = 32;
     l2d_context_params._$u = false;
     l2d_context_params.prototype.getDrawDataIndex = function(id) {
@@ -4586,18 +4586,18 @@
         if (l2d_context_params._$u) {
             l2d_UtDebug.start("_$pT");
         }
-        var aF = this._$_j.length;
+        var aF = this._paramValuesLoad.length;
         for (var aR = 0; aR < aF; aR++) {
-            if (this._$_j[aR] != this._$zd[aR]) {
-                this._$Gm[aR] = l2d_context_params._$Ag;
-                this._$zd[aR] = this._$_j[aR];
+            if (this._paramValuesLoad[aR] != this._paramValuesUpdate[aR]) {
+                this._paramUpdatedFlags[aR] = l2d_context_params._constTrue;
+                this._paramValuesUpdate[aR] = this._paramValuesLoad[aR];
             }
         }
         var aS = false;
         var aL = this._baseDataList.length;
         var aI = this._drawDataList.length;
-        var aN = a.getMinInterval_$Rd();
-        var aU = a.getMaxInterval_$Hd();
+        var aN = l2d_DrawElement_a.getMinInterval_$Rd();
+        var aU = l2d_DrawElement_a.getMaxInterval_$Hd();
         var aP = aU - aN + 1;
         if (this._$lm == null || this._$lm.length < aP) {
             this._$lm = new Int16Array(aP);
@@ -4686,8 +4686,8 @@
         if (l2d_context_params._$u) {
             l2d_UtDebug.start("_$uT");
         }
-        for (var aR = this._$Gm.length - 1; aR >= 0; aR--) {
-            this._$Gm[aR] = l2d_context_params._$Jd;
+        for (var aR = this._paramUpdatedFlags.length - 1; aR >= 0; aR--) {
+            this._paramUpdatedFlags[aR] = l2d_context_params._constFalse;
         }
         this._$6f = false;
         if (l2d_context_params._$u) {
@@ -4730,7 +4730,7 @@
                 return aD;
             }
         }
-        return this.addFloatParam(aC, 0, l2d_context_params._$ed, l2d_context_params._$bd);
+        return this.addFloatParam(aC, 0, l2d_context_params._constMinValue, l2d_context_params._constMaxValue);
     };
     // l2d_context_params.prototype._$cg = function(aC) {
     //     return this.getBaseDataIndex(aC);
@@ -4743,32 +4743,32 @@
         }
         return -1;
     };
-    l2d_context_params.prototype._$1f = function(aE, aC) {
+    l2d_context_params.prototype._extendArrayWithLength = function(aE, aC) {
         var aD = new Float32Array(aC);
         l2d_UtSystem._copyArrayFromStartWithLength(aE, 0, aD, 0, aE.length);
         return aD;
     };
     l2d_context_params.prototype.addFloatParam = function(aI, aH, aG, aC) {
-        if (this._$MR >= this._paramKeys.length) {
+        if (this._paramCount >= this._paramKeys.length) {
             var aF = this._paramKeys.length;
             var aE = new Array(aF * 2);
             l2d_UtSystem._copyArrayFromStartWithLength(this._paramKeys, 0, aE, 0, aF);
             this._paramKeys = aE;
-            this._$_j = this._$1f(this._$_j, aF * 2);
-            this._$zd = this._$1f(this._$zd, aF * 2);
-            this._paramMinMap = this._$1f(this._paramMinMap, aF * 2);
-            this._paramMaxMap = this._$1f(this._paramMaxMap, aF * 2);
+            this._paramValuesLoad = this._extendArrayWithLength(this._paramValuesLoad, aF * 2);
+            this._paramValuesUpdate = this._extendArrayWithLength(this._paramValuesUpdate, aF * 2);
+            this._paramMinMap = this._extendArrayWithLength(this._paramMinMap, aF * 2);
+            this._paramMaxMap = this._extendArrayWithLength(this._paramMaxMap, aF * 2);
             var aD = new Array();
-            l2d_UtSystem._copyArrayFromStartWithLength(this._$Gm, 0, aD, 0, aF);
-            this._$Gm = aD;
+            l2d_UtSystem._copyArrayFromStartWithLength(this._paramUpdatedFlags, 0, aD, 0, aF);
+            this._paramUpdatedFlags = aD;
         }
-        this._paramKeys[this._$MR] = aI;
-        this._$_j[this._$MR] = aH;
-        this._$zd[this._$MR] = aH;
-        this._paramMinMap[this._$MR] = aG;
-        this._paramMaxMap[this._$MR] = aC;
-        this._$Gm[this._$MR] = l2d_context_params._$Ag;
-        return this._$MR++;
+        this._paramKeys[this._paramCount] = aI;
+        this._paramValuesLoad[this._paramCount] = aH;
+        this._paramValuesUpdate[this._paramCount] = aH;
+        this._paramMinMap[this._paramCount] = aG;
+        this._paramMaxMap[this._paramCount] = aC;
+        this._paramUpdatedFlags[this._paramCount] = l2d_context_params._constTrue;
+        return this._paramCount++;
     };
     l2d_context_params.prototype.setBaseData = function(baseDataIndex, baseData) {
         this._baseDataList[baseDataIndex] = baseData;
@@ -4780,21 +4780,21 @@
         if (aD > this._paramMaxMap[aC]) {
             aD = this._paramMaxMap[aC];
         }
-        this._$_j[aC] = aD;
+        this._paramValuesLoad[aC] = aD;
     };
     l2d_context_params.prototype.loadParam = function() {
-        var aC = this._$_j.length;
-        if (aC > this._$qm.length) {
-            aC = this._$qm.length;
+        var aC = this._paramValuesLoad.length;
+        if (aC > this._paramValuesSave.length) {
+            aC = this._paramValuesSave.length;
         }
-        l2d_UtSystem._copyArrayFromStartWithLength(this._$qm, 0, this._$_j, 0, aC);
+        l2d_UtSystem._copyArrayFromStartWithLength(this._paramValuesSave, 0, this._paramValuesLoad, 0, aC);
     };
     l2d_context_params.prototype.saveParam = function() {
-        var aC = this._$_j.length;
-        if (aC > this._$qm.length) {
-            this._$qm = new Float32Array(aC);
+        var aC = this._paramValuesLoad.length;
+        if (aC > this._paramValuesSave.length) {
+            this._paramValuesSave = new Float32Array(aC);
         }
-        l2d_UtSystem._copyArrayFromStartWithLength(this._$_j, 0, this._$qm, 0, aC);
+        l2d_UtSystem._copyArrayFromStartWithLength(this._paramValuesLoad, 0, this._paramValuesSave, 0, aC);
     };
     l2d_context_params.prototype.getInitVersion = function() {
         return this._$UR;
@@ -4803,7 +4803,7 @@
         return this._$6f;
     };
     l2d_context_params.prototype.isParamUpdated = function(aC) {
-        return this._$Gm[aC] == l2d_context_params._$Ag;
+        return this._paramUpdatedFlags[aC] == l2d_context_params._constTrue;
     };
     l2d_context_params.prototype.getTmpPivotTableIndicesRef = function() {
         return this._$hm;
@@ -4815,7 +4815,7 @@
         return this._baseDataList[aC];
     };
     l2d_context_params.prototype.getParamFloat = function(aC) {
-        return this._$_j[aC];
+        return this._paramValuesLoad[aC];
     };
     l2d_context_params.prototype.getParamMax = function(aC) {
         return this._paramMaxMap[aC];
@@ -4859,7 +4859,7 @@
             do {
                 var aH = this._$Fk[aD];
                 if (aH._$7R()) {
-                    aH.getIDrawData()._$cj(this, aH, aI);
+                    aH.getIDrawElement()._$cj(this, aH, aI);
                     aI += stepZ;
                 }
                 var aC = this._$hd[aD];
@@ -5241,10 +5241,10 @@
         this.anisotropyExt = null;
         this.maxAnisotropy = 0;
         this._$Vm = 32;
-        this._$Xd = false;
-        this._$tf = null;
-        this._$zg = null;
-        this._$oR = null;
+        // this._$Xd = false;
+        this._texcoordDrawArrayBuffer = null;
+        this._positionDrawArrayBuffer = null;
+        this._drawElementBuffer = null;
     }
     l2d_drawParamWebGL.prototype = new l2d_drawParamBase();
     l2d_drawParamWebGL._create_array_32f = function(aC) {
@@ -5279,12 +5279,12 @@
         }
         return aD;
     };
-    l2d_drawParamWebGL._$0m = function() {
-        return this._$Xd;
-    };
-    l2d_drawParamWebGL._$Qm = function(aC) {
-        this._$Xd = aC;
-    };
+    // l2d_drawParamWebGL._$0m = function() {
+    //     return this._$Xd;
+    // };
+    // l2d_drawParamWebGL._$Qm = function(aC) {
+    //     this._$Xd = aC;
+    // };
     l2d_drawParamWebGL.prototype.setGL = function(aC) {
         this.gl = aC;
     };
@@ -5315,11 +5315,11 @@
         aC.activeTexture(aC.TEXTURE0);
         aC.uniform1i(this.s_texture0_Loc, 0);
     };
-    l2d_drawParamWebGL.prototype._drawTexture = function(aN, aO, aG, aP, aR, aI, aH, aJ) {
-        if (aI < 0.01) {
+    l2d_drawParamWebGL.prototype._drawTexture = function(textureIdx, indexCount, indexArray, positionArray, texcoordArray, colorAlpha, blendMode, aJ) {
+        if (colorAlpha < 0.01) {
             return;
         }
-        var aD = aI > 0.9 ? l2d_Live2D.EXPAND_W : 0;
+        var aD = colorAlpha > 0.9 ? l2d_Live2D.EXPAND_W : 0;
         var aV = this.gl;
         if (this.gl == null) {
             throw new Error("gl is null");
@@ -5336,8 +5336,8 @@
         var aM;
         var aF;
         var aT = true;
-        switch (aH) {
-        case b._$Km:
+        switch (blendMode) {
+        case l2d_DrawElement_b._$Km:
         default:
             if (aT) {
                 a0 = aV.ONE;
@@ -5348,13 +5348,13 @@
             aM = aV.ONE;
             aF = aV.ONE_MINUS_SRC_ALPHA;
             break;
-        case b._$om:
+        case l2d_DrawElement_b._$om:
             a0 = aV.SRC_ALPHA;
             aS = aV.ONE;
             aM = aV.ZERO;
             aF = aV.ONE;
             break;
-        case b._$_m:
+        case l2d_DrawElement_b._$_m:
             if (aT) {
                 a0 = aV.DST_COLOR;
                 aS = aV.ONE_MINUS_SRC_ALPHA;
@@ -5367,20 +5367,20 @@
             break;
         }
         aV.blendFuncSeparate(a0, aS, aM, aF);
-        this._$zg = R(aV, this._$zg, aP);
+        this._positionDrawArrayBuffer = l2d_glArrayBufferData(aV, this._positionDrawArrayBuffer, positionArray);
         aV.enableVertexAttribArray(this.a_position_Loc);
         aV.vertexAttribPointer(this.a_position_Loc, 2, aV.FLOAT, false, 0, 0);
         var aC = false;
         if (aC) {
             checkError("drawTexture x1");
         }
-        this._$tf = R(aV, this._$tf, aR);
+        this._texcoordDrawArrayBuffer = l2d_glArrayBufferData(aV, this._texcoordDrawArrayBuffer, texcoordArray);
         aV.enableVertexAttribArray(this.a_texCoord_Loc);
         aV.vertexAttribPointer(this.a_texCoord_Loc, 2, aV.FLOAT, false, 0, 0);
         if (aC) {
             checkError("drawTexture x2");
         }
-        aV.bindTexture(aV.TEXTURE_2D, this.textures[aN]);
+        aV.bindTexture(aV.TEXTURE_2D, this.textures[textureIdx]);
         if (this.anisotropyExt) {
             aV.texParameteri(aV.TEXTURE_2D, this.anisotropyExt.TEXTURE_MAX_ANISOTROPY_EXT, this.maxAnisotropy);
         }
@@ -5394,21 +5394,21 @@
         var aQ = this._baseColor_r * aK;
         var aW = this._baseColor_g * aX;
         var aY = this._baseColor_b * aU;
-        var aZ = this._baseColor_a * aI;
+        var aZ = this._baseColor_a * colorAlpha;
         if (aT) {
-            aV.uniform4f(this.u_baseColor, aQ * aI, aW * aI, aY * aI, aZ);
+            aV.uniform4f(this.u_baseColor, aQ * colorAlpha, aW * colorAlpha, aY * colorAlpha, aZ);
         } else {
             aV.uniform4f(this.u_baseColor, aQ, aW, aY, aZ);
         }
-        this._$oR = K(aV, this._$oR, aG);
+        this._drawElementBuffer = l2d_glElementBufferData(aV, this._drawElementBuffer, indexArray);
         aV.enableVertexAttribArray(this.a_position_Loc);
         aV.uniformMatrix4fv(this.u_matrix_Loc, false, this.matrix4x4);
-        var aE = aG.length;
+        var aE = indexArray.length;
         aV.drawElements(aV.TRIANGLES, aE, aV.UNSIGNED_SHORT, 0);
         aV.bindTexture(aV.TEXTURE_2D, null);
     };
 
-    function R(aE, aC, aD) {
+    function l2d_glArrayBufferData(aE, aC, aD) {
         if (aC == null) {
             aC = aE.createBuffer();
         }
@@ -5416,7 +5416,7 @@
         aE.bufferData(aE.ARRAY_BUFFER, aD, aE.DYNAMIC_DRAW);
         return aC;
     }
-    function K(aE, aC, aD) {
+    function l2d_glElementBufferData(aE, aC, aD) {
         if (aC == null) {
             aC = aE.createBuffer();
         }
@@ -5578,10 +5578,10 @@
         EXPAND_W: 2
     };
     l2d_Live2D.initProfile = function() {
-        if (sys_env.isIOS()) {
+        if (l2d_UtEnv.isIOS()) {
             l2d_Live2D.setupProfile(l2d_Live2D.PROFILE_IOS_DEFAULT);
         } else {
-            if (sys_env.isAndroid()) {
+            if (l2d_UtEnv.isAndroid()) {
                 l2d_Live2D.setupProfile(l2d_Live2D.PROFILE_ANDROID);
             } else {
                 l2d_Live2D.setupProfile(l2d_Live2D.PROFILE_DESKTOP);
@@ -5651,7 +5651,7 @@
         l2d_BaseID._dispose();
     };
 
-    function D() {
+    function l2d_drawData_type2() {
         if (live2d_initializing) {
             return;
         }
@@ -5661,13 +5661,13 @@
         this._$Xg = null;
         this._$hR = null;
     }
-    D.prototype = new l2d_IBaseData();
-    D._$sf = new Array();
-    D.prototype._initialize = function() {
+    l2d_drawData_type2.prototype = new l2d_IBaseData();
+    l2d_drawData_type2._$sf = new Array();
+    l2d_drawData_type2.prototype._initialize = function() {
         this._$Xg = new l2d_PivotManager();
         this._$Xg._initialize();
     };
-    D.prototype._initWithBufferReader = function(aC) {
+    l2d_drawData_type2.prototype._initWithBufferReader = function(aC) {
         l2d_IBaseData.prototype._initWithBufferReader.call(this, aC);
         this._$V = aC._getNextInt32();
         this._$R = aC._getNextInt32();
@@ -5675,8 +5675,8 @@
         this._$hR = aC._getNextValue();
         l2d_IBaseData.prototype.readV2_opacity.call(this, aC);
     };
-    D.prototype.init = function(aC) {
-        var aD = new G(this);
+    l2d_drawData_type2.prototype.init = function(aC) {
+        var aD = new l2d_drawContext_type2(this);
         var aE = (this._$R + 1) * (this._$V + 1);
         if (aD._$xd != null) {
             aD._$xd = null;
@@ -5692,19 +5692,19 @@
         }
         return aD;
     };
-    D.prototype._$td = function(aE, aD) {
+    l2d_drawData_type2.prototype._$td = function(aE, aD) {
         var aF = aD;
         if (!this._$Xg._$1d(aE)) {
             return;
         }
         var aG = this._$Nf();
-        var aC = D._$sf;
+        var aC = l2d_drawData_type2._$sf;
         aC[0] = false;
         aB._$Nd(aE, this._$Xg, aC, aG, this._$hR, aF._$xd, 0, 2);
         aD._$4k(aC[0]);
         this.interpolateOpacity(aE, this._$Xg, aD, aC);
     };
-    D.prototype._$jk = function(aF, aE) {
+    l2d_drawData_type2.prototype._$jk = function(aF, aE) {
         var aG = aE;
         aG._$vg(true);
         if (!this._$Sj()) {
@@ -5735,16 +5735,16 @@
             }
         }
     };
-    D.prototype._$ok = function(aG, aD, aC, aH, aJ, aF, aE) {
+    l2d_drawData_type2.prototype._$ok = function(aG, aD, aC, aH, aJ, aF, aE) {
         if (true) {
             var aI = aD;
             var aK = (aI._$vd != null) ? aI._$vd : aI._$xd;
-            D.transformPoints_sdk2(aC, aH, aJ, aF, aE, aK, this._$R, this._$V);
+            l2d_drawData_type2.transformPoints_sdk2(aC, aH, aJ, aF, aE, aK, this._$R, this._$V);
         } else {
             this.transformPoints_sdk1(aG, aD, aC, aH, aJ, aF, aE);
         }
     };
-    D.transformPoints_sdk2 = function(aV, a7, a0, aK, aD, aM, aL, aP) {
+    l2d_drawData_type2.transformPoints_sdk2 = function(aV, a7, a0, aK, aD, aM, aL, aP) {
         var aR = a0 * aD;
         var aQ;
         var bi, bh;
@@ -5984,7 +5984,7 @@
             }
         }
     };
-    D.prototype.transformPoints_sdk1 = function(aE, aM, aG, aV, aP, aK, aU) {
+    l2d_drawData_type2.prototype.transformPoints_sdk1 = function(aE, aM, aG, aV, aP, aK, aU) {
         var aC = aM;
         var aJ, aI;
         var aH = this._$R;
@@ -6041,27 +6041,27 @@
             }
         }
     };
-    D.prototype._$Nf = function() {
+    l2d_drawData_type2.prototype._$Nf = function() {
         return (this._$R + 1) * (this._$V + 1);
     };
-    D.prototype.getType = function() {
+    l2d_drawData_type2.prototype.getType = function() {
         return l2d_IBaseData._type2;
     };
 
-    function G(aC) {
+    function l2d_drawContext_type2(aC) {
         l2d_IBaseContext.prototype.constructor.call(this, aC);
         this._$Fd = l2d_IBaseData._$5d;
         this._$xd = null;
         this._$vd = null;
     }
-    G.prototype = new l2d_IBaseContext();
+    l2d_drawContext_type2.prototype = new l2d_IBaseContext();
 
     function l2d_PhysicsHair() {
         if (live2d_initializing) {
             return;
         }
-        this.p1 = new M();
-        this.p2 = new M();
+        this.p1 = new l2d_PhysicsPoint();
+        this.p2 = new l2d_PhysicsPoint();
         this._$OR = 0;
         this._$wk = 0;
         this._$Tj = 0;
@@ -6108,11 +6108,11 @@
         return (-180 * (Math.atan2(this.p1.x - this.p2.x, -(this.p1.y - this.p2.y))) / Math.PI);
     };
     l2d_PhysicsHair.prototype.addSrcParam = function(aE, aC, aG, aD) {
-        var aF = new h(aE, aC, aG, aD);
+        var aF = new l2d_srcParamPhysicsHair(aE, aC, aG, aD);
         this._$bT.push(aF);
     };
     l2d_PhysicsHair.prototype.addTargetParam = function(aE, aC, aF, aD) {
-        var aG = new az(aE, aC, aF, aD);
+        var aG = new l2d_targetParamPhysicsHair(aE, aC, aF, aD);
         this._$MH.push(aG);
     };
     l2d_PhysicsHair.prototype.update = function(aD, aG) {
@@ -6140,10 +6140,10 @@
     };
     l2d_PhysicsHair.prototype._$RR = function(aI, aD) {
         var aP = 1 / aD;
-        this.p1.vx = (this.p1.x - this.p1._$m2) * aP;
-        this.p1.vy = (this.p1.y - this.p1._$a2) * aP;
-        this.p1.ax = (this.p1.vx - this.p1._$aT) * aP;
-        this.p1.ay = (this.p1.vy - this.p1._$0T) * aP;
+        this.p1.vx = (this.p1.x - this.p1._prev_x) * aP;
+        this.p1.vy = (this.p1.y - this.p1._prev_y) * aP;
+        this.p1.ax = (this.p1.vx - this.p1._prev_vx) * aP;
+        this.p1.ay = (this.p1.vy - this.p1._prev_vy) * aP;
         this.p1.fx = this.p1.ax * this.p1._$W;
         this.p1.fy = this.p1.ay * this.p1._$W;
         this.p1._$3f();
@@ -6153,7 +6153,7 @@
         var aM = Math.cos(aH);
         var aC = Math.sin(aH);
         var aR = 9.8 * this.p2._$W;
-        var aL = (this._$wk * l2d_math._degree2radian_factor);
+        var aL = (this._$wk * l2d_math_angle._degree2radian_factor);
         var aK = (aR * Math.cos(aH - aL));
         aG = (aK * aC);
         aQ = (aK * aM);
@@ -6172,12 +6172,12 @@
         var aJ = (Math.sqrt((this.p1.x - this.p2.x) * (this.p1.x - this.p2.x) + (this.p1.y - this.p2.y) * (this.p1.y - this.p2.y)));
         this.p2.x = this.p1.x + this._$OR * (this.p2.x - this.p1.x) / aJ;
         this.p2.y = this.p1.y + this._$OR * (this.p2.y - this.p1.y) / aJ;
-        this.p2.vx = (this.p2.x - this.p2._$m2) * aP;
-        this.p2.vy = (this.p2.y - this.p2._$a2) * aP;
+        this.p2.vx = (this.p2.x - this.p2._prev_x) * aP;
+        this.p2.vy = (this.p2.y - this.p2._prev_y) * aP;
         this.p2._$3f();
     };
 
-    function M() {
+    function l2d_PhysicsPoint() {
         this._$W = 1;
         this.x = 0;
         this.y = 0;
@@ -6187,19 +6187,19 @@
         this.ay = 0;
         this.fx = 0;
         this.fy = 0;
-        this._$m2 = 0;
-        this._$a2 = 0;
-        this._$aT = 0;
-        this._$0T = 0;
+        this._prev_x = 0;
+        this._prev_y = 0;
+        this._prev_vx = 0;
+        this._prev_vy = 0;
     }
-    M.prototype._$3f = function() {
-        this._$m2 = this.x;
-        this._$a2 = this.y;
-        this._$aT = this.vx;
-        this._$0T = this.vy;
+    l2d_PhysicsPoint.prototype._$3f = function() {
+        this._prev_x = this.x;
+        this._prev_y = this.y;
+        this._prev_vx = this.vx;
+        this._prev_vy = this.vy;
     };
 
-    function an(aE, aD, aC) {
+    function l2d_srcParamBase(aE, aD, aC) {
         this._paramID = null;
         this.scale = null;
         this._weight = null;
@@ -6207,15 +6207,15 @@
         this.scale = aD;
         this._weight = aC;
     }
-    an.prototype._$RH = function(aD, aC) {};
+    l2d_srcParamBase.prototype._$RH = function(aD, aC) {};
 
-    function h(aE, aF, aD, aC) {
-        an.prototype.constructor.call(this, aF, aD, aC);
+    function l2d_srcParamPhysicsHair(aE, aF, aD, aC) {
+        l2d_srcParamBase.prototype.constructor.call(this, aF, aD, aC);
         this._$eT = null;
         this._$eT = aE;
     }
-    h.prototype = new an();
-    h.prototype._$RH = function(aE, aC) {
+    l2d_srcParamPhysicsHair.prototype = new l2d_srcParamBase();
+    l2d_srcParamPhysicsHair.prototype._$RH = function(aE, aC) {
         var aF = this.scale * aE.getParamFloat(this._paramID);
         var aG = aC.getPhysicsPoint1();
         switch (this._$eT) {
@@ -6234,7 +6234,7 @@
         }
     };
 
-    function d(aE, aD, aC) {
+    function l2d_targetParamBase(aE, aD, aC) {
         this._paramID = null;
         this.scale = null;
         this._weight = null;
@@ -6242,15 +6242,15 @@
         this.scale = aD;
         this._weight = aC;
     }
-    d.prototype._$9g = function(aD, aC) {};
+    l2d_targetParamBase.prototype._$9g = function(aD, aC) {};
 
-    function az(aD, aF, aE, aC) {
-        d.prototype.constructor.call(this, aF, aE, aC);
+    function l2d_targetParamPhysicsHair(aD, aF, aE, aC) {
+        l2d_targetParamBase.prototype.constructor.call(this, aF, aE, aC);
         this._$9H = null;
         this._$9H = aD;
     }
-    az.prototype = new d();
-    az.prototype._$9g = function(aD, aC) {
+    l2d_targetParamPhysicsHair.prototype = new l2d_targetParamBase();
+    l2d_targetParamPhysicsHair.prototype._$9g = function(aD, aC) {
         switch (this._$9H) {
         default:
         case l2d_PhysicsHair.Target.TARGET_FROM_ANGLE:
