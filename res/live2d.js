@@ -36,13 +36,13 @@
     l2d_DrawElementBase.prototype.init = function(aC) {};
     l2d_DrawElementBase.prototype.setupInterpolate = function(aC, aD) {
         aD.paramOutside[0] = false;
-        aD.pivotDrawOrder = aB._$Aj(aC, this._pivotManager, aD.paramOutside, this.pivotDrawOrder);
+        aD.pivotDrawOrder = l2d_UtInterpolate.interpolateInt(aC, this._pivotManager, aD.paramOutside, this.pivotDrawOrder);
         if (l2d_Live2D.L2D_OUTSIDE_PARAM_AVAILABLE) {} else {
             if (aD.paramOutside[0]) {
                 return;
             }
         }
-        aD.opacity = aB._$kd(aC, this._pivotManager, aD.paramOutside, this.pivotOpacity);
+        aD.opacity = l2d_UtInterpolate.interpolateFloat(aC, this._pivotManager, aD.paramOutside, this.pivotOpacity);
     };
     l2d_DrawElementBase.prototype.setupTransform = function(aC, aD) {};
     l2d_DrawElementBase.prototype.getDrawDataID = function() {
@@ -95,18 +95,18 @@
 
     function l2d_UtDebug() {}
     // l2d_UtDebug._$Fm = 0;
-    l2d_UtDebug._$qf = new Object();
+    l2d_UtDebug.timersList = new Object();
     l2d_UtDebug.start = function(aD) {
-        var aC = l2d_UtDebug._$qf[aD];
+        var aC = l2d_UtDebug.timersList[aD];
         if (aC == null) {
             aC = new aa();
             aC._$d = aD;
-            l2d_UtDebug._$qf[aD] = aC;
+            l2d_UtDebug.timersList[aD] = aC;
         }
         aC.startTime = l2d_UtSystem.getSystemTimeMSec();
     };
     l2d_UtDebug.dump = function(aE) {
-        var aC = l2d_UtDebug._$qf[aE];
+        var aC = l2d_UtDebug.timersList[aE];
         if (aC != null) {
             var aD = l2d_UtSystem.getSystemTimeMSec();
             var aF = aD - aC.startTime;
@@ -117,7 +117,7 @@
         }
     };
     l2d_UtDebug.end = function(aE) {
-        var aC = l2d_UtDebug._$qf[aE];
+        var aC = l2d_UtDebug.timersList[aE];
         if (aC != null) {
             var aD = l2d_UtSystem.getSystemTimeMSec();
             return aD - aC.startTime;
@@ -148,7 +148,7 @@
         }
         console.log("\n");
     };
-    l2d_UtDebug._$od = function(aG, aD, aF) {
+    l2d_UtDebug.printVectorUShort = function(aG, aD, aF) {
         console.log("%s\n", aG);
         var aC = aD.length;
         for (var aE = 0; aE < aC; ++aE) {
@@ -220,8 +220,8 @@
         l2d_Live2DModelBase._instance_count++;
         this._modelContext = new l2d_context_params(this);
     }
-    l2d_Live2DModelBase._staticInt1 = 1;
-    l2d_Live2DModelBase._staticInt2 = 2;
+    l2d_Live2DModelBase.FILE_LOAD_EOF_ERROR = 1;
+    l2d_Live2DModelBase.FILE_LOAD_VERSION_ERROR = 2;
     l2d_Live2DModelBase._instance_count = 0;
     l2d_Live2DModelBase.loadModel_exe = function(aLive2DModel, inputStream) {
         try {
@@ -243,7 +243,7 @@
             }
             buffReader._setFormatVersion(fmtVersion);
             if (fmtVersion > l2d_global_format._latest_format_version) {
-                aLive2DModel.errorFlags |= l2d_Live2DModelBase._staticInt2;
+                aLive2DModel.errorFlags |= l2d_Live2DModelBase.FILE_LOAD_VERSION_ERROR;
                 var aM = l2d_global_format._latest_format_version;
                 var aD = "Model load error , Illegal data version error ( SDK : " + aM + " < loaded . : " + aI + " )@l2d_Live2DModelBase#loadModel()\n";
                 throw new I(aD);
@@ -253,7 +253,7 @@
                 var aC = buffReader._getNextInt16();
                 var aO = buffReader._getNextInt16();
                 if (aC != -30584 || aO != -30584) {
-                    aL.errorFlags |= l2d_Live2DModelBase._staticInt1;
+                    aL.errorFlags |= l2d_Live2DModelBase.FILE_LOAD_EOF_ERROR;
                     throw new I("Model load error , EOF not found.");
                 }
             }
@@ -532,13 +532,13 @@
     };
     l2d_IDrawData.prototype.setupInterpolate = function(aD, aC) {
         aC.paramOutside[0] = false;
-        aC.pivotDrawOrder = aB._$Aj(aD, this._pivotManager, aC.paramOutside, this.pivotDrawOrder);
+        aC.pivotDrawOrder = l2d_UtInterpolate.interpolateInt(aD, this._pivotManager, aC.paramOutside, this.pivotDrawOrder);
         if (l2d_Live2D.L2D_OUTSIDE_PARAM_AVAILABLE) {} else {
             if (aC.paramOutside[0]) {
                 return;
             }
         }
-        aC.opacity = aB._$kd(aD, this._pivotManager, aC.paramOutside, this.pivotOpacity);
+        aC.opacity = l2d_UtInterpolate.interpolateFloat(aD, this._pivotManager, aC.paramOutside, this.pivotOpacity);
     };
     l2d_IDrawData.prototype.setupTransform = function(aC) {};
     l2d_IDrawData.prototype.getDrawDataID = function() {
@@ -591,7 +591,7 @@
         if (this.pivotOpacity == null) {
             aD.setInterpolatedOpacity(1);
         } else {
-            aD.setInterpolatedOpacity(aB._$kd(aE, aF, aC, this.pivotOpacity));
+            aD.setInterpolatedOpacity(l2d_UtInterpolate.interpolateFloat(aE, aF, aC, this.pivotOpacity));
         }
     };
     l2d_IBaseData.prototype.setupTransform = function(aD, aC) {};
@@ -937,9 +937,9 @@
         this._paramID = null;
         this._paramValueList = null;
         this._paramIndex = l2d_param._defaultParamIndex;
-        this._$jd = -1;
-        this._$nj = 0;
-        this._$dP = 0;
+        this.indexInitVersion = -1;
+        this.tmpPivotIndex = 0;
+        this.tmpT = 0;
     }
     l2d_param._defaultParamIndex = -2;
     l2d_param.prototype._initWithBufferReader = function(aC) {
@@ -948,14 +948,14 @@
         this._paramValueList = aC._getNextValue();
     };
     l2d_param.prototype.getParamIndex = function(aC) {
-        if (this._$jd != aC) {
+        if (this.indexInitVersion != aC) {
             this._paramIndex = l2d_param._defaultParamIndex;
         }
         return this._paramIndex;
     };
-    l2d_param.prototype._$Hk = function(aD, aC) {
+    l2d_param.prototype.setParamIndex_ = function(aD, aC) {
         this._paramIndex = aD;
-        this._$jd = aC;
+        this.indexInitVersion = aC;
     };
     l2d_param.prototype.getParamID = function() {
         return this._paramID;
@@ -973,17 +973,17 @@
         this._paramValueCount = aD;
         this._paramValueList = aC;
     };
-    l2d_param.prototype._$Td = function() {
-        return this._$nj;
+    l2d_param.prototype.getTmpPivotIndex = function() {
+        return this.tmpPivotIndex;
     };
-    l2d_param.prototype._$Ld = function(aC) {
-        this._$nj = aC;
+    l2d_param.prototype.setTmpPivotIndex = function(aC) {
+        this.tmpPivotIndex = aC;
     };
-    l2d_param.prototype._$gT = function() {
-        return this._$dP;
+    l2d_param.prototype.getTmpT = function() {
+        return this.tmpT;
     };
-    l2d_param.prototype._$VT = function(aC) {
-        this._$dP = aC;
+    l2d_param.prototype.setTmpT = function(aC) {
+        this.tmpT = aC;
     };
 
     function l2d_BaseID(aC) {
@@ -1934,7 +1934,7 @@
         if (live2d_initializing) {
             return;
         }
-        this._$hk = l2d_drawParamBase._$Wm;
+        this.fixedTexureCount = l2d_drawParamBase.DEFAULT_FIXED_TEXTURE_COUNT;
         this._baseColor_a = 1;
         this._baseColor_r = 1;
         this._baseColor_g = 1;
@@ -1942,7 +1942,7 @@
         this.culling = false;
         this.matrix4x4 = new Float32Array(16);
     }
-    l2d_drawParamBase._$Wm = 32;
+    l2d_drawParamBase.DEFAULT_FIXED_TEXTURE_COUNT= 32;
     l2d_drawParamBase.prototype._setupDraw = function() {};
     l2d_drawParamBase.prototype._drawTexture = function(aH, aF, aE, aG, aI, aD, aC) {};
     l2d_drawParamBase.prototype._generateModelTextureNo = function() {
@@ -2184,8 +2184,8 @@
             return;
         }
         l2d_drawParamBase.prototype.constructor.call(this);
-        this._$mk = new Int32Array(l2d_drawParamJS._$Vm);
-        this._$1j = new Array();
+        this.fixedTexures = new Int32Array(l2d_drawParamJS.fixedTexureCount);
+        this.textures = new Array();
         this.transform = null;
         this.gl = null;
         if (l2d_drawParamJS._texcoordDrawArrayBuffer == null) {
@@ -2195,7 +2195,7 @@
         }
     }
     l2d_drawParamJS.prototype = new l2d_drawParamBase();
-    l2d_drawParamJS._$Vm = 32;
+    l2d_drawParamJS.fixedTexureCount = 32;
     // l2d_drawParamJS._$Xd = false;
     l2d_drawParamJS._texcoordDrawArrayBuffer = null;
     l2d_drawParamJS._positionDrawArrayBuffer = null;
@@ -2249,7 +2249,7 @@
         if (opacity < 0.01) {
             return;
         }
-        var aG = this._$1j[aJ];
+        var aG = this.textures[aJ];
         var aI = aH > 0.9 ? l2d_Live2D.EXPAND_W : 0;
         this.gl.drawElements(aG, aK, aD, aL, opacity, aI, this.transform, aE);
     };
@@ -2260,56 +2260,56 @@
         throw new Error("_releaseModelTextureNo");
     };
     l2d_drawParamJS.prototype.deleteTextures = function() {
-        for (var aC = 0; aC < this._$mk.length; aC++) {
-            var aD = this._$mk[aC];
+        for (var aC = 0; aC < this.fixedTexures.length; aC++) {
+            var aD = this.fixedTexures[aC];
             if (aD != 0) {
-                this.gl.deleteTextures(1, this._$mk, aC);
-                this._$mk[aC] = 0;
+                this.gl.deleteTextures(1, this.fixedTexures, aC);
+                this.fixedTexures[aC] = 0;
             }
         }
     };
     l2d_drawParamJS.prototype.setTexture = function(aD, aC) {
-        if (this._$mk.length < aD + 1) {
+        if (this.fixedTexures.length < aD + 1) {
             this._$og(aD);
         }
-        this._$mk[aD] = aC;
+        this.fixedTexures[aD] = aC;
     };
     l2d_drawParamJS.prototype.setTexture = function(aC, aD) {
-        if (this._$mk.length < aC + 1) {
+        if (this.fixedTexures.length < aC + 1) {
             this._$og(aC);
         }
-        this._$1j[aC] = aD;
+        this.textures[aC] = aD;
     };
     l2d_drawParamJS.prototype._$og = function(aC) {
-        var aF = Math.max(this._$mk.length * 2, aC + 1 + 10);
+        var aF = Math.max(this.fixedTexures.length * 2, aC + 1 + 10);
         var aD = new Int32Array(aF);
-        l2d_UtSystem._copyArrayFromStartWithLength(this._$mk, 0, aD, 0, this._$mk.length);
-        this._$mk = aD;
+        l2d_UtSystem._copyArrayFromStartWithLength(this.fixedTexures, 0, aD, 0, this.fixedTexures.length);
+        this.fixedTexures = aD;
         var aE = new Array();
-        l2d_UtSystem._copyArrayFromStartWithLength(this._$1j, 0, aE, 0, this._$1j.length);
-        this._$1j = aE;
+        l2d_UtSystem._copyArrayFromStartWithLength(this.textures, 0, aE, 0, this.textures.length);
+        this.textures = aE;
     };
 
-    function aB() {}
-    aB._$Aj = function(a6, bj, bk, aX) {
-        var aW = bj.calcPivotValue(a6, bk);
-        var aY = a6.getTmpPivotTableIndicesRef();
-        var a5 = a6.getTmpT_ArrayRef();
-        bj.calcPivotIndexies(aY, a5, aW);
+    function l2d_UtInterpolate() {}
+    l2d_UtInterpolate.interpolateInt = function(mdc, pivotManager, ret_paramOutside, pivotValue) {
+        var aW = pivotManager.calcPivotValue(mdc, ret_paramOutside);
+        var aY = mdc.getTmpPivotTableIndicesRef();
+        var a5 = mdc.getTmpT_ArrayRef();
+        pivotManager.calcPivotIndexies(aY, a5, aW);
         if (aW <= 0) {
-            return aX[aY[0]];
+            return pivotValue[aY[0]];
         } else {
             if (aW == 1) {
-                var be = aX[aY[0]];
-                var bd = aX[aY[1]];
+                var be = pivotValue[aY[0]];
+                var bd = pivotValue[aY[1]];
                 var a4 = a5[0];
                 return (be + (bd - be) * a4) | 0;
             } else {
                 if (aW == 2) {
-                    var be = aX[aY[0]];
-                    var bd = aX[aY[1]];
-                    var aV = aX[aY[2]];
-                    var aU = aX[aY[3]];
+                    var be = pivotValue[aY[0]];
+                    var bd = pivotValue[aY[1]];
+                    var aV = pivotValue[aY[2]];
+                    var aU = pivotValue[aY[3]];
                     var a4 = a5[0];
                     var a3 = a5[1];
                     var bm = (be + (bd - be) * a4) | 0;
@@ -2317,14 +2317,14 @@
                     return (bm + (bl - bm) * a3) | 0;
                 } else {
                     if (aW == 3) {
-                        var aK = aX[aY[0]];
-                        var aJ = aX[aY[1]];
-                        var bi = aX[aY[2]];
-                        var bh = aX[aY[3]];
-                        var aF = aX[aY[4]];
-                        var aE = aX[aY[5]];
-                        var bb = aX[aY[6]];
-                        var ba = aX[aY[7]];
+                        var aK = pivotValue[aY[0]];
+                        var aJ = pivotValue[aY[1]];
+                        var bi = pivotValue[aY[2]];
+                        var bh = pivotValue[aY[3]];
+                        var aF = pivotValue[aY[4]];
+                        var aE = pivotValue[aY[5]];
+                        var bb = pivotValue[aY[6]];
+                        var ba = pivotValue[aY[7]];
                         var a4 = a5[0];
                         var a3 = a5[1];
                         var a1 = a5[2];
@@ -2337,22 +2337,22 @@
                         return (bm + (bl - bm) * a1) | 0;
                     } else {
                         if (aW == 4) {
-                            var aO = aX[aY[0]];
-                            var aN = aX[aY[1]];
-                            var bp = aX[aY[2]];
-                            var bo = aX[aY[3]];
-                            var aI = aX[aY[4]];
-                            var aH = aX[aY[5]];
-                            var bg = aX[aY[6]];
-                            var bf = aX[aY[7]];
-                            var a9 = aX[aY[8]];
-                            var a7 = aX[aY[9]];
-                            var aS = aX[aY[10]];
-                            var aR = aX[aY[11]];
-                            var a2 = aX[aY[12]];
-                            var a0 = aX[aY[13]];
-                            var aM = aX[aY[14]];
-                            var aL = aX[aY[15]];
+                            var aO = pivotValue[aY[0]];
+                            var aN = pivotValue[aY[1]];
+                            var bp = pivotValue[aY[2]];
+                            var bo = pivotValue[aY[3]];
+                            var aI = pivotValue[aY[4]];
+                            var aH = pivotValue[aY[5]];
+                            var bg = pivotValue[aY[6]];
+                            var bf = pivotValue[aY[7]];
+                            var a9 = pivotValue[aY[8]];
+                            var a7 = pivotValue[aY[9]];
+                            var aS = pivotValue[aY[10]];
+                            var aR = pivotValue[aY[11]];
+                            var a2 = pivotValue[aY[12]];
+                            var a0 = pivotValue[aY[13]];
+                            var aM = pivotValue[aY[14]];
+                            var aL = pivotValue[aY[15]];
                             var a4 = a5[0];
                             var a3 = a5[1];
                             var a1 = a5[2];
@@ -2399,60 +2399,60 @@
             }
         }
     };
-    aB._$kd = function(a5, bj, bk, bb) {
-        var aW = bj.calcPivotValue(a5, bk);
-        var aX = a5.getTmpPivotTableIndicesRef();
-        var a4 = a5.getTmpT_ArrayRef();
-        bj.calcPivotIndexies(aX, a4, aW);
+    l2d_UtInterpolate.interpolateFloat = function(mdc, pivotManager, ret_paramOutside, pivotValue) {
+        var aW = pivotManager.calcPivotValue(mdc, ret_paramOutside);
+        var aX = mdc.getTmpPivotTableIndicesRef();
+        var a4 = mdc.getTmpT_ArrayRef();
+        pivotManager.calcPivotIndexies(aX, a4, aW);
         if (aW <= 0) {
-            return bb[aX[0]];
+            return pivotValue[aX[0]];
         } else {
             if (aW == 1) {
-                var be = bb[aX[0]];
-                var bd = bb[aX[1]];
+                var be = pivotValue[aX[0]];
+                var bd = pivotValue[aX[1]];
                 var a3 = a4[0];
                 return be + (bd - be) * a3;
             } else {
                 if (aW == 2) {
-                    var be = bb[aX[0]];
-                    var bd = bb[aX[1]];
-                    var aV = bb[aX[2]];
-                    var aU = bb[aX[3]];
+                    var be = pivotValue[aX[0]];
+                    var bd = pivotValue[aX[1]];
+                    var aV = pivotValue[aX[2]];
+                    var aU = pivotValue[aX[3]];
                     var a3 = a4[0];
                     var a2 = a4[1];
                     return (1 - a2) * (be + (bd - be) * a3) + a2 * (aV + (aU - aV) * a3);
                 } else {
                     if (aW == 3) {
-                        var aK = bb[aX[0]];
-                        var aJ = bb[aX[1]];
-                        var bi = bb[aX[2]];
-                        var bh = bb[aX[3]];
-                        var aF = bb[aX[4]];
-                        var aE = bb[aX[5]];
-                        var ba = bb[aX[6]];
-                        var a9 = bb[aX[7]];
+                        var aK = pivotValue[aX[0]];
+                        var aJ = pivotValue[aX[1]];
+                        var bi = pivotValue[aX[2]];
+                        var bh = pivotValue[aX[3]];
+                        var aF = pivotValue[aX[4]];
+                        var aE = pivotValue[aX[5]];
+                        var ba = pivotValue[aX[6]];
+                        var a9 = pivotValue[aX[7]];
                         var a3 = a4[0];
                         var a2 = a4[1];
                         var a0 = a4[2];
                         return (1 - a0) * ((1 - a2) * (aK + (aJ - aK) * a3) + a2 * (bi + (bh - bi) * a3)) + a0 * ((1 - a2) * (aF + (aE - aF) * a3) + a2 * (ba + (a9 - ba) * a3));
                     } else {
                         if (aW == 4) {
-                            var aO = bb[aX[0]];
-                            var aN = bb[aX[1]];
-                            var bn = bb[aX[2]];
-                            var bm = bb[aX[3]];
-                            var aI = bb[aX[4]];
-                            var aH = bb[aX[5]];
-                            var bg = bb[aX[6]];
-                            var bf = bb[aX[7]];
-                            var a8 = bb[aX[8]];
-                            var a6 = bb[aX[9]];
-                            var aS = bb[aX[10]];
-                            var aR = bb[aX[11]];
-                            var a1 = bb[aX[12]];
-                            var aZ = bb[aX[13]];
-                            var aM = bb[aX[14]];
-                            var aL = bb[aX[15]];
+                            var aO = pivotValue[aX[0]];
+                            var aN = pivotValue[aX[1]];
+                            var bn = pivotValue[aX[2]];
+                            var bm = pivotValue[aX[3]];
+                            var aI = pivotValue[aX[4]];
+                            var aH = pivotValue[aX[5]];
+                            var bg = pivotValue[aX[6]];
+                            var bf = pivotValue[aX[7]];
+                            var a8 = pivotValue[aX[8]];
+                            var a6 = pivotValue[aX[9]];
+                            var aS = pivotValue[aX[10]];
+                            var aR = pivotValue[aX[11]];
+                            var a1 = pivotValue[aX[12]];
+                            var aZ = pivotValue[aX[13]];
+                            var aM = pivotValue[aX[14]];
+                            var aL = pivotValue[aX[15]];
                             var a3 = a4[0];
                             var a2 = a4[1];
                             var a0 = a4[2];
@@ -2472,7 +2472,7 @@
                             }
                             var bl = new Float32Array(aQ);
                             for (var aP = 0; aP < aQ; aP++) {
-                                bl[aP] = bb[aX[aP]];
+                                bl[aP] = pivotValue[aX[aP]];
                             }
                             var a7 = 0;
                             for (var aP = 0; aP < aQ; aP++) {
@@ -2485,44 +2485,44 @@
             }
         }
     };
-    aB._$Nd = function(bQ, bR, a0, aD, bx, aY, bS, bC) {
-        var aI = bR.calcPivotValue(bQ, a0);
-        var br = bQ.getTmpPivotTableIndicesRef();
-        var aX = bQ.getTmpT_ArrayRef();
-        bR.calcPivotIndexies(br, aX, aI);
-        var aE = aD * 2;
-        var aL = bS;
+    l2d_UtInterpolate.interpolatePoints = function(mdc, pivotManager, ret_paramOutside, numPts, pivotPoints, dst_points, pt_offset, pt_step) {
+        var aI = pivotManager.calcPivotValue(mdc, ret_paramOutside);
+        var br = mdc.getTmpPivotTableIndicesRef();
+        var aX = mdc.getTmpT_ArrayRef();
+        pivotManager.calcPivotIndexies(br, aX, aI);
+        var aE = numPts * 2;
+        var aL = pt_offset;
         if (aI <= 0) {
             var bD = br[0];
-            var bl = bx[bD];
-            if (bC == 2 && bS == 0) {
-                l2d_UtSystem._copyArrayFromStartWithLength(bl, 0, aY, 0, aE);
+            var bl = pivotPoints[bD];
+            if (pt_step == 2 && pt_offset == 0) {
+                l2d_UtSystem._copyArrayFromStartWithLength(bl, 0, dst_points, 0, aE);
             } else {
                 for (var bo = 0; bo < aE;) {
                     aY[aL] = bl[bo++];
                     aY[aL + 1] = bl[bo++];
-                    aL += bC;
+                    aL += pt_step;
                 }
             }
         } else {
             if (aI == 1) {
-                var bl = bx[br[0]];
-                var bk = bx[br[1]];
+                var bl = pivotPoints[br[0]];
+                var bk = pivotPoints[br[1]];
                 var bY = aX[0];
                 var bO = 1 - bY;
                 for (var bo = 0; bo < aE;) {
-                    aY[aL] = bl[bo] * bO + bk[bo] * bY;
+                    dst_points[aL] = bl[bo] * bO + bk[bo] * bY;
                     ++bo;
-                    aY[aL + 1] = bl[bo] * bO + bk[bo] * bY;
+                    dst_points[aL + 1] = bl[bo] * bO + bk[bo] * bY;
                     ++bo;
-                    aL += bC;
+                    aL += pt_step;
                 }
             } else {
                 if (aI == 2) {
-                    var bl = bx[br[0]];
-                    var bk = bx[br[1]];
-                    var aU = bx[br[2]];
-                    var aT = bx[br[3]];
+                    var bl = pivotPoints[br[0]];
+                    var bk = pivotPoints[br[1]];
+                    var aU = pivotPoints[br[2]];
+                    var aT = pivotPoints[br[3]];
                     var bY = aX[0];
                     var bW = aX[1];
                     var bO = 1 - bY;
@@ -2532,22 +2532,22 @@
                     var bH = bW * bO;
                     var bG = bW * bY;
                     for (var bo = 0; bo < aE;) {
-                        aY[aL] = bX * bl[bo] + bV * bk[bo] + bH * aU[bo] + bG * aT[bo];
+                        dst_points[aL] = bX * bl[bo] + bV * bk[bo] + bH * aU[bo] + bG * aT[bo];
                         ++bo;
-                        aY[aL + 1] = bX * bl[bo] + bV * bk[bo] + bH * aU[bo] + bG * aT[bo];
+                        dst_points[aL + 1] = bX * bl[bo] + bV * bk[bo] + bH * aU[bo] + bG * aT[bo];
                         ++bo;
-                        aL += bC;
+                        aL += pt_step;
                     }
                 } else {
                     if (aI == 3) {
-                        var a5 = bx[br[0]];
-                        var a4 = bx[br[1]];
-                        var aK = bx[br[2]];
-                        var aJ = bx[br[3]];
-                        var a1 = bx[br[4]];
-                        var aZ = bx[br[5]];
-                        var aG = bx[br[6]];
-                        var aF = bx[br[7]];
+                        var a5 = pivotPoints[br[0]];
+                        var a4 = pivotPoints[br[1]];
+                        var aK = pivotPoints[br[2]];
+                        var aJ = pivotPoints[br[3]];
+                        var a1 = pivotPoints[br[4]];
+                        var aZ = pivotPoints[br[5]];
+                        var aG = pivotPoints[br[6]];
+                        var aF = pivotPoints[br[7]];
                         var bY = aX[0];
                         var bW = aX[1];
                         var bU = aX[2];
@@ -2563,30 +2563,30 @@
                         var bL = bU * bW * bO;
                         var bJ = bU * bW * bY;
                         for (var bo = 0; bo < aE;) {
-                            aY[aL] = b3 * a5[bo] + b2 * a4[bo] + bP * aK[bo] + bN * aJ[bo] + b1 * a1[bo] + b0 * aZ[bo] + bL * aG[bo] + bJ * aF[bo];
+                            dst_points[aL] = b3 * a5[bo] + b2 * a4[bo] + bP * aK[bo] + bN * aJ[bo] + b1 * a1[bo] + b0 * aZ[bo] + bL * aG[bo] + bJ * aF[bo];
                             ++bo;
-                            aY[aL + 1] = b3 * a5[bo] + b2 * a4[bo] + bP * aK[bo] + bN * aJ[bo] + b1 * a1[bo] + b0 * aZ[bo] + bL * aG[bo] + bJ * aF[bo];
+                            dst_points[aL + 1] = b3 * a5[bo] + b2 * a4[bo] + bP * aK[bo] + bN * aJ[bo] + b1 * a1[bo] + b0 * aZ[bo] + bL * aG[bo] + bJ * aF[bo];
                             ++bo;
-                            aL += bC;
+                            aL += pt_step;
                         }
                     } else {
                         if (aI == 4) {
-                            var by = bx[br[0]];
-                            var bw = bx[br[1]];
-                            var bj = bx[br[2]];
-                            var bh = bx[br[3]];
-                            var bt = bx[br[4]];
-                            var bs = bx[br[5]];
-                            var a9 = bx[br[6]];
-                            var a8 = bx[br[7]];
-                            var bB = bx[br[8]];
-                            var bz = bx[br[9]];
-                            var bq = bx[br[10]];
-                            var bp = bx[br[11]];
-                            var bv = bx[br[12]];
-                            var bu = bx[br[13]];
-                            var bi = bx[br[14]];
-                            var bg = bx[br[15]];
+                            var by = pivotPoints[br[0]];
+                            var bw = pivotPoints[br[1]];
+                            var bj = pivotPoints[br[2]];
+                            var bh = pivotPoints[br[3]];
+                            var bt = pivotPoints[br[4]];
+                            var bs = pivotPoints[br[5]];
+                            var a9 = pivotPoints[br[6]];
+                            var a8 = pivotPoints[br[7]];
+                            var bB = pivotPoints[br[8]];
+                            var bz = pivotPoints[br[9]];
+                            var bq = pivotPoints[br[10]];
+                            var bp = pivotPoints[br[11]];
+                            var bv = pivotPoints[br[12]];
+                            var bu = pivotPoints[br[13]];
+                            var bi = pivotPoints[br[14]];
+                            var bg = pivotPoints[br[15]];
                             var bY = aX[0];
                             var bW = aX[1];
                             var bU = aX[2];
@@ -2612,11 +2612,11 @@
                             var aP = bT * bU * bW * bO;
                             var aO = bT * bU * bW * bY;
                             for (var bo = 0; bo < aE;) {
-                                aY[aL] = bf * by[bo] + bd * bw[bo] + aR * bj[bo] + aQ * bh[bo] + a7 * bt[bo] + a6 * bs[bo] + aN * a9[bo] + aM * a8[bo] + bn * bB[bo] + bm * bz[bo] + aW * bq[bo] + aV * bp[bo] + bc * bv[bo] + ba * bu[bo] + aP * bi[bo] + aO * bg[bo];
+                                dst_points[aL] = bf * by[bo] + bd * bw[bo] + aR * bj[bo] + aQ * bh[bo] + a7 * bt[bo] + a6 * bs[bo] + aN * a9[bo] + aM * a8[bo] + bn * bB[bo] + bm * bz[bo] + aW * bq[bo] + aV * bp[bo] + bc * bv[bo] + ba * bu[bo] + aP * bi[bo] + aO * bg[bo];
                                 ++bo;
-                                aY[aL + 1] = bf * by[bo] + bd * bw[bo] + aR * bj[bo] + aQ * bh[bo] + a7 * bt[bo] + a6 * bs[bo] + aN * a9[bo] + aM * a8[bo] + bn * bB[bo] + bm * bz[bo] + aW * bq[bo] + aV * bp[bo] + bc * bv[bo] + ba * bu[bo] + aP * bi[bo] + aO * bg[bo];
+                                dst_points[aL + 1] = bf * by[bo] + bd * bw[bo] + aR * bj[bo] + aQ * bh[bo] + a7 * bt[bo] + a6 * bs[bo] + aN * a9[bo] + aM * a8[bo] + bn * bB[bo] + bm * bz[bo] + aW * bq[bo] + aV * bp[bo] + bc * bv[bo] + ba * bu[bo] + aP * bi[bo] + aO * bg[bo];
                                 ++bo;
-                                aL += bC;
+                                aL += pt_step;
                             }
                         } else {
                             var bZ = 1 << aI;
@@ -2643,9 +2643,9 @@
                                     a2 += bE[aS] * bb[aS][bM];
                                 }
                                 bo += 2;
-                                aY[aL] = a3;
-                                aY[aL + 1] = a2;
-                                aL += bC;
+                                dst_points[aL] = a3;
+                                dst_points[aL + 1] = a2;
+                                aL += pt_step;
                             }
                         }
                     }
@@ -3231,7 +3231,7 @@
         this._loop = false;
         this.loopFadeIn = true;
         this._loopDurationMSec = -1;
-        this._$uH = 0;
+        this.lastWeight = 0;
     }
     l2d_Live2DMotion.prototype = new l2d_AMotion();
     l2d_Live2DMotion._PREFIX_VISIBLE = "VISIBLE:";
@@ -3455,7 +3455,7 @@
                 motionQueueEnt._finished = true;
             }
         }
-        this._$uH = _weight;
+        this.lastWeight = _weight;
     };
     l2d_Live2DMotion.prototype.isLoop = function() {
         return this._loop;
@@ -3584,13 +3584,13 @@
                 var bc = a2 + aW * aS[aO * 2];
                 var ba = a1 + aU * aS[aO * 2 + 1];
                 if (bg) {
-                    bg._$Hg(aG, aF, bp);
+                    bg.mulVector(aG, aF, bp);
                     aG = bp[0];
                     aF = bp[1];
-                    bg._$Hg(bm, bk, bp);
+                    bg.mulVector(bm, bk, bp);
                     bm = bp[0];
                     bk = bp[1];
-                    bg._$Hg(bc, ba, bp);
+                    bg.mulVector(bc, ba, bp);
                     bc = bp[0];
                     ba = bp[1];
                 }
@@ -3729,10 +3729,10 @@
         var aM = arguments;
         aC.beginPath();
         if (aJ) {
-            aJ._$Hg(aM[2], aM[3], aH);
+            aJ.mulVector(aM[2], aM[3], aH);
             aC.moveTo(aH[0], aH[1]);
             for (var aG = 4; aG < aM.length; aG += 2) {
-                aJ._$Hg(aM[aG], aM[aG + 1], aH);
+                aJ.mulVector(aM[aG], aM[aG + 1], aH);
                 aC.lineTo(aH[0], aH[1]);
             }
         } else {
@@ -4136,7 +4136,7 @@
         }
         var aD = l2d_DDTexture._$sf;
         aD[0] = false;
-        aB._$Nd(aE, this._pivotManager, aD, this._numPoints, this.pivotPoints, aF.interpolatedPoints, l2d_Def.VERTEX_OFFSET, l2d_Def.VERTEX_STEP);
+        l2d_UtInterpolate.interpolatePoints(aE, this._pivotManager, aD, this._numPoints, this.pivotPoints, aF.interpolatedPoints, l2d_Def.VERTEX_OFFSET, l2d_Def.VERTEX_STEP);
     };
     l2d_DDTexture.prototype.setupTransform = function(aF, aD) {
         try {
@@ -4269,7 +4269,7 @@
             aD = aC.getParamIndex(aE);
             if (aD == l2d_param._defaultParamIndex) {
                 aD = modelContext.getParamIndex(aC.getParamID());
-                aC._$Hk(aD, aE);
+                aC.setParamIndex_(aD, aE);
             }
             if (aD < 0) {
                 throw new Exception("PivotManager#calcPivotValue() :tmpParamIndex < 0" + aC.getParamID());
@@ -4325,8 +4325,8 @@
                     }
                 }
             }
-            aC._$Ld(aK);
-            aC._$VT(aO);
+            aC.setTmpPivotIndex(aK);
+            aC.setTmpT(aO);
         }
         return aI;
     };
@@ -4344,8 +4344,8 @@
         }
         for (var aG = 0; aG < aN; ++aG) {
             var aD = this._paramList[aG];
-            if (aD._$gT() == 0) {
-                var aJ = aD._$Td() * aF;
+            if (aD.getTmpT() == 0) {
+                var aJ = aD.getTmpPivotIndex() * aF;
                 if (aJ < 0 && l2d_Live2D.L2D_DEBUG) {
                     throw new Exception("PivotManager#calcPivotIndexies() tmpPivotIndex not supported");
                 }
@@ -4353,12 +4353,12 @@
                     aI[aL] += aJ;
                 }
             } else {
-                var aJ = aF * aD._$Td();
-                var aH = aF * (aD._$Td() + 1);
+                var aJ = aF * aD.getTmpPivotIndex();
+                var aH = aF * (aD.getTmpPivotIndex() + 1);
                 for (var aL = 0; aL < aM; ++aL) {
                     aI[aL] += ((aL / aC | 0) % 2 == 0) ? aJ : aH;
                 }
-                aO[aE++] = aD._$gT();
+                aO[aE++] = aD.getTmpT();
                 aC *= 2;
             }
             aF *= aD._getParamValueCount();
@@ -4891,7 +4891,7 @@
         aC[0] = aC[4] = aC[8] = 1;
         aC[1] = aC[2] = aC[3] = aC[5] = aC[6] = aC[7] = 0;
     };
-    l2d_LDTransform.prototype._$Hg = function(aD, aF, aE) {
+    l2d_LDTransform.prototype.mulVector = function(aD, aF, aE) {
         if (aE == null) {
             aE = new Array(0, 0);
         }
@@ -5240,7 +5240,7 @@
         this.firstDraw = true;
         this.anisotropyExt = null;
         this.maxAnisotropy = 0;
-        this._$Vm = 32;
+        this.fixedTexureCount = 32;
         // this._$Xd = false;
         this._texcoordDrawArrayBuffer = null;
         this._positionDrawArrayBuffer = null;
@@ -5700,7 +5700,7 @@
         var aG = this.getNumPts();
         var aC = l2d_BDBoxGrid._$sf;
         aC[0] = false;
-        aB._$Nd(aE, this._pivotManager, aC, aG, this.pivotPoints, aF.interpolatedPoints, 0, 2);
+        l2d_UtInterpolate.interpolatePoints(aE, this._pivotManager, aC, aG, this.pivotPoints, aF.interpolatedPoints, 0, 2);
         aD.setOutsideParam(aC[0]);
         this.interpolateOpacity(aE, this._pivotManager, aD, aC);
     };
@@ -6062,27 +6062,27 @@
         }
         this.p1 = new l2d_PhysicsPoint();
         this.p2 = new l2d_PhysicsPoint();
-        this._$OR = 0;
-        this._$wk = 0;
-        this._$Tj = 0;
-        this._$8j = 0;
-        this._$Im = 0;
-        this._$Ek = 0;
-        this._$PH = 0;
-        this._$Pf = 0;
-        this._$bT = new Array();
-        this._$MH = new Array();
+        this.baseLengthM = 0;
+        this.gravityAngleDeg = 0;
+        this.airResistance = 0;
+        this.angleP1toP2Deg = 0;
+        this.last_angleP1toP2Deg = 0;
+        this.angleP1toP2Deg_v = 0;
+        this.startTime = 0;
+        this.lastTime = 0;
+        this.srcListPtr = new Array();
+        this.targetListPtr = new Array();
         this.setup(0.3, 0.5, 0.1);
     }
-    l2d_PhysicsHair.prototype.setup = function(aE, aD, aC) {
-        this._$Im = this._$9k();
-        this.p2._$3f();
+    l2d_PhysicsHair.prototype.setup = function(baseLengthM, airRegistance, mass) {
+        this.last_angleP1toP2Deg = this.calc_angleP1toP2();
+        this.p2.setupLast();
         if (arguments.length == 3) {
-            this._$OR = aE;
-            this._$Tj = aD;
-            this.p1._$W = aC;
-            this.p2._$W = aC;
-            this.p2.y = aE;
+            this.baseLengthM = baseLengthM;
+            this.airResistance = airRegistance;
+            this.p1.mass = mass;
+            this.p2.mass = mass;
+            this.p2.y = baseLengthM;
             this.setup();
         }
     };
@@ -6092,93 +6092,93 @@
     l2d_PhysicsHair.prototype.getPhysicsPoint2 = function() {
         return this.p2;
     };
-    l2d_PhysicsHair.prototype._$Md = function() {
-        return this._$wk;
+    l2d_PhysicsHair.prototype.getGravityAngleDeg = function() {
+        return this.gravityAngleDeg;
     };
-    l2d_PhysicsHair.prototype._$Wd = function(aC) {
-        this._$wk = aC;
+    l2d_PhysicsHair.prototype.setGravityAngleDeg = function(aC) {
+        this.gravityAngleDeg = aC;
     };
-    l2d_PhysicsHair.prototype._$Yd = function() {
-        return this._$8j;
+    l2d_PhysicsHair.prototype.getAngleP1toP2Deg = function() {
+        return this.angleP1toP2Deg;
     };
-    l2d_PhysicsHair.prototype._$xm = function() {
-        return this._$Ek;
+    l2d_PhysicsHair.prototype.getAngleP1toP2Deg_velocity = function() {
+        return this.angleP1toP2Deg_v;
     };
-    l2d_PhysicsHair.prototype._$9k = function() {
+    l2d_PhysicsHair.prototype.calc_angleP1toP2 = function() {
         return (-180 * (Math.atan2(this.p1.x - this.p2.x, -(this.p1.y - this.p2.y))) / Math.PI);
     };
-    l2d_PhysicsHair.prototype.addSrcParam = function(aE, aC, aG, aD) {
-        var aF = new l2d_srcParamPhysicsHair(aE, aC, aG, aD);
-        this._$bT.push(aF);
+    l2d_PhysicsHair.prototype.addSrcParam = function(srcType, paramID, scale, weight) {
+        var aF = new l2d_srcParamPhysicsHair(srcType, paramID, scale, weight);
+        this.srcListPtr.push(aF);
     };
-    l2d_PhysicsHair.prototype.addTargetParam = function(aE, aC, aF, aD) {
-        var aG = new l2d_targetParamPhysicsHair(aE, aC, aF, aD);
-        this._$MH.push(aG);
+    l2d_PhysicsHair.prototype.addTargetParam = function(targetType, paramID, scale, weight) {
+        var aG = new l2d_targetParamPhysicsHair(targetType, paramID, scale, weight);
+        this.targetListPtr.push(aG);
     };
-    l2d_PhysicsHair.prototype.update = function(aD, aG) {
-        if (this._$PH == 0) {
-            this._$PH = this._$Pf = aG;
-            this._$OR = (Math.sqrt((this.p1.x - this.p2.x) * (this.p1.x - this.p2.x) + (this.p1.y - this.p2.y) * (this.p1.y - this.p2.y)));
+    l2d_PhysicsHair.prototype.update = function(model, time) {
+        if (this.startTime == 0) {
+            this.startTime = this.lastTime = time;
+            this.baseLengthM = (Math.sqrt((this.p1.x - this.p2.x) * (this.p1.x - this.p2.x) + (this.p1.y - this.p2.y) * (this.p1.y - this.p2.y)));
             return;
         }
-        var aF = (aG - this._$Pf) / 1000;
+        var aF = (time - this.lastTime) / 1000;
         if (aF != 0) {
-            for (var aE = this._$bT.length - 1; aE >= 0; --aE) {
-                var aH = this._$bT[aE];
-                aH._$RH(aD, this);
+            for (var aE = this.srcListPtr.length - 1; aE >= 0; --aE) {
+                var aH = this.srcListPtr[aE];
+                aH.updateSrc(model, this);
             }
-            this._$RR(aD, aF);
-            this._$8j = this._$9k();
-            this._$Ek = (this._$8j - this._$Im) / aF;
-            this._$Im = this._$8j;
+            this.update_exe(model, aF);
+            this.angleP1toP2Deg = this.calc_angleP1toP2();
+            this.angleP1toP2Deg_v = (this.angleP1toP2Deg - this.last_angleP1toP2Deg) / aF;
+            this.last_angleP1toP2Deg = this.angleP1toP2Deg;
         }
-        for (var aE = this._$MH.length - 1; aE >= 0; --aE) {
-            var aC = this._$MH[aE];
-            aC._$9g(aD, this);
+        for (var aE = this.targetListPtr.length - 1; aE >= 0; --aE) {
+            var aC = this.targetListPtr[aE];
+            aC.updateTarget(model, this);
         }
-        this._$Pf = aG;
+        this.lastTime = time;
     };
-    l2d_PhysicsHair.prototype._$RR = function(aI, aD) {
-        var aP = 1 / aD;
+    l2d_PhysicsHair.prototype.update_exe = function(model, dt) {
+        var aP = 1 / dt;
         this.p1.vx = (this.p1.x - this.p1._prev_x) * aP;
         this.p1.vy = (this.p1.y - this.p1._prev_y) * aP;
         this.p1.ax = (this.p1.vx - this.p1._prev_vx) * aP;
         this.p1.ay = (this.p1.vy - this.p1._prev_vy) * aP;
-        this.p1.fx = this.p1.ax * this.p1._$W;
-        this.p1.fy = this.p1.ay * this.p1._$W;
-        this.p1._$3f();
+        this.p1.fx = this.p1.ax * this.p1.mass;
+        this.p1.fy = this.p1.ay * this.p1.mass;
+        this.p1.setupLast();
         var aH = -(Math.atan2((this.p1.y - this.p2.y), this.p1.x - this.p2.x));
         var aG;
         var aQ;
         var aM = Math.cos(aH);
         var aC = Math.sin(aH);
-        var aR = 9.8 * this.p2._$W;
-        var aL = (this._$wk * l2d_math_angle._degree2radian_factor);
+        var aR = 9.8 * this.p2.mass;
+        var aL = (this.gravityAngleDeg * l2d_math_angle._degree2radian_factor);
         var aK = (aR * Math.cos(aH - aL));
         aG = (aK * aC);
         aQ = (aK * aM);
         var aF = (-this.p1.fx * aC * aC);
         var aO = (-this.p1.fy * aC * aM);
-        var aE = ((-this.p2.vx * this._$Tj));
-        var aN = ((-this.p2.vy * this._$Tj));
+        var aE = ((-this.p2.vx * this.airResistance));
+        var aN = ((-this.p2.vy * this.airResistance));
         this.p2.fx = ((aG + aF + aE));
         this.p2.fy = ((aQ + aO + aN));
-        this.p2.ax = this.p2.fx / this.p2._$W;
-        this.p2.ay = this.p2.fy / this.p2._$W;
-        this.p2.vx += this.p2.ax * aD;
-        this.p2.vy += this.p2.ay * aD;
-        this.p2.x += this.p2.vx * aD;
-        this.p2.y += this.p2.vy * aD;
+        this.p2.ax = this.p2.fx / this.p2.mass;
+        this.p2.ay = this.p2.fy / this.p2.mass;
+        this.p2.vx += this.p2.ax * dt;
+        this.p2.vy += this.p2.ay * dt;
+        this.p2.x += this.p2.vx * dt;
+        this.p2.y += this.p2.vy * dt;
         var aJ = (Math.sqrt((this.p1.x - this.p2.x) * (this.p1.x - this.p2.x) + (this.p1.y - this.p2.y) * (this.p1.y - this.p2.y)));
-        this.p2.x = this.p1.x + this._$OR * (this.p2.x - this.p1.x) / aJ;
-        this.p2.y = this.p1.y + this._$OR * (this.p2.y - this.p1.y) / aJ;
+        this.p2.x = this.p1.x + this.baseLengthM * (this.p2.x - this.p1.x) / aJ;
+        this.p2.y = this.p1.y + this.baseLengthM * (this.p2.y - this.p1.y) / aJ;
         this.p2.vx = (this.p2.x - this.p2._prev_x) * aP;
         this.p2.vy = (this.p2.y - this.p2._prev_y) * aP;
-        this.p2._$3f();
+        this.p2.setupLast();
     };
 
     function l2d_PhysicsPoint() {
-        this._$W = 1;
+        this.mass = 1;
         this.x = 0;
         this.y = 0;
         this.vx = 0;
@@ -6192,33 +6192,33 @@
         this._prev_vx = 0;
         this._prev_vy = 0;
     }
-    l2d_PhysicsPoint.prototype._$3f = function() {
+    l2d_PhysicsPoint.prototype.setupLast = function() {
         this._prev_x = this.x;
         this._prev_y = this.y;
         this._prev_vx = this.vx;
         this._prev_vy = this.vy;
     };
 
-    function l2d_srcParamBase(aE, aD, aC) {
+    function l2d_srcParamBase(paramID, scale, _weight) {
         this._paramID = null;
         this.scale = null;
         this._weight = null;
-        this._paramID = aE;
-        this.scale = aD;
-        this._weight = aC;
+        this._paramID = paramID;
+        this.scale = scale;
+        this._weight = _weight;
     }
-    l2d_srcParamBase.prototype._$RH = function(aD, aC) {};
+    l2d_srcParamBase.prototype.updateSrc = function(model, hair) {};
 
-    function l2d_srcParamPhysicsHair(aE, aF, aD, aC) {
-        l2d_srcParamBase.prototype.constructor.call(this, aF, aD, aC);
-        this._$eT = null;
-        this._$eT = aE;
+    function l2d_srcParamPhysicsHair(srcType, paramID, scale, _weight) {
+        l2d_srcParamBase.prototype.constructor.call(this, paramID, scale, _weight);
+        this.srcType = null;
+        this.srcType = srcType;
     }
     l2d_srcParamPhysicsHair.prototype = new l2d_srcParamBase();
-    l2d_srcParamPhysicsHair.prototype._$RH = function(aE, aC) {
-        var aF = this.scale * aE.getParamFloat(this._paramID);
-        var aG = aC.getPhysicsPoint1();
-        switch (this._$eT) {
+    l2d_srcParamPhysicsHair.prototype.updateSrc = function(model, hair) {
+        var aF = this.scale * model.getParamFloat(this._paramID);
+        var aG = hair.getPhysicsPoint1();
+        switch (this.srcType) {
         default:
         case l2d_PhysicsHair.Src.SRC_TO_X:
             aG.x = aG.x + (aF - aG.x) * this._weight;
@@ -6227,37 +6227,37 @@
             aG.y = aG.y + (aF - aG.y) * this._weight;
             break;
         case l2d_PhysicsHair.Src.SRC_TO_G_ANGLE:
-            var aD = aC._$Md();
+            var aD = hair.getGravityAngleDeg();
             aD = aD + (aF - aD) * this._weight;
-            aC._$Wd(aD);
+            hair.setGravityAngleDeg(aD);
             break;
         }
     };
 
-    function l2d_targetParamBase(aE, aD, aC) {
+    function l2d_targetParamBase(paramID, scale, _weight) {
         this._paramID = null;
         this.scale = null;
         this._weight = null;
-        this._paramID = aE;
-        this.scale = aD;
-        this._weight = aC;
+        this._paramID = paramID;
+        this.scale = scale;
+        this._weight = _weight;
     }
-    l2d_targetParamBase.prototype._$9g = function(aD, aC) {};
+    l2d_targetParamBase.prototype.updateTarget = function(model, hair) {};
 
-    function l2d_targetParamPhysicsHair(aD, aF, aE, aC) {
-        l2d_targetParamBase.prototype.constructor.call(this, aF, aE, aC);
-        this._$9H = null;
-        this._$9H = aD;
+    function l2d_targetParamPhysicsHair(targetType, paramID, scale, _weight) {
+        l2d_targetParamBase.prototype.constructor.call(this, paramID, scale, _weight);
+        this.targetType = null;
+        this.targetType = targetType;
     }
     l2d_targetParamPhysicsHair.prototype = new l2d_targetParamBase();
-    l2d_targetParamPhysicsHair.prototype._$9g = function(aD, aC) {
-        switch (this._$9H) {
+    l2d_targetParamPhysicsHair.prototype.updateTarget = function(model, hair) {
+        switch (this.targetType) {
         default:
         case l2d_PhysicsHair.Target.TARGET_FROM_ANGLE:
-            aD.setParamFloat(this._paramID, this.scale * aC._$Yd(), this._weight);
+            model.setParamFloat(this._paramID, this.scale * hair.getAngleP1toP2Deg(), this._weight);
             break;
         case l2d_PhysicsHair.Target.TARGET_FROM_ANGLE_V:
-            aD.setParamFloat(this._paramID, this.scale * aC._$xm(), this._weight);
+            model.setParamFloat(this._paramID, this.scale * hair.getAngleP1toP2Deg_velocity(), this._weight);
             break;
         }
     };
