@@ -898,9 +898,9 @@
     l2d_Live2DModelJS.prototype.setGL = function(aC) {
         this._drawParamJS.setGL(aC);
     };
-    l2d_Live2DModelJS.prototype.setTransform = function(aC) {
-        this._drawParamJS.setTransform(aC);
-    };
+    // l2d_Live2DModelJS.prototype.setTransform = function(aC) {
+    //     this._drawParamJS.setTransform(aC);
+    // };
     l2d_Live2DModelJS.prototype.draw = function() {
         this._modelContext.draw(this._drawParamJS);
     };
@@ -1807,6 +1807,7 @@
         this._resetBitOffset();
         if (aE < 0) {
             aE = this._getNextIntDynamic();
+            console.log("get value by type: " + aE);
         }
         if (aE == l2d_global_format._some_cached_value_type_33) {
             var aC = this._getNextInt32();
@@ -2208,30 +2209,30 @@
         var aD = new Int16Array(aC);
         return aD;
     };
-    l2d_drawParamJS._$Ud = function(aD, aC) {
-        if (aD == null || aD.capacity() < aC.length) {
-            aD = l2d_drawParamJS._create_array_32f(aC.length * 2);
-            aD.put(aC);
-            aD.position(0);
-        } else {
-            aD.clear();
-            aD.put(aC);
-            aD.position(0);
-        }
-        return aD;
-    };
-    l2d_drawParamJS._$Kk = function(aD, aC) {
-        if (aD == null || aD.capacity() < aC.length) {
-            aD = l2d_drawParamJS._create_array_16i(aC.length * 2);
-            aD.put(aC);
-            aD.position(0);
-        } else {
-            aD.clear();
-            aD.put(aC);
-            aD.position(0);
-        }
-        return aD;
-    };
+    // l2d_drawParamJS._$Ud = function(aD, aC) {
+    //     if (aD == null || aD.capacity() < aC.length) {
+    //         aD = l2d_drawParamJS._create_array_32f(aC.length * 2);
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     } else {
+    //         aD.clear();
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     }
+    //     return aD;
+    // };
+    // l2d_drawParamJS._$Kk = function(aD, aC) {
+    //     if (aD == null || aD.capacity() < aC.length) {
+    //         aD = l2d_drawParamJS._create_array_16i(aC.length * 2);
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     } else {
+    //         aD.clear();
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     }
+    //     return aD;
+    // };
     // l2d_drawParamJS._$0m = function() {
     //     return l2d_drawParamJS._$Xd;
     // };
@@ -2241,9 +2242,9 @@
     l2d_drawParamJS.prototype.setGL = function(aC) {
         this.gl = aC;
     };
-    l2d_drawParamJS.prototype.setTransform = function(aC) {
-        this.transform = aC;
-    };
+    // l2d_drawParamJS.prototype.setTransform = function(aC) {
+    //     this.transform = aC;
+    // };
     l2d_drawParamJS.prototype._setupDraw = function() {};
     l2d_drawParamJS.prototype._drawTexture = function(aJ, aC, aK, aD, aL, opacity, aF, aE) {
         if (opacity < 0.01) {
@@ -3523,244 +3524,244 @@
     //     console.log("\n");
     // };
 
-    function l2d_LDGL(aC, aD) {
-        this.canvas = aC;
-        this.context = aD;
-        this._$yf = new Array(0, 0, aC.width, aC.height);
-        this._$Bd = 1;
-        this._$3H = 0;
-        this._$Sd = 1;
-        this._$5H = 0;
-        this._$6R = -1;
-        this.cacheImages = {};
-    }
-    l2d_LDGL.tr = new l2d_LDTransform();
-    l2d_LDGL._$Y2 = new l2d_LDTransform();
-    l2d_LDGL._$fP = new Array(0, 0);
-    l2d_LDGL._$HP = new Array(0, 0);
-    l2d_LDGL._$c = new Array(0, 0);
-    l2d_LDGL.prototype._$bH = function(aD, aF, aE, aC) {
-        this._$yf = new Array(aD, aF, aE, aC);
-    };
-    l2d_LDGL.prototype._$kT = function() {
-        this.context.save();
-        var aC = this._$yf;
-        if (aC != null) {
-            this.context.beginPath();
-            this.context._$TP(aC[0], aC[1], aC[2], aC[3]);
-            this.context.clip();
-        }
-    };
-    l2d_LDGL.prototype._$uP = function() {
-        this.context.restore();
-    };
-    l2d_LDGL.prototype.drawElements = function(a7, bh, aS, aE, bv, aH, bg, bu) {
-        try {
-            if (bv != this._$6R) {
-                this._$6R = bv;
-                this.context.globalAlpha = bv;
-            }
-            var aX = bh.length;
-            var aK = a7.width;
-            var a0 = a7.height;
-            var bz = this.context;
-            var a2 = this._$3H;
-            var a1 = this._$5H;
-            var aW = this._$Bd;
-            var aU = this._$Sd;
-            var by = l2d_LDGL.tr;
-            var aD = l2d_LDGL._$fP;
-            var aC = l2d_LDGL._$HP;
-            var bp = l2d_LDGL._$c;
-            for (var bt = 0; bt < aX; bt += 3) {
-                bz.save();
-                var aR = bh[bt];
-                var aQ = bh[bt + 1];
-                var aO = bh[bt + 2];
-                var aG = a2 + aW * aS[aR * 2];
-                var aF = a1 + aU * aS[aR * 2 + 1];
-                var bm = a2 + aW * aS[aQ * 2];
-                var bk = a1 + aU * aS[aQ * 2 + 1];
-                var bc = a2 + aW * aS[aO * 2];
-                var ba = a1 + aU * aS[aO * 2 + 1];
-                if (bg) {
-                    bg.mulVector(aG, aF, bp);
-                    aG = bp[0];
-                    aF = bp[1];
-                    bg.mulVector(bm, bk, bp);
-                    bm = bp[0];
-                    bk = bp[1];
-                    bg.mulVector(bc, ba, bp);
-                    bc = bp[0];
-                    ba = bp[1];
-                }
-                var aN = aK * aE[aR * 2];
-                var aL = a0 - a0 * aE[aR * 2 + 1];
-                var bs = aK * aE[aQ * 2];
-                var br = a0 - a0 * aE[aQ * 2 + 1];
-                var bf = aK * aE[aO * 2];
-                var be = a0 - a0 * aE[aO * 2 + 1];
-                var aY = Math.atan2(br - aL, bs - aN);
-                var aV = Math.atan2(bk - aF, bm - aG);
-                var aJ = bm - aG;
-                var aI = bk - aF;
-                var bd = Math.sqrt(aJ * aJ + aI * aI);
-                var aP = bs - aN;
-                var aM = br - aL;
-                var bo = Math.sqrt(aP * aP + aM * aM);
-                var bq = bd / bo;
-                l2d_UtVector._$oP(bf, be, aN, aL, (bs - aN), (br - aL), -(br - aL), (bs - aN), aD);
-                l2d_UtVector._$oP(bc, ba, aG, aF, (bm - aG), (bk - aF), -(bk - aF), (bm - aG), aC);
-                var aT = (aC[0] - aD[0]) / aD[1];
-                var bn = Math.min(aN, bs, bf);
-                var bb = Math.max(aN, bs, bf);
-                var bl = Math.min(aL, br, be);
-                var a9 = Math.max(aL, br, be);
-                var bj = Math.floor(bn);
-                var a6 = Math.floor(bl);
-                var aZ = Math.ceil(bb);
-                var bx = Math.ceil(a9);
-                by.identity();
-                by.translate(aG, aF);
-                by.rotate(aV);
-                by.scale(1, aC[1] / aD[1]);
-                by.shear(aT, 0);
-                by.scale(bq, bq);
-                by.rotate(-aY);
-                by.translate(-aN, -aL);
-                by.setContext(bz);
-                var a3 = true;
-                var a4 = 1.2;
-                if (!aH) {
-                    aH = a3 ? a4 : 0;
-                }
-                if (l2d_Live2D.IGNORE_EXPAND) {
-                    aH = 0;
-                }
-                if (l2d_Live2D.USE_CACHED_POLYGON_IMAGE) {
-                    var a8 = bu.srcPtr;
-                    a8.gl_cacheImage = a8.gl_cacheImage || {};
-                    if (!a8.gl_cacheImage[bt]) {
-                        var bi = l2d_LDGL.createCanvas(aZ - bj, bx - a6);
-                        l2d_Live2D.DEBUG_DATA.LDGL_CANVAS_MB = l2d_Live2D.DEBUG_DATA.LDGL_CANVAS_MB || 0;
-                        l2d_Live2D.DEBUG_DATA.LDGL_CANVAS_MB += (aZ - bj) * (bx - a6) * 4;
-                        var a5 = bi.getContext("2d");
-                        a5.translate(-bj, -a6);
-                        l2d_LDGL.clip(a5, by, aH, bd, aN, aL, bs, br, bf, be, aG, aF, bm, bk, bc, ba);
-                        a5.drawImage(a7, 0, 0);
-                        a8.gl_cacheImage[bt] = {
-                            cacheCanvas: bi,
-                            cacheContext: a5
-                        };
-                    }
-                    bz.drawImage(a8.gl_cacheImage[bt]["cacheCanvas"], bj, a6);
-                } else {
-                    if (!l2d_Live2D.IGNORE_CLIP) {
-                        l2d_LDGL.clip(bz, by, aH, bd, aN, aL, bs, br, bf, be, aG, aF, bm, bk, bc, ba);
-                    }
-                    if (l2d_Live2D.USE_ADJUST_TRANSLATION) {
-                        bn = 0;
-                        bb = aK;
-                        bl = 0;
-                        a9 = a0;
-                    }
-                    bz.drawImage(a7, bn, bl, bb - bn, a9 - bl, bn, bl, bb - bn, a9 - bl);
-                }
-                bz.restore();
-            }
-        } catch (bw) {
-            l2d_UtDebug.dumpException(bw);
-        }
-    };
-    l2d_LDGL.clip = function(aF, aE, aQ, aD, aH, aG, aP, aO, aL, aK, aJ, aI, aC, aR, aN, aM) {
-        if (aQ > 0.02) {
-            l2d_LDGL.expandClip(aF, aE, aQ, aD, aJ, aI, aC, aR, aN, aM);
-        } else {
-            l2d_LDGL.clipWithTransform(aF, null, aH, aG, aP, aO, aL, aK);
-        }
-    };
-    l2d_LDGL.expandClip = function(aQ, bb, aF, aY, aE, aD, a9, a5, aU, aS) {
-        var aK = a9 - aE;
-        var aJ = a5 - aD;
-        var bd = aU - aE;
-        var bc = aS - aD;
-        var be = aK * bc - aJ * bd > 0 ? aF : -aF;
-        var aG = -aJ;
-        var aC = aK;
-        var a7 = aU - a9;
-        var a3 = aS - a5;
-        var a2 = -a3;
-        var a1 = a7;
-        var aL = Math.sqrt(a7 * a7 + a3 * a3);
-        var ba = -bc;
-        var a6 = bd;
-        var aX = Math.sqrt(bd * bd + bc * bc);
-        var a8 = aE - be * aG / aY;
-        var a4 = aD - be * aC / aY;
-        var aT = a9 - be * aG / aY;
-        var aR = a5 - be * aC / aY;
-        var a0 = a9 - be * a2 / aL;
-        var aZ = a5 - be * a1 / aL;
-        var aN = aU - be * a2 / aL;
-        var aM = aS - be * a1 / aL;
-        var aI = aE + be * ba / aX;
-        var aH = aD + be * a6 / aX;
-        var aW = aU + be * ba / aX;
-        var aV = aS + be * a6 / aX;
-        var aP = l2d_LDGL._$Y2;
-        var aO = bb._$Hj(aP);
-        if (aO == null) {
-            return false;
-        }
-        l2d_LDGL.clipWithTransform(aQ, aP, a8, a4, aT, aR, a0, aZ, aN, aM, aW, aV, aI, aH);
-        return true;
-    };
-    l2d_LDGL.clipWithTransform = function(aC, aD, aN, aI, aL, aF, aK, aE) {
-        if (arguments.length < (1 + 3 * 2)) {
-            l2d_UtDebug.error("err : @LDGL.clip()");
-            return;
-        }
-        if (!(arguments[1] instanceof ah)) {
-            l2d_UtDebug.error("err : a[0] is _$B LDTransform @LDGL.clip()");
-            return;
-        }
-        var aH = l2d_LDGL._$c;
-        var aJ = aD;
-        var aM = arguments;
-        aC.beginPath();
-        if (aJ) {
-            aJ.mulVector(aM[2], aM[3], aH);
-            aC.moveTo(aH[0], aH[1]);
-            for (var aG = 4; aG < aM.length; aG += 2) {
-                aJ.mulVector(aM[aG], aM[aG + 1], aH);
-                aC.lineTo(aH[0], aH[1]);
-            }
-        } else {
-            aC.moveTo(aM[2], aM[3]);
-            for (var aG = 4; aG < aM.length; aG += 2) {
-                aC.lineTo(aM[aG], aM[aG + 1]);
-            }
-        }
-        aC.clip();
-    };
-    l2d_LDGL.createCanvas = function(aC, aE) {
-        var aD = document.createElement("canvas");
-        aD.setAttribute("width", aC);
-        aD.setAttribute("height", aE);
-        if (!aD) {
-            l2d_UtDebug.error("err : " + aD);
-        }
-        return aD;
-    };
-    l2d_LDGL.dumpValues = function() {
-        var aD = "";
-        for (var aC = 0; aC < arguments.length; aC++) {
-            aD += "[" + aC + "]= " + arguments[aC].toFixed(3) + " , ";
-        }
-        console.log(aD);
-    };
+    // function l2d_LDGL(aC, aD) {
+    //     this.canvas = aC;
+    //     this.context = aD;
+    //     this._$yf = new Array(0, 0, aC.width, aC.height);
+    //     this._$Bd = 1;
+    //     this._$3H = 0;
+    //     this._$Sd = 1;
+    //     this._$5H = 0;
+    //     this._$6R = -1;
+    //     this.cacheImages = {};
+    // }
+    // l2d_LDGL.tr = new l2d_LDTransform();
+    // l2d_LDGL._$Y2 = new l2d_LDTransform();
+    // l2d_LDGL._$fP = new Array(0, 0);
+    // l2d_LDGL._$HP = new Array(0, 0);
+    // l2d_LDGL._$c = new Array(0, 0);
+    // l2d_LDGL.prototype._$bH = function(aD, aF, aE, aC) {
+    //     this._$yf = new Array(aD, aF, aE, aC);
+    // };
+    // l2d_LDGL.prototype._$kT = function() {
+    //     this.context.save();
+    //     var aC = this._$yf;
+    //     if (aC != null) {
+    //         this.context.beginPath();
+    //         this.context._$TP(aC[0], aC[1], aC[2], aC[3]);
+    //         this.context.clip();
+    //     }
+    // };
+    // l2d_LDGL.prototype._$uP = function() {
+    //     this.context.restore();
+    // };
+    // l2d_LDGL.prototype.drawElements = function(a7, bh, aS, aE, bv, aH, bg, bu) {
+    //     try {
+    //         if (bv != this._$6R) {
+    //             this._$6R = bv;
+    //             this.context.globalAlpha = bv;
+    //         }
+    //         var aX = bh.length;
+    //         var aK = a7.width;
+    //         var a0 = a7.height;
+    //         var bz = this.context;
+    //         var a2 = this._$3H;
+    //         var a1 = this._$5H;
+    //         var aW = this._$Bd;
+    //         var aU = this._$Sd;
+    //         var by = l2d_LDGL.tr;
+    //         var aD = l2d_LDGL._$fP;
+    //         var aC = l2d_LDGL._$HP;
+    //         var bp = l2d_LDGL._$c;
+    //         for (var bt = 0; bt < aX; bt += 3) {
+    //             bz.save();
+    //             var aR = bh[bt];
+    //             var aQ = bh[bt + 1];
+    //             var aO = bh[bt + 2];
+    //             var aG = a2 + aW * aS[aR * 2];
+    //             var aF = a1 + aU * aS[aR * 2 + 1];
+    //             var bm = a2 + aW * aS[aQ * 2];
+    //             var bk = a1 + aU * aS[aQ * 2 + 1];
+    //             var bc = a2 + aW * aS[aO * 2];
+    //             var ba = a1 + aU * aS[aO * 2 + 1];
+    //             if (bg) {
+    //                 bg.mulVector(aG, aF, bp);
+    //                 aG = bp[0];
+    //                 aF = bp[1];
+    //                 bg.mulVector(bm, bk, bp);
+    //                 bm = bp[0];
+    //                 bk = bp[1];
+    //                 bg.mulVector(bc, ba, bp);
+    //                 bc = bp[0];
+    //                 ba = bp[1];
+    //             }
+    //             var aN = aK * aE[aR * 2];
+    //             var aL = a0 - a0 * aE[aR * 2 + 1];
+    //             var bs = aK * aE[aQ * 2];
+    //             var br = a0 - a0 * aE[aQ * 2 + 1];
+    //             var bf = aK * aE[aO * 2];
+    //             var be = a0 - a0 * aE[aO * 2 + 1];
+    //             var aY = Math.atan2(br - aL, bs - aN);
+    //             var aV = Math.atan2(bk - aF, bm - aG);
+    //             var aJ = bm - aG;
+    //             var aI = bk - aF;
+    //             var bd = Math.sqrt(aJ * aJ + aI * aI);
+    //             var aP = bs - aN;
+    //             var aM = br - aL;
+    //             var bo = Math.sqrt(aP * aP + aM * aM);
+    //             var bq = bd / bo;
+    //             l2d_UtVector._$oP(bf, be, aN, aL, (bs - aN), (br - aL), -(br - aL), (bs - aN), aD);
+    //             l2d_UtVector._$oP(bc, ba, aG, aF, (bm - aG), (bk - aF), -(bk - aF), (bm - aG), aC);
+    //             var aT = (aC[0] - aD[0]) / aD[1];
+    //             var bn = Math.min(aN, bs, bf);
+    //             var bb = Math.max(aN, bs, bf);
+    //             var bl = Math.min(aL, br, be);
+    //             var a9 = Math.max(aL, br, be);
+    //             var bj = Math.floor(bn);
+    //             var a6 = Math.floor(bl);
+    //             var aZ = Math.ceil(bb);
+    //             var bx = Math.ceil(a9);
+    //             by.identity();
+    //             by.translate(aG, aF);
+    //             by.rotate(aV);
+    //             by.scale(1, aC[1] / aD[1]);
+    //             by.shear(aT, 0);
+    //             by.scale(bq, bq);
+    //             by.rotate(-aY);
+    //             by.translate(-aN, -aL);
+    //             by.setContext(bz);
+    //             var a3 = true;
+    //             var a4 = 1.2;
+    //             if (!aH) {
+    //                 aH = a3 ? a4 : 0;
+    //             }
+    //             if (l2d_Live2D.IGNORE_EXPAND) {
+    //                 aH = 0;
+    //             }
+    //             if (l2d_Live2D.USE_CACHED_POLYGON_IMAGE) {
+    //                 var a8 = bu.srcPtr;
+    //                 a8.gl_cacheImage = a8.gl_cacheImage || {};
+    //                 if (!a8.gl_cacheImage[bt]) {
+    //                     var bi = l2d_LDGL.createCanvas(aZ - bj, bx - a6);
+    //                     l2d_Live2D.DEBUG_DATA.LDGL_CANVAS_MB = l2d_Live2D.DEBUG_DATA.LDGL_CANVAS_MB || 0;
+    //                     l2d_Live2D.DEBUG_DATA.LDGL_CANVAS_MB += (aZ - bj) * (bx - a6) * 4;
+    //                     var a5 = bi.getContext("2d");
+    //                     a5.translate(-bj, -a6);
+    //                     l2d_LDGL.clip(a5, by, aH, bd, aN, aL, bs, br, bf, be, aG, aF, bm, bk, bc, ba);
+    //                     a5.drawImage(a7, 0, 0);
+    //                     a8.gl_cacheImage[bt] = {
+    //                         cacheCanvas: bi,
+    //                         cacheContext: a5
+    //                     };
+    //                 }
+    //                 bz.drawImage(a8.gl_cacheImage[bt]["cacheCanvas"], bj, a6);
+    //             } else {
+    //                 if (!l2d_Live2D.IGNORE_CLIP) {
+    //                     l2d_LDGL.clip(bz, by, aH, bd, aN, aL, bs, br, bf, be, aG, aF, bm, bk, bc, ba);
+    //                 }
+    //                 if (l2d_Live2D.USE_ADJUST_TRANSLATION) {
+    //                     bn = 0;
+    //                     bb = aK;
+    //                     bl = 0;
+    //                     a9 = a0;
+    //                 }
+    //                 bz.drawImage(a7, bn, bl, bb - bn, a9 - bl, bn, bl, bb - bn, a9 - bl);
+    //             }
+    //             bz.restore();
+    //         }
+    //     } catch (bw) {
+    //         l2d_UtDebug.dumpException(bw);
+    //     }
+    // };
+    // l2d_LDGL.clip = function(aF, aE, aQ, aD, aH, aG, aP, aO, aL, aK, aJ, aI, aC, aR, aN, aM) {
+    //     if (aQ > 0.02) {
+    //         l2d_LDGL.expandClip(aF, aE, aQ, aD, aJ, aI, aC, aR, aN, aM);
+    //     } else {
+    //         l2d_LDGL.clipWithTransform(aF, null, aH, aG, aP, aO, aL, aK);
+    //     }
+    // };
+    // l2d_LDGL.expandClip = function(aQ, bb, aF, aY, aE, aD, a9, a5, aU, aS) {
+    //     var aK = a9 - aE;
+    //     var aJ = a5 - aD;
+    //     var bd = aU - aE;
+    //     var bc = aS - aD;
+    //     var be = aK * bc - aJ * bd > 0 ? aF : -aF;
+    //     var aG = -aJ;
+    //     var aC = aK;
+    //     var a7 = aU - a9;
+    //     var a3 = aS - a5;
+    //     var a2 = -a3;
+    //     var a1 = a7;
+    //     var aL = Math.sqrt(a7 * a7 + a3 * a3);
+    //     var ba = -bc;
+    //     var a6 = bd;
+    //     var aX = Math.sqrt(bd * bd + bc * bc);
+    //     var a8 = aE - be * aG / aY;
+    //     var a4 = aD - be * aC / aY;
+    //     var aT = a9 - be * aG / aY;
+    //     var aR = a5 - be * aC / aY;
+    //     var a0 = a9 - be * a2 / aL;
+    //     var aZ = a5 - be * a1 / aL;
+    //     var aN = aU - be * a2 / aL;
+    //     var aM = aS - be * a1 / aL;
+    //     var aI = aE + be * ba / aX;
+    //     var aH = aD + be * a6 / aX;
+    //     var aW = aU + be * ba / aX;
+    //     var aV = aS + be * a6 / aX;
+    //     var aP = l2d_LDGL._$Y2;
+    //     var aO = bb._$Hj(aP);
+    //     if (aO == null) {
+    //         return false;
+    //     }
+    //     l2d_LDGL.clipWithTransform(aQ, aP, a8, a4, aT, aR, a0, aZ, aN, aM, aW, aV, aI, aH);
+    //     return true;
+    // };
+    // l2d_LDGL.clipWithTransform = function(aC, aD, aN, aI, aL, aF, aK, aE) {
+    //     if (arguments.length < (1 + 3 * 2)) {
+    //         l2d_UtDebug.error("err : @LDGL.clip()");
+    //         return;
+    //     }
+    //     if (!(arguments[1] instanceof ah)) {
+    //         l2d_UtDebug.error("err : a[0] is _$B LDTransform @LDGL.clip()");
+    //         return;
+    //     }
+    //     var aH = l2d_LDGL._$c;
+    //     var aJ = aD;
+    //     var aM = arguments;
+    //     aC.beginPath();
+    //     if (aJ) {
+    //         aJ.mulVector(aM[2], aM[3], aH);
+    //         aC.moveTo(aH[0], aH[1]);
+    //         for (var aG = 4; aG < aM.length; aG += 2) {
+    //             aJ.mulVector(aM[aG], aM[aG + 1], aH);
+    //             aC.lineTo(aH[0], aH[1]);
+    //         }
+    //     } else {
+    //         aC.moveTo(aM[2], aM[3]);
+    //         for (var aG = 4; aG < aM.length; aG += 2) {
+    //             aC.lineTo(aM[aG], aM[aG + 1]);
+    //         }
+    //     }
+    //     aC.clip();
+    // };
+    // l2d_LDGL.createCanvas = function(aC, aE) {
+    //     var aD = document.createElement("canvas");
+    //     aD.setAttribute("width", aC);
+    //     aD.setAttribute("height", aE);
+    //     if (!aD) {
+    //         l2d_UtDebug.error("err : " + aD);
+    //     }
+    //     return aD;
+    // };
+    // l2d_LDGL.dumpValues = function() {
+    //     var aD = "";
+    //     for (var aC = 0; aC < arguments.length; aC++) {
+    //         aD += "[" + aC + "]= " + arguments[aC].toFixed(3) + " , ";
+    //     }
+    //     console.log(aD);
+    // };
 
-    function l2d_DrawContextBase(srcPtr) {
+    function l2d_DDTextureContextBase(srcPtr) {
         if (live2d_initializing) {
             return;
         }
@@ -3774,13 +3775,13 @@
         this.baseOpacity = 1;
         this.srcPtr = srcPtr;
     }
-    l2d_DrawContextBase.prototype.getparamOutside = function() {
+    l2d_DDTextureContextBase.prototype.getparamOutside = function() {
         return this.paramOutside[0];
     };
-    l2d_DrawContextBase.prototype.isAvailable = function() {
+    l2d_DDTextureContextBase.prototype.isAvailable = function() {
         return this.available && !this.paramOutside[0];
     };
-    l2d_DrawContextBase.prototype.getSrcPtr = function() {
+    l2d_DDTextureContextBase.prototype.getSrcPtr = function() {
         return this.srcPtr;
     };
 
@@ -3893,7 +3894,7 @@
     l2d_LDAffineTransform.prototype.update = function() {
         if (this.m01 == 0 && this.m10 == 0) {
             if (this.m00 == 1 && this.m11 == 1) {
-                if (this._$I == 0 && this.m12 == 0) {
+                if (this.m02 == 0 && this.m12 == 0) {
                     this._state = l2d_LDAffineTransform.STATE_IDENTITY;
                     this.mode = l2d_LDAffineTransform.MODE_IDENTITY;
                 } else {
@@ -4046,6 +4047,7 @@
         this._pivotManager._initialize();
     };
     l2d_DDTexture.prototype._initWithBufferReader = function(aF) {
+        console.log("start init DDTexture");
         l2d_IDrawData.prototype._initWithBufferReader.call(this, aF);
         this._textureNo = aF._getNextInt32();
         this._numPoints = aF._getNextInt32();
@@ -4220,12 +4222,12 @@
     };
 
     function l2d_DDTextureContext(aC) {
-        l2d_DrawContextBase.prototype.constructor.call(this, aC);
+        l2d_DDTextureContextBase.prototype.constructor.call(this, aC);
         this.tmpBaseDataIndex = l2d_IDrawData.BASE_INDEX_NOT_INIT;
         this.interpolatedPoints = null;
         this.transformedPoints = null;
     }
-    l2d_DDTextureContext.prototype = new l2d_DrawContextBase();
+    l2d_DDTextureContext.prototype = new l2d_DDTextureContextBase();
     l2d_DDTextureContext.prototype.getTransformedPoints = function() {
         return (this.transformedPoints != null) ? this.transformedPoints : this.interpolatedPoints;
     };
@@ -5040,9 +5042,9 @@
     l2d_Live2DModelWebGL.prototype.setGL = function(aC) {
         this.drawParamWebGL.setGL(aC);
     };
-    l2d_Live2DModelWebGL.prototype.setTransform = function(aC) {
-        this.drawParamWebGL.setTransform(aC);
-    };
+    // l2d_Live2DModelWebGL.prototype.setTransform = function(aC) {
+    //     this.drawParamWebGL.setTransform(aC);
+    // };
     l2d_Live2DModelWebGL.prototype.draw = function() {
         this._modelContext.draw(this.drawParamWebGL);
     };
@@ -5235,50 +5237,50 @@
         }
         l2d_drawParamBase.prototype.constructor.call(this);
         this.textures = new Array();
-        this.transform = null;
+        // this.transform = null;
         this.gl = null;
         this.firstDraw = true;
         this.anisotropyExt = null;
         this.maxAnisotropy = 0;
-        this.fixedTexureCount = 32;
+        // this.fixedTexureCount = 32;
         // this._$Xd = false;
         this._texcoordDrawArrayBuffer = null;
         this._positionDrawArrayBuffer = null;
         this._drawElementBuffer = null;
     }
     l2d_drawParamWebGL.prototype = new l2d_drawParamBase();
-    l2d_drawParamWebGL._create_array_32f = function(aC) {
-        var aD = new Float32Array(aC);
-        return aD;
-    };
-    l2d_drawParamWebGL._create_array_16i = function(aC) {
-        var aD = new Int16Array(aC);
-        return aD;
-    };
-    l2d_drawParamWebGL._$Ud = function(aD, aC) {
-        if (aD == null || aD.capacity() < aC.length) {
-            aD = l2d_drawParamWebGL._create_array_32f(aC.length * 2);
-            aD.put(aC);
-            aD.position(0);
-        } else {
-            aD.clear();
-            aD.put(aC);
-            aD.position(0);
-        }
-        return aD;
-    };
-    l2d_drawParamWebGL._$Kk = function(aD, aC) {
-        if (aD == null || aD.capacity() < aC.length) {
-            aD = l2d_drawParamWebGL._create_array_16i(aC.length * 2);
-            aD.put(aC);
-            aD.position(0);
-        } else {
-            aD.clear();
-            aD.put(aC);
-            aD.position(0);
-        }
-        return aD;
-    };
+    // l2d_drawParamWebGL._create_array_32f = function(aC) {
+    //     var aD = new Float32Array(aC);
+    //     return aD;
+    // };
+    // l2d_drawParamWebGL._create_array_16i = function(aC) {
+    //     var aD = new Int16Array(aC);
+    //     return aD;
+    // };
+    // l2d_drawParamWebGL._$Ud = function(aD, aC) {
+    //     if (aD == null || aD.capacity() < aC.length) {
+    //         aD = l2d_drawParamWebGL._create_array_32f(aC.length * 2);
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     } else {
+    //         aD.clear();
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     }
+    //     return aD;
+    // };
+    // l2d_drawParamWebGL._$Kk = function(aD, aC) {
+    //     if (aD == null || aD.capacity() < aC.length) {
+    //         aD = l2d_drawParamWebGL._create_array_16i(aC.length * 2);
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     } else {
+    //         aD.clear();
+    //         aD.put(aC);
+    //         aD.position(0);
+    //     }
+    //     return aD;
+    // };
     // l2d_drawParamWebGL._$0m = function() {
     //     return this._$Xd;
     // };
@@ -5288,9 +5290,9 @@
     l2d_drawParamWebGL.prototype.setGL = function(aC) {
         this.gl = aC;
     };
-    l2d_drawParamWebGL.prototype.setTransform = function(aC) {
-        this.transform = aC;
-    };
+    // l2d_drawParamWebGL.prototype.setTransform = function(aC) {
+    //     this.transform = aC;
+    // };
     l2d_drawParamWebGL.prototype._setupDraw = function() {
         var aC = this.gl;
         if (this.firstDraw) {
@@ -5319,7 +5321,7 @@
         if (colorAlpha < 0.01) {
             return;
         }
-        var aD = colorAlpha > 0.9 ? l2d_Live2D.EXPAND_W : 0;
+        // var aD = colorAlpha > 0.9 ? l2d_Live2D.EXPAND_W : 0;
         var aV = this.gl;
         if (this.gl == null) {
             throw new Error("gl is null");
@@ -5407,7 +5409,6 @@
         aV.drawElements(aV.TRIANGLES, aE, aV.UNSIGNED_SHORT, 0);
         aV.bindTexture(aV.TEXTURE_2D, null);
     };
-
     function l2d_glArrayBufferData(aE, aC, aD) {
         if (aC == null) {
             aC = aE.createBuffer();
@@ -6271,7 +6272,7 @@
     window.UtSystem = l2d_UtSystem;
     window.UtDebug = l2d_UtDebug;
     window.LDTransform = l2d_LDTransform;
-    window.LDGL = l2d_LDGL;
+    // window.LDGL = l2d_LDGL;
     window.Live2D = l2d_Live2D;
     window.Live2DModelWebGL = l2d_Live2DModelWebGL;
     window.Live2DModelJS = l2d_Live2DModelJS;
